@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhy.libra.dao.ThirdDAO">
+
+	<resultMap id="thirdResult" type="com.zhy.libra.bean.Third">
+		<result property="src" column="type"
+			typeHandler="com.zhy.libra.bean.typeHandler.SrcTypeHandler" />
+		<result property="userId" column="user_id" />
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="endTime" column="end_time" />
+		<result property="metaIndex1" column="meta_index_1" />
+		<result property="metaIndex2" column="meta_index_2" />
+		<result property="metaIndex3" column="meta_index_3" />
+		<result property="metaIndex4" column="meta_index_4" />
+		<result property="metaIndex5" column="meta_index_5" />
+	</resultMap>
+
+	<insert id="sav_by_third" parameterType="third">
+		INSERT INTO `third`(type, user_id, create_time, modify_time, end_time
+		<if test="metaIndex1 != null">,meta_index_1</if>
+		<if test="metaIndex2 != null">,meta_index_2</if>
+		<if test="metaIndex3 != null">,meta_index_3</if>
+		<if test="metaIndex4 != null">,meta_index_4</if>
+		<if test="metaIndex5 != null">,meta_index_5</if>
+		) VALUES ( #{src.code}, #{userId}, #{createTime}, #{modifyTime}, #{endTime}
+		<if test="metaIndex1 != null">,#{metaIndex1}</if>
+		<if test="metaIndex2 != null">,#{metaIndex2}</if>
+		<if test="metaIndex3 != null">,#{metaIndex3}</if>
+		<if test="metaIndex4 != null">,#{metaIndex4}</if>
+		<if test="metaIndex5 != null">,#{metaIndex5}</if>
+		)
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<select id="sel_by_third_userId" parameterType="java.lang.Long"
+		resultMap="thirdResult">
+		SELECT * FROM `third` WHERE user_id=#{userId}
+	</select>
+
+	<update id="upd_by_third" parameterType="third">
+		UPDATE `third`
+		<set>
+			<if test="metaIndex1 != null">
+				meta_index_1=#{metaIndex1},
+			</if>
+			<if test="metaIndex2 != null">
+				meta_index_2=#{metaIndex2},
+			</if>
+			<if test="metaIndex3 != null">
+				meta_index_3=#{metaIndex3},
+			</if>
+			<if test="metaIndex4 != null">
+				meta_index_4=#{metaIndex4},
+			</if>
+			<if test="metaIndex5 != null">
+				meta_index_5=#{metaIndex5},
+			</if>
+		</set>
+		WHERE
+		<choose>
+			<when test="id != null">id=#{id}</when>
+			<otherwise>
+				user_id=#{userId} AND type=#{src.code}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<select id="sel_sametype" parameterType="third"
+		resultType="java.lang.Long">
+		SELECT user_id FROM `third` WHERE user_id &lt;&gt; #{userId} AND type = #{type} ORDER BY rand() LIMIT #{pageSize}
+	</select>
+		
+</mapper>

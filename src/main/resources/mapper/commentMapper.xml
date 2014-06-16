@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhy.libra.dao.CommentDAO">
+
+	<resultMap id="commentResult" type="com.zhy.libra.bean.Comment">
+		<result property="id" column="id" />
+		<result property="dependId" column="depend_id" />
+		<result property="userId" column="user_id" />
+		<result property="content" column="content" />
+		<result property="userName" column="user_name" />
+		<result property="pic" column="pic" />
+		<result property="commentTime" column="comment_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="commentType" column="type" typeHandler="com.zhy.libra.bean.typeHandler.CommentTypeHandler" />
+		<result property="isValid" column="is_valid" />
+	</resultMap>
+
+	<select id="sel_by_dependAndType" parameterType="comment"
+		resultMap="commentResult">
+		SELECT * FROM `comment` WHERE depend_id = #{dependId} AND type= #{commentType.type}
+	</select>
+
+	<insert id="sav_by_comment" parameterType="comment">
+		INSERT INTO `comment`
+		(depend_id, user_id, content, user_name, pic, comment_time, modify_time, 
+		type, is_valid) VALUES (#{dependId},
+		#{userId}, #{content}, #{userName}, #{commentTime}, #{modifyTime},
+		#{commentType.type}, #{isValid})
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<!-- 删除评论,更新modify_time,设置is_valid为0 -->
+	<update id="upd_by_commentIsValid" parameterType="java.lang.Long">
+		UPDATE `comment` SET is_valid=false WHERE id = #{id}
+	</update>
+
+</mapper>

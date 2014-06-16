@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhy.libra.dao.FriendDAO">
+
+	<resultMap id="friendResult" type="com.zhy.libra.bean.Friend">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="friendId" column="friend_id" />
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="isValid" column="is_valid" />
+	</resultMap>
+
+	<select id="sel_by_frienduserId" parameterType="friend"
+		resultMap="friendResult">
+		SELECT * FROM `friend` WHERE friend_id = #{userId} AND is_valid
+		= true
+		<if test="sinceCount != 0">
+			LIMIT #{sinceCount} , #{pageSize}
+		</if>
+	</select>
+
+	<select id="sel_byfriendId" parameterType="java.lang.Long"
+		resultMap="friendResult">
+		SELECT * FROM `friend` WHERE id=#{id}
+	</select>
+	
+	<select id="sel_userFriendSize" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `friend` WHERE user_id=#{id}
+	</select>
+
+	<insert id="sav_by_friend" parameterType="friend">
+		INSERT INTO `friend` (user_id, friend_id, modify_time, is_valid)
+		VALUES (#{userId}, #{friendId},#{modifyTime}, #{isValid})
+		<selectKey resultType="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="upd_by_friend" parameterType="friend">
+		UPDATE `friend` set is_valid = #{isValid} WHERE user_id =
+		#{userId} AND friend_id = #{friendId}
+	</update>
+
+</mapper>

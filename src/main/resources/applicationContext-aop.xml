@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd"
+       default-lazy-init="true">
+
+    <!-- 开启AOP监听 只对当前配置文件有效 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 开启注解事务 只对当前配置文件有效 -->
+  	<tx:annotation-driven transaction-manager="transactionManager"/>
+  	
+    <!-- Transaction Manager -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+        <!-- 
+			<tx:method name="get*" read-only="true" rollback-for="Exception" />
+			<tx:method name="find*" read-only="true" rollback-for="Exception" />
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception" />
+             -->
+        </tx:attributes>
+    </tx:advice>
+      
+    <aop:config expose-proxy="true">
+    <!-- 
+        <aop:pointcut id="productServiceMethods" expression="execution(* com.*.*.service.*.*(..))" />
+         -->
+        <aop:pointcut id="productServiceMethods" expression="execution(* com.zhy..*Service.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"/>
+    <!-- 
+        <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* com.*.*.service.*.*(..))" order="2"/>
+         -->
+    </aop:config>
+    
+</beans>

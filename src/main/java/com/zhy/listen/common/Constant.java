@@ -132,4 +132,9 @@ public class Constant {
      * 访客默认大小
      */
     public static int VISITOR_DEFAULTSIZE = 9;
+    
+    /**
+     * 百度下载音乐url
+     */
+    public static String BAIDU_MUSIC_URL = "listen.baidu.music.url";
 }

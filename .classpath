@@ -2,7 +2,10 @@
 <classpath>
 	<classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/aspectjweaver-1.7.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/aspectjrt-1.7.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/Sdk4J.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/aopalliance-1.0.jar"/>

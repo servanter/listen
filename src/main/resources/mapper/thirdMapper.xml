@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhy.libra.dao.ThirdDAO">
+<mapper namespace="com.zhy.listen.dao.ThirdDAO">
 
-	<resultMap id="thirdResult" type="com.zhy.libra.bean.Third">
+	<resultMap id="thirdResult" type="com.zhy.listen.bean.Third">
 		<result property="src" column="type"
-			typeHandler="com.zhy.libra.bean.typeHandler.SrcTypeHandler" />
+			typeHandler="com.zhy.listen.bean.typeHandler.SrcTypeHandler" />
 		<result property="userId" column="user_id" />
 		<result property="createTime" column="create_time" />
 		<result property="modifyTime" column="modify_time" />

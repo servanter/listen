@@ -9,6 +9,7 @@
 	<bean id="thirdServices" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
+				<!-- 
 				<entry key="SINA" value-ref="sinaService" />
 				<entry key="QQWEIBO" value-ref="qqWeiboSerivce" />
 				<entry key="RENREN" value-ref="renrenService" />
@@ -17,6 +18,7 @@
 				<entry key="WANGYI" value-ref="wangYiService" />
 				<entry key="QQ" value-ref="qQService" />
 				<entry key="SOHU" value-ref="soHuService" />
+				 -->
 			</map>
 		</constructor-arg>
 	</bean>

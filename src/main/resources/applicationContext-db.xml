@@ -32,7 +32,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:ibatis-config.xml" />
-		<property name="mapperLocations" value="classpath:*Mapper.xml"></property>
+		<property name="mapperLocations" value="classpath:mapper/musicMapper.xml"></property>
 	</bean>
 	
   	<!-- 扫描basePackage下所有以@Repository标识的 接口-->

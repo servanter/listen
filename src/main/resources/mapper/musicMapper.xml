@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhy.listen.dao.MusicDAO">
+
+	<resultMap id="musicResult" type="com.zhy.listen.bean.Music">
+		<result property="id" column="id" />
+		<result property="url" column="download_url" />
+		<result property="lrc" column="lrc" />
+		<result property="title" column="title" />
+		<result property="author" column="author" />
+		<result property="createTime" column="create_time" />
+		<result property="isUpload" column="is_upload" />
+		<result property="isIndex" column="is_index" />
+	</resultMap>
+
+	<select id="getMusicsByUpload" parameterType="music" resultMap="musicResult">
+		SELECT * FROM `music` WHERE is_upload = #{uploadEnum.type}
+	</select>
+	
+	<insert id="save" parameterType="music">
+		INSERT INTO music(title, author, url, lrc) VALUES(#{title}, #{author}, #{url}, #{lrc})
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+</mapper>

@@ -16,11 +16,6 @@ public class BaseMusicServiceImplTest extends SuperTest{
     private BaseMusicService baseMusicService;
     
     @Test
-    public void testFindNotUploadMusics() {
-        baseMusicService.findNotUploadMusics();
-    }
-
-    @Test
     public void testAdd() {
         Music music = new Music();
         music.setTitle("回到过去");

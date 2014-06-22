@@ -142,4 +142,29 @@ public class Constant {
      * 百度音乐歌词url
      */
     public static String BAIDU_MUSIC_LRC_URL = "listen.baidu.music.lrc.pre.url";
+    
+    /**
+     * 金山快盘request token url
+     */
+    public static String KINGSOFT_REQUEST_TOKEN_URL = "listen.kingsoft.request.url";
+    
+    /**
+     * 金山快盘 consume key
+     */
+    public static String KINGSOFT_CONSUME_KEY = "listen.kingsoft.comsume.key";
+    
+    /**
+     * 金山快盘consume secret
+     */
+    public static String KINGSOFT_CONSUME_SECRET = "listen.kingsoft.comsume.secret";
+    
+    /**
+     * 请求 request token 完整URL
+     */
+    public static String KINGSOFT_REQUEST_URL = "listen.kingsoft.request.token.url";
+    
+    /**
+     * 授权url
+     */
+    public static String KINGSOFT_AUTH_URL = "listen.kingsoft.authorise.url";
 }

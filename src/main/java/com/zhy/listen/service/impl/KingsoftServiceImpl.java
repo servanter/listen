@@ -66,7 +66,6 @@ public class KingsoftServiceImpl implements KingsoftService {
             for (Entry<String, String> entry : m.entrySet()) {
                 rowSign += entry.getKey() + "=" + entry.getValue() + SPLIT;
             }
-            System.out.println(URLEncoder.encode("=", "utf-8"));
             rowSign = rowSign.substring(0, rowSign.length() - 1);
             String mm = URLEncoder.encode(rowSign, "utf-8");
             mm = method + URLEncoder.encode(requestUrl, "utf-8") + SPLIT + mm;
@@ -74,8 +73,7 @@ public class KingsoftServiceImpl implements KingsoftService {
             System.out.println(sign);
             sign = URLEncoder.encode(sign, "UTF-8");
             String url = templateService.getMessage(Constant.KINGSOFT_REQUEST_URL, r, t, templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY), sign);
-            
-            
+            logger.info("[Request url]:" + url);
             URLConnection urlConnection = new URL(url).openConnection();
             InputStream is = urlConnection.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);  

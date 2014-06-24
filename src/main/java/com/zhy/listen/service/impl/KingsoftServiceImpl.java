@@ -161,6 +161,7 @@ public class KingsoftServiceImpl implements KingsoftService {
         if (m.containsKey("oauth_token")) {
             key += m.get("oauth_token");
         }
+        System.out.println(signature);
         String sign = MD5Util.hmacsha1(signature, key);
         sign = URLEncoder.encode(sign, "UTF-8");
         return sign;

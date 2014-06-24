@@ -1,29 +1,21 @@
 package com.zhy.listen.service.impl;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import net.sf.json.JSONObject;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
-import org.jsoup.Connection;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +26,18 @@ import com.zhy.listen.template.TemplateService;
 import com.zhy.listen.util.MD5Util;
 import com.zhy.listen.util.RandomUtils;
 
+/**
+ * 
+ * 授权金山快盘 NOTE:
+ * 
+ * <pre>
+ *   Step1. 先获取request token
+ *   Step2. 进入授权页面
+ *   Step3. post数据授权完成
+ *   Step4. 获取accesstoken
+ * @author zhanghongyan
+ * 
+ */
 @Service
 public class KingsoftServiceImpl implements KingsoftService {
 
@@ -42,131 +46,133 @@ public class KingsoftServiceImpl implements KingsoftService {
     private static final String POST_METHOD = "POST";
 
     private static final String SPLIT = "&";
-    
+
     public static Logger logger = Logger.getLogger(KingsoftServiceImpl.class);
 
     @Autowired
     private TemplateService templateService;
-    
+
     @Override
     public void upload(Music music) {
         try {
             long time = System.currentTimeMillis();
-            String method = GET_METHOD + SPLIT;
-            String rowSign = "";
             String requestUrl = templateService.getMessage(Constant.KINGSOFT_REQUEST_TOKEN_URL);
-            TreeMap<String, String> m = new TreeMap<String, String>(new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return o1.compareTo(o2);
-                }
-            });
             String t = String.valueOf(time).substring(0, 10);
             String r = RandomUtils.generateString(6);
+            Map<String, String> m = new TreeMap<String, String>(new TreeMapComparator());
             m.put("oauth_nonce", r);
             m.put("oauth_timestamp", t);
             m.put("oauth_consumer_key", templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY));
             m.put("oauth_signature_method", "HMAC-SHA1");
             m.put("oauth_version", "1.0");
-            for (Entry<String, String> entry : m.entrySet()) {
-                rowSign += entry.getKey() + "=" + entry.getValue() + SPLIT;
-            }
-            rowSign = rowSign.substring(0, rowSign.length() - 1);
-            String mm = URLEncoder.encode(rowSign, "utf-8");
-            mm = method + URLEncoder.encode(requestUrl, "utf-8") + SPLIT + mm;
-            String sign = MD5Util.hmacsha1(mm, templateService.getMessage(Constant.KINGSOFT_CONSUME_SECRET) + SPLIT);
-            System.out.println(sign);
-            sign = URLEncoder.encode(sign, "UTF-8");
-            String url = templateService.getMessage(Constant.KINGSOFT_REQUEST_URL, r, t, templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY), sign);
+            String sign = calculateSignature(m, requestUrl, GET_METHOD);
+
+            String url = templateService.getMessage(Constant.KINGSOFT_REQUEST_URL, r, t,
+                    templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY), sign);
             logger.info("[Request url]:" + url);
-//            URLConnection urlConnection = new URL(url).openConnection();
-//            InputStream is = urlConnection.getInputStream();
-//            InputStreamReader isr = new InputStreamReader(is);  
-//            BufferedReader br = new BufferedReader(isr);  
-//            String s = br.readLine();  
-//            System.out.println(s);  
-            
-            GetMethod getMethod = new GetMethod(url);
+
+            GetMethod requestTokenMethod = new GetMethod(url);
             HttpClient client = new HttpClient();
-            client.executeMethod(getMethod);
-            String text = getMethod.getResponseBodyAsString();
-            if(text != null && text.length() > 0) {
+            client.executeMethod(requestTokenMethod);
+            String text = requestTokenMethod.getResponseBodyAsString();
+            if (text != null && text.length() > 0) {
                 JSONObject jsonObject = JSONObject.fromObject(text);
-                if(jsonObject.containsKey("msg")) {
-                    
+                if (jsonObject.containsKey("msg")) {
+
                     // 请求失败
                 } else {
+
+                    // request token & secret
                     String requestToken = jsonObject.getString("oauth_token");
                     String requestSecret = jsonObject.getString("oauth_token_secret");
-                    
-                    
-                    
-                    String message = templateService.getMessage(Constant.KINGSOFT_AUTH_URL , requestToken);
-                    GetMethod getMethod2 = new GetMethod(message);
-//                    getMethod2.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-//                    getMethod2.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-//                    getMethod2.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-//                    getMethod2.setRequestHeader("Connection", "keep-alive");
-                    getMethod2.setRequestHeader("Host", "www.kuaipan.cn");
-                    getMethod2.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
-                    HttpClient client2 = new HttpClient();
-                    client2.executeMethod(getMethod2);
-                    String re = getMethod2.getResponseBodyAsString();
-                    
+                    String authURL = templateService.getMessage(Constant.KINGSOFT_AUTH_URL, requestToken);
+                    GetMethod authMethod = new GetMethod(authURL);
+                    authMethod.setRequestHeader("Host", "www.kuaipan.cn");
+                    authMethod
+                            .setRequestHeader("User-Agent",
+                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
+                    client = new HttpClient();
+                    client.executeMethod(authMethod);
+                    String re = authMethod.getResponseBodyAsString();
                     Document document = Jsoup.parse(re);
-//                    Connection conn = Jsoup.connect(templateService.getMessage(Constant.KINGSOFT_AUTH_URL , requestToken)).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36").method(Method.POST);
-//                    conn.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-//                    conn.header("Accept-Encoding", "gzip,deflate,sdch");
-//                    conn.header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-//                    conn.header("Connection", "keep-alive");
-//                    conn.header("Host", "www.kuaipan.cn");
-//                    conn.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
-//                    Document document = conn.get();
-//                    Response response = conn.execute();  
-//                    String sessionId = response.cookie("PHPSESSID");
-                    
+
+                    // random s
                     String val = document.getElementsByTag("input").get(3).val();
-                    
-                    Cookie[] cs = client2.getState().getCookies();
-                    Cookie c = cs[0];
-                    
-                    String username = "fengshang@126.com";
-                    String userpwd = "8158011";
-                    String appName = "听听";
-                    PostMethod postMethod = new PostMethod("https://www.kuaipan.cn/api.php?ac=open&op=authorisecheck");
-                    postMethod.setRequestBody(new NameValuePair[]{new NameValuePair("username", username), new NameValuePair("userpwd", userpwd), new NameValuePair("s", val), new NameValuePair("app_name", appName), new NameValuePair("oauth_token", requestToken)});
-//                    postMethod.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-//                    postMethod.setRequestHeader("Accept-Encoding", "gzip,deflate,sdch");
-//                    postMethod.setRequestHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-//                    postMethod.setRequestHeader("Cache-Control", "max-age=0");
-//                    postMethod.setRequestHeader("Connection", "keep-alive");
-//                    postMethod.setRequestHeader("Content-Length", String.valueOf(username.length() + userpwd.length() + appName.length() + val.length() + requestToken.length()));
-//                    postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//                    postMethod.setRequestHeader("Host", "www.kuaipan.cn");
-//                    postMethod.setRequestHeader("Origin", "https://www.kuaipan.cn");
-                    postMethod.setRequestHeader("Referer", message);
-//                    postMethod.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    client2.executeMethod(postMethod);
+                    String username = templateService.getMessage(Constant.KINGSOFT_USERNAME);
+                    String userpwd = templateService.getMessage(Constant.KINGSOFT_PASSWORD);
+                    String appName = templateService.getMessage(Constant.KINGSOFT_APPNAME);
+                    PostMethod postMethod = new PostMethod(
+                            templateService.getMessage(Constant.KINGSOFT_AUTHORISE_POST_URL));
+                    postMethod.setRequestBody(new NameValuePair[] { new NameValuePair("username", username),
+                            new NameValuePair("userpwd", userpwd), new NameValuePair("s", val),
+                            new NameValuePair("app_name", appName), new NameValuePair("oauth_token", requestToken) });
+                    postMethod.setRequestHeader("Referer", authURL);
+                    client.executeMethod(postMethod);
                     String authResult = postMethod.getResponseBodyAsString();
-                    System.out.println(authResult);
+                    logger.debug("[Auth result]:" + authResult);
+
+                    // step3
+
+                    r = RandomUtils.generateString(6);
+                    t = String.valueOf(time).substring(0, 10);
+                    m = new TreeMap<String, String>(new TreeMapComparator());
+                    m.put("oauth_nonce", r);
+                    m.put("oauth_timestamp", t);
+                    m.put("oauth_consumer_key", templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY));
+                    m.put("oauth_signature_method", "HMAC-SHA1");
+                    m.put("oauth_version", "1.0");
+                    m.put("oauth_token", requestToken);
+                    String accessTokenSign = calculateSignature(m, "https://openapi.kuaipan.cn/open/accessToken", GET_METHOD);
+                    time = System.currentTimeMillis();
+                    String string = "https://openapi.kuaipan.cn/open/accessToken?oauth_consumer_key="
+                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)
+                            + "&oauth_signature_method=HMAC-SHA1&oauth_signature=" + accessTokenSign
+                            + "&oauth_timestamp=" + t + "&oauth_nonce=" + r + "&oauth_version=1.0&oauth_token=" + requestToken;
+                    logger.debug("[AccessToen url]:" + string);
+                    GetMethod mm = new GetMethod(string);
+                    client = new HttpClient();
+                    client.executeMethod(mm);
+                    String aa = mm.getResponseBodyAsString();
+                    System.out.println(aa);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 计算signautre
+     * 
+     * @param m
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    private String calculateSignature(Map<String, String> m, String requestUrl, String method)
+            throws UnsupportedEncodingException {
+        String rowSign = "";
+        for (Entry<String, String> entry : m.entrySet()) {
+            rowSign += entry.getKey() + "=" + entry.getValue() + SPLIT;
+        }
+        rowSign = rowSign.substring(0, rowSign.length() - 1);
+        rowSign = URLEncoder.encode(rowSign, "utf-8");
+        String signature = method + "&" + URLEncoder.encode(requestUrl, "utf-8") + SPLIT + rowSign;
+        String key = templateService.getMessage(Constant.KINGSOFT_CONSUME_SECRET) + SPLIT;
+        if (m.containsKey("oauth_token")) {
+            key += m.get("oauth_token");
+        }
+        String sign = MD5Util.hmacsha1(signature, key);
+        sign = URLEncoder.encode(sign, "UTF-8");
+        return sign;
+    }
+
+}
+
+class TreeMapComparator implements Comparator<String> {
+
+    @Override
+    public int compare(String o1, String o2) {
+        return o1.compareTo(o2);
     }
 
 }

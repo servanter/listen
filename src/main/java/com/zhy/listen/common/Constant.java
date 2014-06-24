@@ -112,7 +112,7 @@ public class Constant {
      * 回调地址前缀
      */
     public static String TEMPLATE_THIRD_CALLBACK_WORDS = "libra.third.callback.url";
-    
+
     /**
      * 投票详情地址前缀
      */
@@ -132,39 +132,59 @@ public class Constant {
      * 访客默认大小
      */
     public static int VISITOR_DEFAULTSIZE = 9;
-    
+
     /**
      * 百度下载音乐url
      */
     public static String BAIDU_MUSIC_URL = "listen.baidu.music.url";
-    
+
     /**
      * 百度音乐歌词url
      */
     public static String BAIDU_MUSIC_LRC_URL = "listen.baidu.music.lrc.pre.url";
-    
+
     /**
      * 金山快盘request token url
      */
     public static String KINGSOFT_REQUEST_TOKEN_URL = "listen.kingsoft.request.url";
-    
+
     /**
      * 金山快盘 consume key
      */
     public static String KINGSOFT_CONSUME_KEY = "listen.kingsoft.comsume.key";
-    
+
     /**
      * 金山快盘consume secret
      */
     public static String KINGSOFT_CONSUME_SECRET = "listen.kingsoft.comsume.secret";
-    
+
     /**
      * 请求 request token 完整URL
      */
     public static String KINGSOFT_REQUEST_URL = "listen.kingsoft.request.token.url";
-    
+
     /**
      * 授权url
      */
     public static String KINGSOFT_AUTH_URL = "listen.kingsoft.authorise.url";
+
+    /**
+     * 用户名
+     */
+    public static String KINGSOFT_USERNAME = "listen.kingsoft.usename";
+
+    /**
+     * 密码
+     */
+    public static String KINGSOFT_PASSWORD = "listen.kingsoft.password";
+    
+    /**
+     * 应用名称
+     */
+    public static String KINGSOFT_APPNAME = "listen.kingsoft.appname";
+
+    /**
+     * 授权posturl
+     */
+    public static String KINGSOFT_AUTHORISE_POST_URL = "listen.kingsoft.authorise.post.url";
 }

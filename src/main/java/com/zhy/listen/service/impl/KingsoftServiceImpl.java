@@ -109,11 +109,11 @@ public class KingsoftServiceImpl implements KingsoftService {
                     postMethod.setRequestHeader("Referer", authURL);
                     client.executeMethod(postMethod);
                     String authResult = postMethod.getResponseBodyAsString();
-                    logger.debug("[Auth result]:" + authResult);
 
                     // step3
 
                     r = RandomUtils.generateString(6);
+                    time = System.currentTimeMillis();
                     t = String.valueOf(time).substring(0, 10);
                     m = new TreeMap<String, String>(new TreeMapComparator());
                     m.put("oauth_nonce", r);
@@ -121,9 +121,9 @@ public class KingsoftServiceImpl implements KingsoftService {
                     m.put("oauth_consumer_key", templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY));
                     m.put("oauth_signature_method", "HMAC-SHA1");
                     m.put("oauth_version", "1.0");
+                    m.put("oauth_secret", requestSecret);
                     m.put("oauth_token", requestToken);
                     String accessTokenSign = calculateSignature(m, "https://openapi.kuaipan.cn/open/accessToken", GET_METHOD);
-                    time = System.currentTimeMillis();
                     String string = "https://openapi.kuaipan.cn/open/accessToken?oauth_consumer_key="
                             + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)
                             + "&oauth_signature_method=HMAC-SHA1&oauth_signature=" + accessTokenSign
@@ -152,14 +152,17 @@ public class KingsoftServiceImpl implements KingsoftService {
             throws UnsupportedEncodingException {
         String rowSign = "";
         for (Entry<String, String> entry : m.entrySet()) {
+            if(entry.getKey().equals("oauth_secret")) {
+                continue;
+            }
             rowSign += entry.getKey() + "=" + entry.getValue() + SPLIT;
         }
         rowSign = rowSign.substring(0, rowSign.length() - 1);
         rowSign = URLEncoder.encode(rowSign, "utf-8");
         String signature = method + "&" + URLEncoder.encode(requestUrl, "utf-8") + SPLIT + rowSign;
         String key = templateService.getMessage(Constant.KINGSOFT_CONSUME_SECRET) + SPLIT;
-        if (m.containsKey("oauth_token")) {
-            key += m.get("oauth_token");
+        if (m.containsKey("oauth_secret")) {
+            key += m.get("oauth_secret");
         }
         System.out.println(signature);
         String sign = MD5Util.hmacsha1(signature, key);

@@ -1,11 +1,13 @@
 package com.zhy.listen.service.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Comparator;
 import java.util.Map;
@@ -22,7 +24,6 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -176,7 +177,6 @@ public class KingsoftServiceImpl implements KingsoftService {
                     String uploadResult = uploadFileMethod.getResponseBodyAsString();
                     System.out.println(uploadResult);
 
-                    
                     String uploadUrl = JSONObject.fromObject(uploadResult).getString("url");
 
                     r = RandomUtils.generateString(6);
@@ -190,58 +190,80 @@ public class KingsoftServiceImpl implements KingsoftService {
                     m.put("oauth_version", "1.0");
                     m.put("oauth_secret", accessSecret);
                     m.put("oauth_token", accessToken);
-                    m.put("overwrite", "True");
-                    m.put("root", "kuaipan");
-                    m.put("path", "/aaa.jpg");
-                    String string2 = uploadUrl + "1/fileops/upload_file";
+                    m.put("overwrite", "true");
+                    m.put("root", "app_folder");
+                    String fileName = "/aaa.txt";
+                    String signFileName = fileName.replace("/", "%2F");
+                    m.put("path", signFileName);
+                    String string2 = uploadUrl + "/1/fileops/upload_file";
                     String uploadStep2Sign = calculateSignature(m, string2, POST_METHOD);
                     System.out.println("++++++++++" + string2);
-                    File targetFile = new File("D:\\aaa.jpg");
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(targetFile)));
-                    String result = "";
-                    String every = null;
-                    while((every = bufferedReader.readLine()) != null) {
-                        result += every;
+
+                    URLConnection connection = new URL("http://zhangmenshiting2.baidu.com/data2/music/35420302/35420302.mp3?xcode=6d6dd74a7cd8933a9a1f91991d05578b598f0faef8e9c637&mid=0.62135695683709").openConnection();
+                    InputStream fis = connection.getInputStream();
+                    File targetFile = new File("d:\\mpa.mp3");
+                    OutputStream os = new FileOutputStream(targetFile);
+                    int bytesRead = 0;
+                    byte[] buffer = new byte[8192];
+                    while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+                    os.write(buffer, 0, bytesRead);
                     }
                     
-                        
-                    PostMethod uploadStep2Method = new PostMethod(string2);
-                    NameValuePair[] parameters = new NameValuePair[] {
-                            new NameValuePair("oauth_nonce", r),
-                            new NameValuePair("oauth_timestamp", t),
-                            new NameValuePair("oauth_consumer_key",
-                                    templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
-                            new NameValuePair("oauth_signature_method", "HMAC-SHA1"),
-                            new NameValuePair("oauth_version", "1.0"),
-                            new NameValuePair("oauth_secret", accessSecret),
-                            new NameValuePair("oauth_token", accessToken), new NameValuePair("overwrite", "True"),
-                            new NameValuePair("root", "kuaipan"), new NameValuePair("path", "/aaa.jpg") ,
-                            new NameValuePair("oauth_signature", uploadStep2Sign)};
-                    uploadStep2Method.setRequestBody(parameters);
-//                    uploadStep2Method.setRequestHeader("Accept-Encoding", "identity");
-//                    uploadStep2Method.setRequestHeader("Host", "ufaclient.wps.cn");
-//                    uploadStep2Method.setRequestHeader("Connection", "close");
-                    uploadStep2Method.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
-                    uploadStep2Method.setRequestHeader("Referer", "http://www.surroundlife.com");
                     
                     
-                    
-                    FilePart fp = new FilePart(targetFile.getName(), targetFile, "image/jpeg", "UTF-8");
-                    
-                    Part[] parts =new Part[] { fp,new StringPart("oauth_nonce", r),
+                    String string3 = string2 + "?oauth_signature=" + uploadStep2Sign + "&oauth_consumer_key="
+                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY) + "&oauth_nonce=" + r + "&oauth_signature_method=HMAC-SHA1" 
+                            + "&oauth_timestamp=" + t + "&oauth_token=" + accessToken
+                            + "&oauth_version=1.0&overwrite=true&path="+ signFileName +"&root=app_folder";
+                    PostMethod uploadStep2Method = new PostMethod(string3);
+                    System.out.println(string3);
+                    // NameValuePair[] parameters = new NameValuePair[] {
+                    // new NameValuePair("oauth_nonce", r),
+                    // new NameValuePair("oauth_timestamp", t),
+                    // new NameValuePair("oauth_consumer_key",
+                    // templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
+                    // new NameValuePair("oauth_signature_method", "HMAC-SHA1"),
+                    // new NameValuePair("oauth_version", "1.0"), new NameValuePair("oauth_secret", accessSecret),
+                    // new NameValuePair("oauth_token", accessToken), new NameValuePair("overwrite", "True"),
+                    // new NameValuePair("root", "kuaipan"), new NameValuePair("path", "/aaa.jpg"),
+                    // new NameValuePair("oauth_signature", uploadStep2Sign) };
+                    // uploadStep2Method.setRequestBody(parameters);
+                    // uploadStep2Method.setRequestHeader("Accept-Encoding", "identity");
+                    // uploadStep2Method.setRequestHeader("Host", "ufaclient.wps.cn");
+                    // uploadStep2Method.setRequestHeader("Connection", "close");
+
+                    FilePart fp = new FilePart(targetFile.getName(), targetFile);
+
+                    Part[] parts = new Part[] {
+                            fp,
+                            new StringPart("oauth_nonce", r),
                             new StringPart("oauth_timestamp", t),
                             new StringPart("oauth_consumer_key",
                                     templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
                             new StringPart("oauth_signature_method", "HMAC-SHA1"),
-                            new StringPart("oauth_version", "1.0"),
-                            new StringPart("oauth_secret", accessSecret),
-                            new StringPart("oauth_token", accessToken), new StringPart("overwrite", "True"),
-                            new StringPart("root", "kuaipan"), new StringPart("path", "/aaa.jpg") ,
+                            new StringPart("oauth_version", "1.0"), new StringPart("oauth_secret", accessSecret),
+                            new StringPart("oauth_token", accessToken), new StringPart("overwrite", "true"),
+                            new StringPart("root", "app_folder"), new StringPart("path", "/aaa.txt"),
                             new StringPart("oauth_signature", uploadStep2Sign) };
                     MultipartRequestEntity entity = new MultipartRequestEntity(parts, uploadStep2Method.getParams());
-                    System.out.println("++++++++++++++++++++" + entity.getContentType() + "   " + entity.getContentLength());
-                    uploadStep2Method.setRequestHeader("Content-Type", "multipart/form-data; boundary=----------TwaYUyulTQswqDWGHTE0ZF6Jy3NL94Yj");
-                    uploadStep2Method.setRequestHeader("Content-Length", entity.getContentLength() + "");
+                    System.out.println("++++++++++++++++++++" + entity.getContentType() + "   "
+                            + entity.getContentLength());
+                    String contentType = entity.getContentType();
+                    String contentTypeResult = contentType.substring(0, contentType.indexOf("=") + 1) + "----------"
+                            + contentType.substring(contentType.indexOf("=") + 1);
+                    System.out.println(contentTypeResult);
+
+                    // uploadStep2Method.setRequestHeader("Accept-Encoding ", "identity");
+                    // uploadStep2Method.setRequestHeader("Content-Length", entity.getContentLength() + "");
+                    // uploadStep2Method.setRequestHeader("Host", "ufaclient.wps.cn");
+                    // uploadStep2Method.setRequestHeader("Content-Type", contentTypeResult);
+                    // uploadStep2Method.setRequestHeader("Connection", "close");
+                    // uploadStep2Method.setRequestHeader("User-Agent", "klive");
+
+                    // uploadStep2Method.setRequestHeader("User-Agent",
+                    // "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
+//                    uploadStep2Method.setRequestHeader("Referer", "http://www.surroundlife.com");
+
                     uploadStep2Method.setRequestEntity(entity);
                     HttpClient upload2Http = new HttpClient();
                     upload2Http.executeMethod(uploadStep2Method);

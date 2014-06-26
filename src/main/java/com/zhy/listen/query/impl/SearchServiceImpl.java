@@ -21,7 +21,6 @@ public class SearchServiceImpl implements SearchService, ApplicationContextAware
         String className = t.getClass().getSimpleName();
         String serviceName = String.valueOf(className.charAt(0)).toLowerCase() + className.substring(1);
         Object service = applicationContext.getBean(serviceName + "Service");
-        String parentName = service.getClass().getSuperclass().getName();
         List<T> result = ((AbstractSearch) service).search(t);
         return result;
     }

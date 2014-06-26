@@ -14,4 +14,6 @@ public interface MusicDAO {
     public List<Music> getMusicsByUpload(@Param("uploadEnum") MusicUploadEnum musicUploadEnum);
 
     public int save(Music music);
+
+    public List<Music> getMusic(@Param("author") String author, @Param("title") String title);
 }

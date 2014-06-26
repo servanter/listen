@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.Music;
-import com.zhy.listen.service.BaseMusicService;
+import com.zhy.listen.service.MusicService;
 
 public class BaseMusicServiceImplTest extends SuperTest{
 
     @Autowired
-    private BaseMusicService baseMusicService;
+    private MusicService baseMusicService;
     
     @Test
     public void testAdd() {
@@ -25,6 +25,14 @@ public class BaseMusicServiceImplTest extends SuperTest{
         Assert.assertTrue("Can't save the music ?", baseMusicService.add(music));
         List<Music> musics = baseMusicService.findNotUploadMusics();
         Assert.assertTrue("Can't find the musics ?", musics != null && musics.size() > 0);
+    }
+    
+    @Test
+    public void testFind() {
+        String author = "周杰伦";
+        String title = "回到过去";
+        List<Music> ms = baseMusicService.findByAuthorAndTitle(author, title);
+        Assert.assertTrue("Can't find the music.", ms != null && ms.size() > 0);
     }
 
 }

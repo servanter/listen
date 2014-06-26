@@ -67,7 +67,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/json-simple-1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jstl-1.2.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/junit-4.11.jar" sourcepath="D:/maven/repo/junit/junit/4.11/junit-4.11-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/junit-4.8.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/kaixin4j-1.0.jar"/>

@@ -24,6 +24,16 @@ public class Music extends Paging implements java.io.Serializable {
     private Boolean isUpload;
     
     private Boolean isIndex;
+    
+    private Boolean isValid;
+
+    public Boolean getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
 
     public Boolean getIsIndex() {
         return isIndex;
@@ -107,6 +117,7 @@ public class Music extends Paging implements java.io.Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((isIndex == null) ? 0 : isIndex.hashCode());
         result = prime * result + ((isUpload == null) ? 0 : isUpload.hashCode());
+        result = prime * result + ((isValid == null) ? 0 : isValid.hashCode());
         result = prime * result + ((lrc == null) ? 0 : lrc.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((url == null) ? 0 : url.hashCode());
@@ -147,6 +158,11 @@ public class Music extends Paging implements java.io.Serializable {
                 return false;
         } else if (!isUpload.equals(other.isUpload))
             return false;
+        if (isValid == null) {
+            if (other.isValid != null)
+                return false;
+        } else if (!isValid.equals(other.isValid))
+            return false;
         if (lrc == null) {
             if (other.lrc != null)
                 return false;
@@ -167,8 +183,9 @@ public class Music extends Paging implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Music [id=" + id + ", title=" + title + ", author=" + author + ", url=" + url + ", lrc=" + lrc + ", createTime=" + createTime
-                + ", isUpload=" + isUpload + ", isIndex=" + isIndex + "]";
+        return "Music [id=" + id + ", title=" + title + ", author=" + author + ", url=" + url + ", lrc=" + lrc
+                + ", createTime=" + createTime + ", isUpload=" + isUpload + ", isIndex=" + isIndex + ", isValid="
+                + isValid + "]";
     }
     
     

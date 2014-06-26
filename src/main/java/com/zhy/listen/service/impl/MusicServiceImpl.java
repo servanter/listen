@@ -1,53 +1,44 @@
 package com.zhy.listen.service.impl;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Music;
-import com.zhy.listen.common.Constant;
+import com.zhy.listen.bean.MusicUploadEnum;
+import com.zhy.listen.bean.Paging;
+import com.zhy.listen.dao.MusicDAO;
+import com.zhy.listen.query.AbstractLuceneSearch;
 import com.zhy.listen.service.MusicService;
-import com.zhy.listen.template.TemplateService;
 
-@Service
-public class MusicServiceImpl implements MusicService {
+@Service("musicService")
+public class MusicServiceImpl extends AbstractLuceneSearch implements MusicService {
 
     @Autowired
-    private TemplateService templateService;
+    private MusicDAO musicDAO;
+    
+    @Override
+    public List<Music> findNotUploadMusics() {
+        return musicDAO.getMusicsByUpload(MusicUploadEnum.NOT_UPLOADED);
+    }
 
     @Override
-    public Music findMusicByBaidu(String author, String topic) throws Exception {
-        Music result = new Music(author, topic);
-        String url = templateService.getMessage(Constant.BAIDU_MUSIC_URL, topic, author);
-        Document document = Jsoup.connect(url).get();
-        Elements elements = document.getElementsByTag("count");
-        if(elements != null && elements.size() > 0 && Integer.parseInt(elements.get(0).text()) > 0) {
-            Elements elements1 = document.getElementsByTag("encode");
-            Elements elements2 = document.getElementsByTag("decode");
-            Elements elements3 = document.getElementsByTag("lrcid");
-            if (elements1 != null && elements1.size() > 0 && elements2 != null && elements2.size() > 0) {
-                for (int i = 0; i < elements1.size(); i++) {
-                    String first = elements1.get(i).text();
-                    String downloadUrl = "";
-                    String lrc = "";
-                    if (first.contains("/")) {
-                        downloadUrl = first.substring(0, first.lastIndexOf("/") + 1) + elements2.get(i).text();
-                        result.setUrl(downloadUrl);
-                    }
-                    if (elements3 != null && elements3.size() > 0 && !elements3.text().equals("0")) {
-                        String rowLrc = elements3.get(0).text();
-                        lrc = templateService.getMessage(Constant.BAIDU_MUSIC_LRC_URL, String.valueOf(Integer.parseInt(rowLrc) / 100), rowLrc);
-                        result.setLrc(lrc);
-                    }
-                    if (downloadUrl != null && downloadUrl.length() > 0 && lrc != null && lrc.length() > 0) {
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
+    public boolean add(Music music) {
+        return musicDAO.save(music) > 0;
     }
+
+    @Override
+    public List<Music> findByAuthorAndTitle(String author, String title) {
+        return musicDAO.getMusic(author, title);
+    }
+
+    @Override
+    public <T extends Paging> List<T> search(T t) {
+        Music m = (Music)t;
+        return (List<T>)musicDAO.getMusic(m.getAuthor(), m.getTitle());
+    }
+
+
 
 }

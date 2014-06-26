@@ -11,6 +11,7 @@
 		<result property="createTime" column="create_time" />
 		<result property="isUpload" column="is_upload" />
 		<result property="isIndex" column="is_index" />
+		<result property="isValid" column="is_valid" />
 	</resultMap>
 
 	<select id="getMusicsByUpload" parameterType="music" resultMap="musicResult">
@@ -23,5 +24,9 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+	
+	<select id="getMusic" resultMap="musicResult">
+		SELECT * FROM `music` WHERE author = #{author} AND title = #{title} AND is_valid = 1
+	</select>
 
 </mapper>

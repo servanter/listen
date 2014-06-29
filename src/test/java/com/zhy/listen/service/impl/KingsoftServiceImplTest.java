@@ -21,7 +21,9 @@ public class KingsoftServiceImplTest extends SuperTest {
     public void testUpload() {
 //        String a = URLDecoder.decode("%252F");
 //        System.out.println(a);
-        kingsoftService.upload(new Music());
+        Music music = new Music();
+        music.setUrl("http://zhangmenshiting2.baidu.com/data2/music/35420302/35420302.mp3?xcode=14425ed4171b44c643eb9f0766c34212598f0faef8e9c637&mid=0.86962648680245");
+        kingsoftService.upload(music);
     }
 
 }

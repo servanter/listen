@@ -187,4 +187,21 @@ public class Constant {
      * 授权posturl
      */
     public static String KINGSOFT_AUTHORISE_POST_URL = "listen.kingsoft.authorise.post.url";
+    
+    /**
+     * 获取accesstoken url
+     */
+    public static String KINGSOFT_ACCESSTOKEN_URL = "listen.kingsoft.accesstoken.url";
+    
+    /**
+     * 获取accesstoken 完整url
+     */
+    public static String KINGSOFT_ACCESSTOKEN_PARAMETERS_URL = "listen.kingsoft.accesstoken.parameters.url";
+    
+    /**
+     * 上传文件url
+     */
+    public static String KINGSOFT_UPLOAD_STEP1_URL = "listen.kingsoft.upload.step1.url";
+    
+    
 }

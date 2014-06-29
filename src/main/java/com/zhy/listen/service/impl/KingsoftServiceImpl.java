@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.json.JSONObject;
 
@@ -78,8 +80,8 @@ public class KingsoftServiceImpl implements KingsoftService {
             m.put("oauth_version", "1.0");
             String sign = calculateSignature(m, requestUrl, GET_METHOD);
 
-            String url = templateService.getMessage(Constant.KINGSOFT_REQUEST_URL, r, t,
-                    templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY), sign);
+            String url = templateService.getMessage(Constant.KINGSOFT_REQUEST_URL, r, t, templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY),
+                    sign);
             logger.info("[Request url]:" + url);
 
             GetMethod requestTokenMethod = new GetMethod(url);
@@ -99,9 +101,8 @@ public class KingsoftServiceImpl implements KingsoftService {
                     String authURL = templateService.getMessage(Constant.KINGSOFT_AUTH_URL, requestToken);
                     GetMethod authMethod = new GetMethod(authURL);
                     authMethod.setRequestHeader("Host", "www.kuaipan.cn");
-                    authMethod
-                            .setRequestHeader("User-Agent",
-                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
+                    authMethod.setRequestHeader("User-Agent",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
                     client = new HttpClient();
                     client.executeMethod(authMethod);
                     String re = authMethod.getResponseBodyAsString();
@@ -112,16 +113,14 @@ public class KingsoftServiceImpl implements KingsoftService {
                     String username = templateService.getMessage(Constant.KINGSOFT_USERNAME);
                     String userpwd = templateService.getMessage(Constant.KINGSOFT_PASSWORD);
                     String appName = templateService.getMessage(Constant.KINGSOFT_APPNAME);
-                    PostMethod postMethod = new PostMethod(
-                            templateService.getMessage(Constant.KINGSOFT_AUTHORISE_POST_URL));
-                    postMethod.setRequestBody(new NameValuePair[] { new NameValuePair("username", username),
-                            new NameValuePair("userpwd", userpwd), new NameValuePair("s", val),
-                            new NameValuePair("app_name", appName), new NameValuePair("oauth_token", requestToken) });
+                    PostMethod postMethod = new PostMethod(templateService.getMessage(Constant.KINGSOFT_AUTHORISE_POST_URL));
+                    postMethod.setRequestBody(new NameValuePair[] { new NameValuePair("username", username), new NameValuePair("userpwd", userpwd),
+                            new NameValuePair("s", val), new NameValuePair("app_name", appName), new NameValuePair("oauth_token", requestToken) });
                     postMethod.setRequestHeader("Referer", authURL);
                     client.executeMethod(postMethod);
                     String authResult = postMethod.getResponseBodyAsString();
 
-                    // step3
+                    // step4 获取accesstoken
 
                     r = RandomUtils.generateString(6);
                     time = System.currentTimeMillis();
@@ -134,13 +133,9 @@ public class KingsoftServiceImpl implements KingsoftService {
                     m.put("oauth_version", "1.0");
                     m.put("oauth_secret", requestSecret);
                     m.put("oauth_token", requestToken);
-                    String accessTokenSign = calculateSignature(m, "https://openapi.kuaipan.cn/open/accessToken",
-                            GET_METHOD);
-                    String string = "https://openapi.kuaipan.cn/open/accessToken?oauth_consumer_key="
-                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)
-                            + "&oauth_signature_method=HMAC-SHA1&oauth_signature=" + accessTokenSign
-                            + "&oauth_timestamp=" + t + "&oauth_nonce=" + r + "&oauth_version=1.0&oauth_token="
-                            + requestToken;
+                    String accessTokenSign = calculateSignature(m, templateService.getMessage(Constant.KINGSOFT_ACCESSTOKEN_URL), GET_METHOD);
+                    String string = templateService.getMessage(Constant.KINGSOFT_ACCESSTOKEN_PARAMETERS_URL,
+                            templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY), accessTokenSign, t, r, requestToken);
                     logger.debug("[AccessToken url]:" + string);
                     GetMethod mm = new GetMethod(string);
                     client = new HttpClient();
@@ -163,22 +158,44 @@ public class KingsoftServiceImpl implements KingsoftService {
                     m.put("oauth_secret", accessSecret);
                     m.put("oauth_token", accessToken);
 
-                    String uploadSign = calculateSignature(m,
-                            "http://api-content.dfs.kuaipan.cn/1/fileops/upload_locate", GET_METHOD);
+                    // 上传文件第一步，获取上传文件url
+                    String uploadSign = calculateSignature(m, Constant.KINGSOFT_UPLOAD_STEP1_URL, GET_METHOD);
                     String uploadFileUrl = "http://api-content.dfs.kuaipan.cn/1/fileops/upload_locate?oauth_consumer_key="
-                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)
-                            + "&oauth_signature_method=HMAC-SHA1&oauth_signature="
-                            + uploadSign
-                            + "&oauth_timestamp="
-                            + t + "&oauth_nonce=" + r + "&oauth_version=1.0&oauth_token=" + accessToken;
+                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY) + "&oauth_signature_method=HMAC-SHA1&oauth_signature="
+                            + uploadSign + "&oauth_timestamp=" + t + "&oauth_nonce=" + r + "&oauth_version=1.0&oauth_token=" + accessToken;
                     GetMethod uploadFileMethod = new GetMethod(uploadFileUrl);
                     HttpClient uploadHttp = new HttpClient();
                     uploadHttp.executeMethod(uploadFileMethod);
                     String uploadResult = uploadFileMethod.getResponseBodyAsString();
-                    System.out.println(uploadResult);
 
+                    // 上传文件url
                     String uploadUrl = JSONObject.fromObject(uploadResult).getString("url");
 
+                    
+                    // music
+                    URLConnection connection = new URL(music.getUrl()).openConnection();
+                    InputStream fis = connection.getInputStream();
+                    
+                    // 获取filename 并生成文件
+                    Pattern pattern = Pattern.compile("\\w+\\.\\w+\\?");
+                    Matcher matcher = pattern.matcher(music.getUrl());
+                    String result = "";
+                    if(matcher.find()) {
+                        result = matcher.group();
+                    }
+                    result = result.replace("?", "");
+                    String filePostName = "";
+                    filePostName = result.substring(result.indexOf(".") + 1);
+                    String tempFileName = result.substring(0, result.indexOf(".")) + "_" + String.valueOf(System.currentTimeMillis());
+                    File targetFile = new File("d:\\music\\" + tempFileName + "." + filePostName);
+                    OutputStream os = new FileOutputStream(targetFile);
+                    int bytesRead = 0;
+                    byte[] buffer = new byte[8192];
+                    while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+                        os.write(buffer, 0, bytesRead);
+                    }
+                    
+                    
                     r = RandomUtils.generateString(6);
                     time = System.currentTimeMillis();
                     t = String.valueOf(time).substring(0, 10);
@@ -199,55 +216,25 @@ public class KingsoftServiceImpl implements KingsoftService {
                     String uploadStep2Sign = calculateSignature(m, string2, POST_METHOD);
                     System.out.println("++++++++++" + string2);
 
-                    URLConnection connection = new URL("http://zhangmenshiting2.baidu.com/data2/music/35420302/35420302.mp3?xcode=6d6dd74a7cd8933a9a1f91991d05578b598f0faef8e9c637&mid=0.62135695683709").openConnection();
-                    InputStream fis = connection.getInputStream();
-                    File targetFile = new File("d:\\mpa.mp3");
-                    OutputStream os = new FileOutputStream(targetFile);
-                    int bytesRead = 0;
-                    byte[] buffer = new byte[8192];
-                    while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
-                    os.write(buffer, 0, bytesRead);
-                    }
                     
-                    
-                    
+
                     String string3 = string2 + "?oauth_signature=" + uploadStep2Sign + "&oauth_consumer_key="
-                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY) + "&oauth_nonce=" + r + "&oauth_signature_method=HMAC-SHA1" 
-                            + "&oauth_timestamp=" + t + "&oauth_token=" + accessToken
-                            + "&oauth_version=1.0&overwrite=true&path="+ signFileName +"&root=app_folder";
+                            + templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY) + "&oauth_nonce=" + r + "&oauth_signature_method=HMAC-SHA1"
+                            + "&oauth_timestamp=" + t + "&oauth_token=" + accessToken + "&oauth_version=1.0&overwrite=true&path=" + signFileName
+                            + "&root=app_folder";
                     PostMethod uploadStep2Method = new PostMethod(string3);
                     System.out.println(string3);
-                    // NameValuePair[] parameters = new NameValuePair[] {
-                    // new NameValuePair("oauth_nonce", r),
-                    // new NameValuePair("oauth_timestamp", t),
-                    // new NameValuePair("oauth_consumer_key",
-                    // templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
-                    // new NameValuePair("oauth_signature_method", "HMAC-SHA1"),
-                    // new NameValuePair("oauth_version", "1.0"), new NameValuePair("oauth_secret", accessSecret),
-                    // new NameValuePair("oauth_token", accessToken), new NameValuePair("overwrite", "True"),
-                    // new NameValuePair("root", "kuaipan"), new NameValuePair("path", "/aaa.jpg"),
-                    // new NameValuePair("oauth_signature", uploadStep2Sign) };
-                    // uploadStep2Method.setRequestBody(parameters);
-                    // uploadStep2Method.setRequestHeader("Accept-Encoding", "identity");
-                    // uploadStep2Method.setRequestHeader("Host", "ufaclient.wps.cn");
-                    // uploadStep2Method.setRequestHeader("Connection", "close");
 
                     FilePart fp = new FilePart(targetFile.getName(), targetFile);
 
-                    Part[] parts = new Part[] {
-                            fp,
-                            new StringPart("oauth_nonce", r),
-                            new StringPart("oauth_timestamp", t),
-                            new StringPart("oauth_consumer_key",
-                                    templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
-                            new StringPart("oauth_signature_method", "HMAC-SHA1"),
-                            new StringPart("oauth_version", "1.0"), new StringPart("oauth_secret", accessSecret),
-                            new StringPart("oauth_token", accessToken), new StringPart("overwrite", "true"),
-                            new StringPart("root", "app_folder"), new StringPart("path", "/aaa.txt"),
+                    Part[] parts = new Part[] { fp, new StringPart("oauth_nonce", r), new StringPart("oauth_timestamp", t),
+                            new StringPart("oauth_consumer_key", templateService.getMessage(Constant.KINGSOFT_CONSUME_KEY)),
+                            new StringPart("oauth_signature_method", "HMAC-SHA1"), new StringPart("oauth_version", "1.0"),
+                            new StringPart("oauth_secret", accessSecret), new StringPart("oauth_token", accessToken),
+                            new StringPart("overwrite", "true"), new StringPart("root", "app_folder"), new StringPart("path", "/aaa.txt"),
                             new StringPart("oauth_signature", uploadStep2Sign) };
                     MultipartRequestEntity entity = new MultipartRequestEntity(parts, uploadStep2Method.getParams());
-                    System.out.println("++++++++++++++++++++" + entity.getContentType() + "   "
-                            + entity.getContentLength());
+                    System.out.println("++++++++++++++++++++" + entity.getContentType() + "   " + entity.getContentLength());
                     String contentType = entity.getContentType();
                     String contentTypeResult = contentType.substring(0, contentType.indexOf("=") + 1) + "----------"
                             + contentType.substring(contentType.indexOf("=") + 1);
@@ -262,7 +249,7 @@ public class KingsoftServiceImpl implements KingsoftService {
 
                     // uploadStep2Method.setRequestHeader("User-Agent",
                     // "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36");
-//                    uploadStep2Method.setRequestHeader("Referer", "http://www.surroundlife.com");
+                    // uploadStep2Method.setRequestHeader("Referer", "http://www.surroundlife.com");
 
                     uploadStep2Method.setRequestEntity(entity);
                     HttpClient upload2Http = new HttpClient();
@@ -283,8 +270,7 @@ public class KingsoftServiceImpl implements KingsoftService {
      * @return
      * @throws UnsupportedEncodingException
      */
-    private String calculateSignature(Map<String, String> m, String requestUrl, String method)
-            throws UnsupportedEncodingException {
+    private String calculateSignature(Map<String, String> m, String requestUrl, String method) throws UnsupportedEncodingException {
         String rowSign = "";
         for (Entry<String, String> entry : m.entrySet()) {
             if (entry.getKey().equals("oauth_secret")) {

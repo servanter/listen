@@ -203,5 +203,13 @@ public class Constant {
      */
     public static String KINGSOFT_UPLOAD_STEP1_URL = "listen.kingsoft.upload.step1.url";
     
-    
+    /**
+     * 音乐存放文件夹
+     */
+    public static String KINGSOFT_MUSIC_FOLDER = "listen.kingsoft.music.folder";
+ 
+    /**
+     * 上传文件第二部url
+     */
+    public static String KINGSOFT_UPLOAD_STEP2_URL = "listen.kingsoft.upload.step2.url";
 }

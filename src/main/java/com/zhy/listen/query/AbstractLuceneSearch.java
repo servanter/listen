@@ -43,7 +43,7 @@ import com.zhy.listen.util.StringUtil;
  * @author zhanghongyan
  * 
  */
-public abstract class AbstractLuceneSearch extends AbstractSearch {
+public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
 
     @Autowired
     private TemplateService templateService;
@@ -210,22 +210,26 @@ public abstract class AbstractLuceneSearch extends AbstractSearch {
         return fields;
     }
     
-    protected QueryResult generateQueryResult(Class<? extends Paging> t, IndexerClass indexerClass) {
+    protected QueryResult generateQueryResult(T t, IndexerClass indexerClass) {
         QueryResult queryResult = new QueryResult();
         queryResult.setIndexerClass(indexerClass);
         try {
             List<QueryField> queryFields = new ArrayList<QueryField>();
             List<String> fields = requiredFields.get(queryResult.getIndexerClass().name().toLowerCase());
             for (String f : fields) {
-                String getMethodName = "get" + f;
-                Object method = t.getMethod(getMethodName).invoke(t);
+                String getMethodName = "get" + StringUtil.signUpChar(0, f);
+                Object method = t.getClass().getMethod(getMethodName).invoke(t);
+                if(method == null) {
+                    continue;
+                }
                 String value = String.valueOf(method.toString());
                 QueryField field = new QueryField(f, value);
                 queryFields.add(field);
             }
+            queryResult.setQueryFields(queryFields);
             
             // 获取当前查询的条数
-            queryResult.setCount(Integer.parseInt(t.getDeclaredMethod("getCount").invoke(t).toString()));
+            queryResult.setCount(Integer.parseInt(t.getClass().getSuperclass().getDeclaredMethod("getPageSize").invoke(t).toString()));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (SecurityException e) {

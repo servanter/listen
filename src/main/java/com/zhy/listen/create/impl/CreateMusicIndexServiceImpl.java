@@ -7,11 +7,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.create.GenerateIndexService;
 import com.zhy.listen.create.GenerateIndexServiceAdapter;
 
+@Service
 public class CreateMusicIndexServiceImpl extends GenerateIndexServiceAdapter implements GenerateIndexService<Music> {
 
     @Override
@@ -24,9 +26,10 @@ public class CreateMusicIndexServiceImpl extends GenerateIndexServiceAdapter imp
             document.add(new Field("author", music.getAuthor(), Store.YES, Index.ANALYZED));
             document.add(new Field("url", music.getUrl(), Store.YES, Index.NO));
             document.add(new Field("lrc", music.getLrc(), Store.YES, Index.NO));
-            document.add(new Field("is_upload", music.getIsUpload().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("is_index", music.getIsIndex().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("is_valid", music.getIsValid().toString(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("isUpload", music.getIsUpload().toString(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("isIndex", music.getIsIndex().toString(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("isValid", music.getIsValid().toString(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("createTime", music.getCreateTime().toString(), Store.YES, Index.NOT_ANALYZED));
             docs.add(document);
         }
         return docs;

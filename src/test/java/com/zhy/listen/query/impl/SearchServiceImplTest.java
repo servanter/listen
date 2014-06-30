@@ -17,8 +17,8 @@ public class SearchServiceImplTest extends SuperTest {
     @Test
     public void testSearch() {
         Music music = new Music();
-        music.setAuthor("周杰伦");
-        music.setTitle("回到过去");
+        music.setAuthor("周");
+        music.setTitle("到");
         List<Music> ms = searchService.search(music);
 
         System.out.println(ms);

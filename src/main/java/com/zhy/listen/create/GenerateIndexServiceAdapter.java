@@ -3,9 +3,11 @@ package com.zhy.listen.create;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.indexer.IndexerClass;
 
+@Service
 public class GenerateIndexServiceAdapter implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;

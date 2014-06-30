@@ -13,6 +13,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.common.Constant;
@@ -20,6 +21,7 @@ import com.zhy.listen.create.CreateService;
 import com.zhy.listen.create.GenerateIndexServiceAdapter;
 import com.zhy.listen.template.TemplateService;
 
+@Service
 public class CreateServiceImpl implements CreateService {
 
     @Autowired

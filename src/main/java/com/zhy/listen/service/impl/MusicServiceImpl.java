@@ -4,20 +4,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.MusicUploadEnum;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.indexer.IndexerClass;
-import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.dao.MusicDAO;
 import com.zhy.listen.query.AbstractLuceneSearch;
 import com.zhy.listen.service.MusicService;
 
 @Service("musicService")
-public class MusicServiceImpl extends AbstractLuceneSearch implements MusicService {
+public class MusicServiceImpl extends AbstractLuceneSearch<Music> implements MusicService {
 
     @Autowired
     private MusicDAO musicDAO;
@@ -38,16 +36,16 @@ public class MusicServiceImpl extends AbstractLuceneSearch implements MusicServi
     }
 
     @Override
-    public <T extends Paging> List<T> search(T t) {
+    public List<Music> search(Music t) {
         
         // 查询索引
         Music m = (Music)t;
-        QueryResult queryResult = super.generateQueryResult(t.getClass(), IndexerClass.MUSIC);
+        QueryResult queryResult = super.generateQueryResult((com.zhy.listen.bean.Music) m, IndexerClass.MUSIC);
         queryResult = super.query(queryResult);
         if(queryResult.getHitCount() > 0) {
-            return (List<T>) queryResult.getResult();
+            return (List<Music>) queryResult.getResult();
         }
-        return (List<T>)musicDAO.getMusic(m.getAuthor(), m.getTitle());
+        return (List<Music>)musicDAO.getMusic(t.getAuthor(), m.getTitle());
     }
 
 

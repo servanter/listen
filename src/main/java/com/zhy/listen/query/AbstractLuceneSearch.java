@@ -154,12 +154,12 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
      * @param type
      * @return
      */
-    private <T extends Paging> Paging getBean(Document doc, Class<T> type) {
+    private <X extends Paging> Paging getBean(Document doc, Class<X> type) {
         Field[] fields = getFields(type);
         try {
 
             // 实例化
-            T bean = type.newInstance();
+            X bean = type.newInstance();
             for (Field field : fields) {
                 // 设置每一个field
                 String name = field.getName();

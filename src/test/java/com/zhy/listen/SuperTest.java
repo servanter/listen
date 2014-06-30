@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration( { "/applicationContext-db.xml","/applicationContext-third.xml" })
+@ContextConfiguration( { "/applicationContext-db.xml","/applicationContext-third.xml", "/applicationContext-index.xml" })
 public class SuperTest {
 
 }

@@ -1,4 +1,4 @@
-package com.zhy.listen.index;
+package com.zhy.listen.create;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -12,8 +12,7 @@ public class GenerateIndexServiceAdapter implements ApplicationContextAware {
 
     public GenerateIndexService getCreateIndexImpl(IndexerClass indexerClass) {
         try {
-            return (GenerateIndexService) applicationContext.getBean("create" + indexerClass.getAlias()
-                    + "IndexServiceImpl");
+            return (GenerateIndexService) applicationContext.getBean("create" + indexerClass.getAlias() + "IndexServiceImpl");
         } catch (BeansException e) {
             e.printStackTrace();
         }

@@ -9,19 +9,14 @@ package com.zhy.listen.bean.indexer;
 public enum IndexerClass {
 
     /**
-     * 新鲜事 对应createNewsIndexImpl
+     * 音乐
      */
-    NEWS("News"),
+    MUSIC("Music"),
 
     /**
      * 用户相关
      */
-    USER("User"),
-
-    /**
-     * 查询外网相关
-     */
-    INFORMATION("Information");
+    USER("User");
 
     private String alias;
 

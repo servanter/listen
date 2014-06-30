@@ -39,13 +39,12 @@ public class MusicServiceImpl extends AbstractLuceneSearch<Music> implements Mus
     public List<Music> search(Music t) {
         
         // 查询索引
-        Music m = (Music)t;
-        QueryResult queryResult = super.generateQueryResult((com.zhy.listen.bean.Music) m, IndexerClass.MUSIC);
+        QueryResult queryResult = super.generateQueryResult(t, IndexerClass.MUSIC);
         queryResult = super.query(queryResult);
         if(queryResult.getHitCount() > 0) {
             return (List<Music>) queryResult.getResult();
         }
-        return (List<Music>)musicDAO.getMusic(t.getAuthor(), m.getTitle());
+        return (List<Music>)musicDAO.getMusic(t.getAuthor(), t.getTitle());
     }
 
 

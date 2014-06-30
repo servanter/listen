@@ -95,3 +95,37 @@ CREATE TABLE `comment` (
   `is_valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0为不可用;1为可用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+-- -----------------------------------------------
+-- Table structure for `author` 作者表
+-- -----------------------------------------------
+CREATE TABLE `author` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `en_name` varchar(50) NOT NULL,
+  `first_en_name` varchar(2) NOT NULL,
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_valid` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+
+
+-- -----------------------------------------------
+-- Table structure for `music` 音乐表
+-- -----------------------------------------------
+CREATE TABLE `music` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `author` varchar(50) NOT NULL,
+  `url` varchar(200) NOT NULL,
+  `lrc` varchar(200) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_upload` tinyint(1) NOT NULL DEFAULT '0',
+  `is_index` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

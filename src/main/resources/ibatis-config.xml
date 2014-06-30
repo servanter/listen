@@ -8,5 +8,6 @@
 		<typeAlias alias="third" type="com.zhy.listen.bean.Third" />
 		<typeAlias alias="user" type="com.zhy.listen.bean.User" />
 		<typeAlias alias="music" type="com.zhy.listen.bean.Music" />
+		<typeAlias alias="author" type="com.zhy.listen.bean.Author" />
 	</typeAliases>
 </configuration>

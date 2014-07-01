@@ -23,7 +23,7 @@ public interface CommentDAO {
      * @param comment
      * @return
      */
-    public Comment save(Comment comment);
+    public int save(Comment comment);
 
     /**
      * 删除评论(逻辑删除,只修改)

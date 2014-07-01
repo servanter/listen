@@ -17,8 +17,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment comment(Comment comment) {
-        Comment result = commentDAO.save(comment);
-        return result.getId() != -1L ? result : null;
+        commentDAO.save(comment);
+        return comment;
     }
 
     @Override

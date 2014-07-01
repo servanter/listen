@@ -89,6 +89,7 @@ CREATE TABLE `comment` (
   `content` varchar(200) NOT NULL COMMENT '评论内容',
   `re_content` varchar(200) NOT NULL DEFAULT '' COMMENT '评论内容',
   `user_name` varchar(20) DEFAULT NULL COMMENT '用户昵称',
+  `re_user_name` varchar(20) DEFAULT NULL COMMENT '用户昵称',
   `comment_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '评论时间',
   `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近一次修改时间',
   `type` int(2) NOT NULL COMMENT '类别',

@@ -24,32 +24,32 @@
 	</resultMap>
 
 	<!-- 验证该用户名是否可用 -->
-	<select id="sel_by_username" parameterType="java.lang.String"
+	<select id="isExistUser" parameterType="java.lang.String"
 		resultMap="userMap">
 		SELECT * FROM `user` WHERE user_name=#{userName}
 	</select>
 
 	<!-- 根据用户名密码登陆 -->
-	<select id="sel_by_name_pass" parameterType="user"
+	<select id="getUserByNameAndPass" parameterType="user"
 		resultMap="userMap">
 		SELECT * FROM `user` WHERE user_name = #{userName} AND pass_word
 		= #{passWord} AND is_valid = true
 	</select>
 
 	<!-- 根据用户ID查询 -->
-	<select id="sel_by_id" parameterType="java.lang.Long"
+	<select id="getUserById" parameterType="java.lang.Long"
 		resultMap="userMap">
 		SELECT * FROM `user` WHERE id = #{id}
 	</select>
 
 	<!-- 根据用户昵称查询 -->
-	<select id="sel_by_usernick" parameterType="java.lang.String"
+	<select id="getUserByNick" parameterType="java.lang.String"
 		resultMap="userMap">
 		SELECT * FROM `user` WHERE user_nick like #{userNick}
 	</select>
 
 	<!-- 随即查询用户 -->
-	<select id="sel_by_userrandom" parameterType="user"
+	<select id="getUsersByRandom" parameterType="user"
 		resultMap="userMap">
 		SELECT * FROM `user` WHERE
 		<![CDATA[ id <> #{id} ]]>
@@ -57,12 +57,12 @@
 	</select>
 
 	<!-- 查询用户id及昵称 -->
-	<select id="sel_by_usernameAndId" resultMap="userMap">
+	<select id="getUserNameAndId" resultMap="userMap">
 		SELECT id, user_nick FROM `user`
 	</select>
 
 	<!-- 注册用户 -->
-	<insert id="sav_by_user" parameterType="user">
+	<insert id="save" parameterType="user">
 		INSERT INTO `user` (user_name,pass_word,reg_time
 		<if test="birthday != null">,birthday</if>
 		<if test="sex != null">,sex</if>
@@ -93,19 +93,19 @@
 		<![CDATA[ 
         ) 
     	]]>
-		<selectKey resultType="java.lang.Long" keyProperty="id">
-			SELECT id FROM `user` WHERE user_name = #{userName} AND
-			pass_word = #{passWord}
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+	
 
 	<!-- 修改用户状态 -->
-	<update id="upd_by_userIsValid" parameterType="user">
+	<update id="modifyIsValid" parameterType="java.lang.Long">
 		UPDATE `user` SET is_valid=#{isValid} WHERE id=#{id}
 	</update>
 
 	<!-- 修改用户信息 -->
-	<update id="upd_by_userId" parameterType="user">
+	<update id="update" parameterType="user">
 		UPDATE `user`
 		<set>
 			<if test="passWord != null">pass_word=#{passWord},</if>
@@ -126,13 +126,13 @@
 	</update>
 
 	<!-- 更新用户等级及积分 -->
-	<update id="upd_userpointAndLevel" parameterType="java.util.Map">
+	<update id="updatePointAndLevel" parameterType="java.util.Map">
 		UPDATE `user` SET user_level=#{userLevel},
 		user_point=#{userPoint} WHERE ID=#{userId}
 	</update>
 	
 	<!-- 查询一批用户 -->
-	<select id="sel_byIds" parameterType="java.lang.Long">
+	<select id="getUsersByIds" parameterType="java.lang.Long">
 		SELECT * FROM `user` WHERE id IN
 		<foreach collection="ids" item="id" open="(" separator="," close=")">
 			#{id}

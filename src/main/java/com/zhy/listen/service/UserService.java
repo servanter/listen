@@ -52,7 +52,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    public User register(User user);
+    public Long register(User user);
 
     /**
      * 查看该用户名是否可用

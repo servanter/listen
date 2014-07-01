@@ -10,10 +10,10 @@ import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.service.MusicService;
 
-public class BaseMusicServiceImplTest extends SuperTest{
+public class MusicServiceImplTest extends SuperTest{
 
     @Autowired
-    private MusicService baseMusicService;
+    private MusicService musicService;
     
     @Test
     public void testAdd() {
@@ -22,8 +22,8 @@ public class BaseMusicServiceImplTest extends SuperTest{
         music.setAuthor("周杰伦");
         music.setUrl("www.baodu.com");
         music.setLrc("想回到过去");
-        Assert.assertTrue("Can't save the music ?", baseMusicService.add(music));
-        List<Music> musics = baseMusicService.findNotUploadMusics();
+        Assert.assertTrue("Can't save the music ?", musicService.add(music));
+        List<Music> musics = musicService.findNotUploadMusics();
         Assert.assertTrue("Can't find the musics ?", musics != null && musics.size() > 0);
     }
     
@@ -31,7 +31,7 @@ public class BaseMusicServiceImplTest extends SuperTest{
     public void testFind() {
         String author = "周杰伦";
         String title = "回到过去";
-        List<Music> ms = baseMusicService.findByAuthorAndTitle(author, title);
+        List<Music> ms = musicService.findByAuthorAndTitle(author, title);
         Assert.assertTrue("Can't find the music.", ms != null && ms.size() > 0);
     }
 

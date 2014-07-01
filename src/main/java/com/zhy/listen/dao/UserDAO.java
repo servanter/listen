@@ -3,6 +3,7 @@ package com.zhy.listen.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.zhy.listen.bean.User;
@@ -23,7 +24,7 @@ public interface UserDAO {
      * @param user
      * @return
      */
-    public User save(User user);
+    public int save(User user);
 
     /**
      * 根据用户名密码查找用户
@@ -40,7 +41,7 @@ public interface UserDAO {
      * @param id
      * @return
      */
-    public Map<String, User> getUserById(Long id);
+    public User getUserById(Long id);
 
     /**
      * 随机获取用户(I'm feeling lucky)
@@ -105,7 +106,7 @@ public interface UserDAO {
      * @param level
      * @return
      */
-    public int updatePointAndLevel(Long userId, Long point, Integer level);
+    public int updatePointAndLevel(@Param("userId") Long userId, @Param("userPoint")Long point, @Param("userLevel")Integer level);
 
     /**
      * 获取一批用户

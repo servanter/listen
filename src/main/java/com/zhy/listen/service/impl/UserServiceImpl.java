@@ -25,9 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        Map<String, User> result = userDAO.getUserById(id);
-        User user = result.get(id);
-        return user;
+        return userDAO.getUserById(id);
     }
 
     @Override
@@ -41,9 +39,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
+    public Long register(User user) {
         if (isNameValid(user.getUserName())) {
-            return userDAO.save(user);
+            userDAO.save(user);
+            return user.getId();
         }
 
         // exists this username

@@ -19,4 +19,19 @@ public interface AuthorService {
      * @return
      */
     public List<Author> getAuthorsByConditions(Author author);
+
+    /**
+     * 新增作者
+     * 
+     * @param author
+     * @return
+     */
+    public boolean add(Author author);
+
+    /**
+     * 批量新增作者
+     * 
+     * @param authors
+     */
+    public void batchAdd(List<Author> authors);
 }

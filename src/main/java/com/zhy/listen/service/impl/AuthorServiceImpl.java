@@ -14,10 +14,20 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorDAO authorDAO;
-    
+
     @Override
     public List<Author> getAuthorsByConditions(Author author) {
         return authorDAO.getAuthorsByConditions(author);
+    }
+
+    @Override
+    public boolean add(Author author) {
+        return authorDAO.save(author) > 0;
+    }
+
+    @Override
+    public void batchAdd(List<Author> authors) {
+        authorDAO.batchSave(authors);
     }
 
 }

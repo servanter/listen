@@ -102,12 +102,13 @@ CREATE TABLE `comment` (
 -- -----------------------------------------------
 -- Table structure for `author` 作者表
 -- -----------------------------------------------
+DROP TABLE IF EXISTS `author`;
 CREATE TABLE `author` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `en_name` varchar(50) NOT NULL,
   `first_en_name` varchar(2) NOT NULL,
-  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

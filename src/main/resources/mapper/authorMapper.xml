@@ -21,4 +21,18 @@
 		</where>
 	</select>
 	
+	<insert id="save" parameterType="author">
+		INSERT INTO author (title, en_name, first_en_name) VALUES (#{name}, #{enName}, #{firstEnName})
+		<selectKey keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<insert id="batchSave">
+		INSERT INTO author (title, en_name, first_en_name) VALUES 
+		<foreach collection="list" item="l" separator=",">
+			(#{l.name}, #{l.enName}, #{l.firstEnName})
+		</foreach>		
+	</insert>
+	
 </mapper>

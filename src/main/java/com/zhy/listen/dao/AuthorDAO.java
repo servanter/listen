@@ -11,4 +11,8 @@ public interface AuthorDAO {
 
     public List<Author> getAuthorsByConditions(Author author);
 
+    public int save(Author author);
+
+    public void batchSave(List<Author> authors);
+
 }

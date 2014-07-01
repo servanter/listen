@@ -19,7 +19,8 @@ public class ThirdServiceImpl implements ThirdService {
 
     @Override
     public Third add(Third third) {
-        return thirdDAO.save(third);
+        thirdDAO.save(third);
+        return third;
     }
 
     @Override

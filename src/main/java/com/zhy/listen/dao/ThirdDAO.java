@@ -15,7 +15,7 @@ public interface ThirdDAO {
      * @param third
      * @return
      */
-    public Third save(Third third);
+    public int save(Third third);
 
     /**
      * 根据用户ID获取第三方信息

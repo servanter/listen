@@ -16,7 +16,7 @@
 		<result property="metaIndex5" column="meta_index_5" />
 	</resultMap>
 
-	<insert id="sav_by_third" parameterType="third">
+	<insert id="save" parameterType="third">
 		INSERT INTO `third`(type, user_id, create_time, modify_time, end_time
 		<if test="metaIndex1 != null">,meta_index_1</if>
 		<if test="metaIndex2 != null">,meta_index_2</if>
@@ -35,7 +35,7 @@
 		</selectKey>
 	</insert>
 
-	<select id="sel_by_third_userId" parameterType="java.lang.Long"
+	<select id="getThirdsById" parameterType="java.lang.Long"
 		resultMap="thirdResult">
 		SELECT * FROM `third` WHERE user_id=#{userId}
 	</select>
@@ -68,7 +68,7 @@
 		</choose>
 	</update>
 	
-	<select id="sel_sametype" parameterType="third"
+	<select id="getSameThirdsByType" parameterType="third"
 		resultType="java.lang.Long">
 		SELECT user_id FROM `third` WHERE user_id &lt;&gt; #{userId} AND type = #{type} ORDER BY rand() LIMIT #{pageSize}
 	</select>

@@ -12,8 +12,7 @@ import com.zhy.listen.bean.Music;
 public class SearchController {
 
     @RequestMapping(value="search", method = RequestMethod.GET)
-    public String search(@RequestParam("author") String author, @RequestParam("title") String title) {
-        Music music = new Music(author, title);
+    public String search(@RequestParam("title") String text) {
         
         
         return null;

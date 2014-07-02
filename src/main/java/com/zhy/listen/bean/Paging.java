@@ -11,10 +11,10 @@ import java.util.Map;
  * @author zhy
  * 
  */
-public class Paging {
+public class Paging<T> {
 
     /**
-     * 页大小,当pageSize为0时则取所有
+     * 默认页大小
      */
     private int pageSize = 10;
 
@@ -26,17 +26,19 @@ public class Paging {
     /**
      * 总页数
      */
-    private int totalPage;
+    private int totalPage = 0;
 
     /**
      * 总记录数
      */
-    private int totalRecord;
+    private long totalRecord = 0;
 
     /**
-     * 起始数(limit 第一位)
+     * 从id
      */
     private int sinceCount = 0;
+
+    private List<T> result;
 
     public Paging() {
 
@@ -46,6 +48,13 @@ public class Paging {
         this.page = page;
         this.pageSize = pageSize;
         getSinceCountByPage();
+    }
+
+    public Paging(long totalRecord, int page, int pageSize, List<T> result) {
+        this.page = page;
+        this.pageSize = pageSize;
+        setTotalRecord(totalRecord);
+        this.setResult(result);
     }
 
     public int getPageSize() {
@@ -75,17 +84,33 @@ public class Paging {
         this.totalPage = totalPage;
     }
 
-    public int getTotalRecord() {
+    public long getTotalRecord() {
         return totalRecord;
     }
 
-    public void setTotalRecord(int totalRecord) {
+    public void setTotalRecord(Long totalRecord) {
         this.totalRecord = totalRecord;
-        totalPage = (totalRecord - 1) / pageSize + 1;
+        totalPage = (totalRecord.intValue() - 1) / pageSize + 1;
+    }
+
+    public int getSinceCount() {
+        return sinceCount;
+    }
+
+    public void setSinceCount(int sinceCount) {
+        this.sinceCount = sinceCount;
+    }
+
+    public List<T> getResult() {
+        return result;
+    }
+
+    public void setResult(List<T> result) {
+        this.result = result;
     }
 
     /**
-     * 根据pageSize分页List集合
+     * 全部加装时，分页
      * 
      * @param list
      * @return
@@ -110,27 +135,27 @@ public class Paging {
     }
 
     /**
-     * 获取分页下标范围
+     * 分页10页内下标
      * 
      * @return
      */
     public int[] getStartAndEndRange() {
         int startPage = 0;
         int endPage = 0;
-        if (getPage() < 6) {
+        if (getPage() < 4) {
             startPage = 1;
         } else {
-            startPage = getPage() - 5;
+            startPage = getPage() - 3;
         }
 
-        if (getTotalPage() >= 10) {
-            if (getPage() + 5 >= getTotalPage()) {
+        if (getTotalPage() >= 8) {
+            if (getPage() + 3 >= getTotalPage()) {
                 endPage = getTotalPage();
             } else {
-                endPage = getPage() + 5;
+                endPage = getPage() + 3;
             }
 
-        } else if (getTotalPage() < 10) {
+        } else if (getTotalPage() < 8) {
             endPage = getTotalPage();
         } else {
             endPage = getPage() + getTotalPage() - 1;
@@ -138,17 +163,17 @@ public class Paging {
         int[] result = { startPage, endPage };
         return result;
     }
-
-    public int getSinceCount() {
-        return sinceCount;
-    }
-
-    public void setSinceCount(int sinceCount) {
-        this.sinceCount = sinceCount;
+    
+    public static void main(String[] args) {
+        Paging p = new Paging();
+        p.setPage(7);
+        p.setTotalPage(100);
+        int i[] = p.getStartAndEndRange();
+        System.out.println(i[0] + " " + i[1]);
     }
 
     /**
-     * 封装成Map(翻页)
+     * to map
      * 
      * @return
      */
@@ -169,20 +194,21 @@ public class Paging {
         }
     }
 
-    public static Paging generatePaging(String page, String pageSize) {
-        int p = 0;
-        int pSize = 10;
-        try {
-            if (page != null && page.length() > 0) {
-                p = Integer.parseInt(page);
-            }
-            if (pageSize != null && pageSize.length() > 0) {
-                pSize = Integer.parseInt(pageSize);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new Paging(p, pSize);
+    public Paging<T> setTotalRecordAndResult(long totalRecord, List<T> result) {
+        setTotalRecord(totalRecord);
+        this.result = result;
+        return this;
     }
+
+    public Paging generateCommonAttributePaging() {
+        Paging p = new Paging();
+        p.setPage(this.page);
+        p.setPageSize(this.pageSize);
+        p.setTotalPage(this.totalPage);
+        p.setTotalRecord(this.totalRecord);
+        p.setSinceCount(this.sinceCount);
+        return p;
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.zhy.listen.service;
 import java.util.List;
 
 import com.zhy.listen.bean.Author;
+import com.zhy.listen.bean.Paging;
 
 /**
  * 作者字典业务
@@ -18,7 +19,7 @@ public interface AuthorService {
      * @param author
      * @return
      */
-    public List<Author> getAuthorsByConditions(Author author);
+    public Paging<Author> findAuthorsByConditions(Author author);
 
     /**
      * 新增作者

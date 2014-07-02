@@ -6,18 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Author;
+import com.zhy.listen.bean.Paging;
 import com.zhy.listen.dao.AuthorDAO;
+import com.zhy.listen.query.AbstractDBSearch;
 import com.zhy.listen.service.AuthorService;
 
-@Service
-public class AuthorServiceImpl implements AuthorService {
+@Service("authorService")
+public class AuthorServiceImpl extends AbstractDBSearch<Author> implements AuthorService {
 
     @Autowired
     private AuthorDAO authorDAO;
 
     @Override
-    public List<Author> getAuthorsByConditions(Author author) {
-        return authorDAO.getAuthorsByConditions(author);
+    public Paging<Author> findAuthorsByConditions(Author author) {
+        return super.findByPaging(author, "getAuthorsByConditions", author);
     }
 
     @Override
@@ -28,6 +30,14 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void batchAdd(List<Author> authors) {
         authorDAO.batchSave(authors);
+    }
+    
+    public List<Author> getAuthorsByConditions(Author author){
+        return authorDAO.getAuthorsByConditions(author);
+    }
+    
+    public int getAuthorsByConditionsCount(Author author){
+        return authorDAO.getAuthorsByConditionsCount(author);
     }
 
 }

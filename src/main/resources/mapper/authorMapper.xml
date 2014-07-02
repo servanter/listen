@@ -21,6 +21,16 @@
 		</where>
 	</select>
 	
+	<select id="getAuthorsByConditionsCount" parameterType="music" resultType="int">
+		SELECT COUNT(1) FROM `author`
+		<where>
+			<if test="isValid != null">AND is_valid = #{isValid}</if>
+			<if test="name != null">AND title = #{name}</if>
+			<if test="enName != null">AND en_name = #{enName}</if>
+			<if test="firstEnName != null">AND first_en_name = #{firstEnName}</if>
+		</where>
+	</select>
+	
 	<insert id="save" parameterType="author">
 		INSERT INTO author (title, en_name, first_en_name) VALUES (#{name}, #{enName}, #{firstEnName})
 		<selectKey keyProperty="id">

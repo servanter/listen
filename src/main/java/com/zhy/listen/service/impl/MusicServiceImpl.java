@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.MusicUploadEnum;
-import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.dao.MusicDAO;
@@ -19,7 +18,7 @@ public class MusicServiceImpl extends AbstractLuceneSearch<Music> implements Mus
 
     @Autowired
     private MusicDAO musicDAO;
-    
+
     @Override
     public List<Music> findNotUploadMusics() {
         return musicDAO.getMusicsByUpload(MusicUploadEnum.NOT_UPLOADED);
@@ -36,17 +35,12 @@ public class MusicServiceImpl extends AbstractLuceneSearch<Music> implements Mus
     }
 
     @Override
-    public List<Music> search(Music t) {
-        
+    public QueryResult search(Music t) {
+
         // 查询索引
         QueryResult queryResult = super.generateQueryResult(t, IndexerClass.MUSIC);
         queryResult = super.query(queryResult);
-        if(queryResult.getHitCount() > 0) {
-            return (List<Music>) queryResult.getResult();
-        }
-        return (List<Music>)musicDAO.getMusic(t.getAuthor(), t.getTitle());
+        return queryResult;
     }
-
-
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.Music;
+import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.query.SearchService;
 
 public class SearchServiceImplTest extends SuperTest {
@@ -19,7 +20,7 @@ public class SearchServiceImplTest extends SuperTest {
         Music music = new Music();
         music.setAuthor("周");
         music.setTitle("到");
-        List<Music> ms = searchService.search(music);
+        QueryResult ms = searchService.search(music);
 
         System.out.println(ms);
     }

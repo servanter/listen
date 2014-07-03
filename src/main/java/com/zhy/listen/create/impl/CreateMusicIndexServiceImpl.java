@@ -22,8 +22,9 @@ public class CreateMusicIndexServiceImpl extends GenerateIndexServiceAdapter imp
         for (Music music : list) {
             Document document = new Document();
             document.add(new Field("id", music.getId().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("title", music.getTitle(), Store.YES, Index.ANALYZED));
-            document.add(new Field("author", music.getAuthor(), Store.YES, Index.ANALYZED));
+            document.add(new Field("title", music.getTitle(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("author", music.getAuthor(), Store.YES, Index.NOT_ANALYZED));
+            document.add(new Field("title_author", music.getAuthor(), Store.YES, Index.ANALYZED));
             document.add(new Field("url", music.getUrl(), Store.YES, Index.NO));
             document.add(new Field("lrc", music.getLrc(), Store.YES, Index.NO));
             document.add(new Field("isUpload", music.getIsUpload().toString(), Store.YES, Index.NOT_ANALYZED));

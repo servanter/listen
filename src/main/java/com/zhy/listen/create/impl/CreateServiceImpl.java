@@ -8,6 +8,7 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -30,13 +31,17 @@ public class CreateServiceImpl implements CreateService {
     @Autowired
     private TemplateService templateService;
     
+    @SuppressWarnings("deprecation")
     @Override
     public boolean found(Indexer indexer) {
         try {
-            IndexWriter writer = new IndexWriter(getIndexDirectory(), new IndexWriterConfig(Version.LUCENE_36,
-                    new StandardAnalyzer(Version.LUCENE_36)));
+            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_36, new StandardAnalyzer(Version.LUCENE_36));
+            config.setOpenMode(OpenMode.CREATE_OR_APPEND);
+            IndexWriter writer = new IndexWriter(getIndexDirectory(), config);
             writer.addDocuments(generateIndexServiceAdapter.getCreateIndexImpl(indexer.getIndexerClass()).create(
                     indexer.getNeedIndexList()));
+            writer.commit(); 
+            writer.forceMerge(3);
             writer.close();
         } catch (CorruptIndexException e) {
             e.printStackTrace();

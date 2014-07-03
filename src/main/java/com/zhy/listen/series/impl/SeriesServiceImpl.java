@@ -44,8 +44,6 @@ public class SeriesServiceImpl implements SeriesService {
                 break;
             }
         }
-        music.setAuthor("汪");
-        music.setTitle(null);
         QueryResult queryResult = searchService.search(music);
         if(queryResult.getHitCount() <= 0) {
             try {

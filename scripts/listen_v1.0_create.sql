@@ -129,5 +129,6 @@ CREATE TABLE `music` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_upload` tinyint(1) NOT NULL DEFAULT '0',
   `is_index` tinyint(1) NOT NULL DEFAULT '0',
+  `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

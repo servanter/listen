@@ -18,6 +18,10 @@
 		SELECT * FROM `music` WHERE is_upload = #{uploadEnum.type}
 	</select>
 	
+	<select id="getMusicsByIndex" parameterType="indexEnum" resultMap="musicResult">
+		SELECT * FROM `music` WHERE is_index = #{indexEnum.type}
+	</select>
+	
 	<insert id="save" parameterType="music">
 		INSERT INTO music(title, author, url, lrc) VALUES(#{title}, #{author}, #{url}, #{lrc})
 		<selectKey resultType="Long" keyProperty="id">

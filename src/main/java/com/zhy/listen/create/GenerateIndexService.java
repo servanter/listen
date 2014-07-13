@@ -2,9 +2,9 @@ package com.zhy.listen.create;
 
 import java.util.List;
 
-import org.apache.lucene.document.Document;
+import org.apache.solr.common.SolrInputDocument;
 
 public interface GenerateIndexService<T> {
 
-    public abstract List<Document> create(List<T> list);
+    public abstract List<SolrInputDocument> create(List<T> list);
 }

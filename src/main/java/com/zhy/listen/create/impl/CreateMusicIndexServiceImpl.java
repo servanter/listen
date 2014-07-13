@@ -3,10 +3,7 @@ package com.zhy.listen.create.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Music;
@@ -17,20 +14,19 @@ import com.zhy.listen.create.GenerateIndexServiceAdapter;
 public class CreateMusicIndexServiceImpl extends GenerateIndexServiceAdapter implements GenerateIndexService<Music> {
 
     @Override
-    public List<Document> create(List<Music> list) {
-        List<Document> docs = new ArrayList<Document>();
+    public List<SolrInputDocument> create(List<Music> list) {
+        List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
         for (Music music : list) {
-            Document document = new Document();
-            document.add(new Field("id", music.getId().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("title", music.getTitle(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("author", music.getAuthor(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("title_author", music.getAuthor(), Store.YES, Index.ANALYZED));
-            document.add(new Field("url", music.getUrl(), Store.YES, Index.NO));
-            document.add(new Field("lrc", music.getLrc(), Store.YES, Index.NO));
-            document.add(new Field("isUpload", music.getIsUpload().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("isIndex", music.getIsIndex().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("isValid", music.getIsValid().toString(), Store.YES, Index.NOT_ANALYZED));
-            document.add(new Field("createTime", music.getCreateTime().toString(), Store.YES, Index.NOT_ANALYZED));
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("id", music.getId());
+            document.addField("title", music.getTitle());
+            document.addField("author", music.getAuthor());
+            document.addField("url", music.getUrl());
+            document.addField("lrc", music.getLrc());
+            document.addField("is_upload", music.getIsUpload());
+            document.addField("is_index", music.getIsIndex());
+            document.addField("is_valid", music.getIsValid());
+            document.addField("create_time", music.getCreateTime());
             docs.add(document);
         }
         return docs;

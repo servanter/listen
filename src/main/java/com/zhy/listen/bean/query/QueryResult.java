@@ -41,6 +41,10 @@ public class QueryResult {
      */
     private int count = 20;
 
+    private int page;
+
+    private String keywords;
+
     /**
      * lucene命中条数(查询是作为查询条件)
      */
@@ -68,10 +72,12 @@ public class QueryResult {
 
     }
 
-    public QueryResult(Long userId, IndexerClass indexerClass, List<QueryField> queryFields) {
-        this.userId = userId;
-        this.indexerClass = indexerClass;
-        this.queryFields = queryFields;
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public Long getId() {
@@ -154,11 +160,19 @@ public class QueryResult {
         this.queryFields = queryFields;
     }
 
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
     @Override
     public String toString() {
         return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime=" + endTime + ", userId=" + userId
-                + ", count=" + count + ", hitCount=" + hitCount + ", result=" + result + ", indexerClass=" + indexerClass + ", message=" + message
-                + "]";
+                + ", count=" + count + ", page=" + page + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result=" + result
+                + ", indexerClass=" + indexerClass + ", message=" + message + "]";
     }
 
     @Override
@@ -170,7 +184,9 @@ public class QueryResult {
         result = prime * result + hitCount;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((indexerClass == null) ? 0 : indexerClass.hashCode());
+        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
         result = prime * result + ((message == null) ? 0 : message.hashCode());
+        result = prime * result + page;
         result = prime * result + ((queryFields == null) ? 0 : queryFields.hashCode());
         result = prime * result + ((queryTime == null) ? 0 : queryTime.hashCode());
         result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
@@ -203,10 +219,17 @@ public class QueryResult {
             return false;
         if (indexerClass != other.indexerClass)
             return false;
+        if (keywords == null) {
+            if (other.keywords != null)
+                return false;
+        } else if (!keywords.equals(other.keywords))
+            return false;
         if (message == null) {
             if (other.message != null)
                 return false;
         } else if (!message.equals(other.message))
+            return false;
+        if (page != other.page)
             return false;
         if (queryFields == null) {
             if (other.queryFields != null)
@@ -230,7 +253,5 @@ public class QueryResult {
             return false;
         return true;
     }
-    
-    
 
 }

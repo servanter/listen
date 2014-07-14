@@ -13,6 +13,8 @@ import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
+import com.zhy.listen.bean.query.QueryField;
+import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.solr.SolrService;
 
 public class SolrServiceImplTest extends SuperTest {
@@ -26,9 +28,9 @@ public class SolrServiceImplTest extends SuperTest {
         indexer.setIndexerClass(IndexerClass.MUSIC);
         List<Music> ms = new ArrayList<Music>();
         Music music = new Music();
-        music.setId(333L);
-        music.setTitle("布拉格广场");
-        music.setAuthor("蔡依林");
+        music.setId(22L);
+        music.setTitle("怒放的生命");
+        music.setAuthor("汪峰");
         music.setUrl("www.baidu.com");
         music.setIsUpload(false);
         music.setIsIndex(false);
@@ -42,6 +44,14 @@ public class SolrServiceImplTest extends SuperTest {
 
     @Test
     public void testQuery() {
+        QueryResult queryResult = new QueryResult();
+        List<QueryField> fields = new ArrayList<QueryField>();
+//        QueryField field = new QueryField("author", "蔡依林");
+//        fields.add(field);
+//        queryResult.setQueryFields(fields);
+        queryResult.setIndexerClass(IndexerClass.MUSIC);
+        queryResult.setKeywords("我试个啊速第七章第七章度进空间按法律框架萨芬广场阿斯达");
+        System.out.println(solrService.query(queryResult));
     }
 
 }

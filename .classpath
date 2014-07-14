@@ -153,7 +153,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/xpp3-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsoup-1.6.2.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/solr-solrj-4.6.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/solr-solrj-4.6.0.jar" sourcepath="C:/Users/zhanghongyan/.m2/repository/org/apache/solr/solr-solrj/4.6.0/solr-solrj-4.6.0-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/httpclient-4.2.6.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/httpcore-4.2.5.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/httpmime-4.2.6.jar"/>

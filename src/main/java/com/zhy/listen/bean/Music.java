@@ -2,7 +2,7 @@ package com.zhy.listen.bean;
 
 import java.sql.Timestamp;
 
-public class Music extends Paging implements java.io.Serializable {
+public class Music extends Page implements java.io.Serializable {
 
     /**
      * 

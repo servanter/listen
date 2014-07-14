@@ -29,6 +29,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
@@ -83,13 +84,13 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
     protected QueryResult query(QueryResult queryResult) {
         try {
             IndexSearcher searcher = new IndexSearcher(getIndexReader());
-            TopDocs topDocs = searcher.search(createQuery(queryResult), queryResult.getCount());
+            TopDocs topDocs = searcher.search(createQuery(queryResult), queryResult.getPageSize());
             ScoreDoc[] docs = topDocs.scoreDocs;
             queryResult.setHitCount(docs.length);
-            List<Paging> result = new ArrayList<Paging>();
+            List<Page> result = new ArrayList<Page>();
             Class clazz = Class.forName("com.zhy.listen.bean." + queryResult.getIndexerClass().getAlias());
             for (ScoreDoc doc : docs) {
-                Paging p = getBean(searcher.doc(doc.doc), clazz);
+                Page p = getBean(searcher.doc(doc.doc), clazz);
                 result.add(p);
             }
             queryResult.setResult(result);
@@ -154,7 +155,7 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
      * @param type
      * @return
      */
-    private <X extends Paging> Paging getBean(Document doc, Class<X> type) {
+    private <X extends Page> Page getBean(Document doc, Class<X> type) {
         Field[] fields = getFields(type);
         try {
 
@@ -229,7 +230,7 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
             queryResult.setQueryFields(queryFields);
             
             // 获取当前查询的条数
-            queryResult.setCount(Integer.parseInt(t.getClass().getSuperclass().getDeclaredMethod("getPageSize").invoke(t).toString()));
+            queryResult.setPageSize(Integer.parseInt(t.getClass().getSuperclass().getDeclaredMethod("getPageSize").invoke(t).toString()));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (SecurityException e) {

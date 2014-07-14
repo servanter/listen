@@ -3,7 +3,7 @@ package com.zhy.listen.bean.query;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.indexer.IndexerClass;
 
 /**
@@ -12,7 +12,7 @@ import com.zhy.listen.bean.indexer.IndexerClass;
  * @author zhy19890221@gmail.com
  * 
  */
-public class QueryResult {
+public class QueryResult extends Page {
 
     private Long id;
 
@@ -36,13 +36,6 @@ public class QueryResult {
      */
     private Long userId;
 
-    /**
-     * 查询条数 默认20
-     */
-    private int count = 20;
-
-    private int page;
-
     private String keywords;
 
     /**
@@ -53,7 +46,7 @@ public class QueryResult {
     /**
      * 查询结果
      */
-    private List<? extends Paging> result;
+    private List<? extends Page> result;
 
     /**
      * 查询类型
@@ -70,14 +63,6 @@ public class QueryResult {
 
     public QueryResult() {
 
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 
     public Long getId() {
@@ -104,28 +89,20 @@ public class QueryResult {
         this.endTime = endTime;
     }
 
+    public List<? extends Page> getResult() {
+        return result;
+    }
+
+    public void setResult(List<? extends Page> result) {
+        this.result = result;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public List<? extends Paging> getResult() {
-        return result;
-    }
-
-    public void setResult(List<? extends Paging> result) {
-        this.result = result;
     }
 
     public int getHitCount() {
@@ -169,24 +146,15 @@ public class QueryResult {
     }
 
     @Override
-    public String toString() {
-        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime=" + endTime + ", userId=" + userId
-                + ", count=" + count + ", page=" + page + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result=" + result
-                + ", indexerClass=" + indexerClass + ", message=" + message + "]";
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + count;
         result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
         result = prime * result + hitCount;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((indexerClass == null) ? 0 : indexerClass.hashCode());
         result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
         result = prime * result + ((message == null) ? 0 : message.hashCode());
-        result = prime * result + page;
         result = prime * result + ((queryFields == null) ? 0 : queryFields.hashCode());
         result = prime * result + ((queryTime == null) ? 0 : queryTime.hashCode());
         result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
@@ -203,8 +171,6 @@ public class QueryResult {
         if (getClass() != obj.getClass())
             return false;
         QueryResult other = (QueryResult) obj;
-        if (count != other.count)
-            return false;
         if (endTime == null) {
             if (other.endTime != null)
                 return false;
@@ -229,8 +195,6 @@ public class QueryResult {
                 return false;
         } else if (!message.equals(other.message))
             return false;
-        if (page != other.page)
-            return false;
         if (queryFields == null) {
             if (other.queryFields != null)
                 return false;
@@ -252,6 +216,13 @@ public class QueryResult {
         } else if (!userId.equals(other.userId))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime=" + endTime + ", userId=" + userId
+                + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result=" + result + ", indexerClass=" + indexerClass + ", message="
+                + message + "]";
     }
 
 }

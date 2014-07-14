@@ -57,7 +57,7 @@ public class Page {
 
     public void setPage(int page) {
         this.page = page;
-        if (page != 1) {
+        if (page >= 1) {
             sinceCount = (page - 1) * pageSize;
         }
     }

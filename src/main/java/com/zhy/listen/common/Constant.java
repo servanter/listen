@@ -212,4 +212,9 @@ public class Constant {
      * 上传文件第二部url
      */
     public static String KINGSOFT_UPLOAD_STEP2_URL = "listen.kingsoft.upload.step2.url";
+    
+    /**
+     * solr地址
+     */
+    public static String SOLR_URL = "listen.solr.url";
 }

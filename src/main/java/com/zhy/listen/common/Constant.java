@@ -217,4 +217,9 @@ public class Constant {
      * solr地址
      */
     public static String SOLR_URL = "listen.solr.url";
+    
+    /**
+     * bean package path
+     */
+    public static String BEAN_PACKAGE_PATH = "com.zhy.listen.bean.";
 }

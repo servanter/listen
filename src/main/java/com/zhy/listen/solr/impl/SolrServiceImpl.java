@@ -91,11 +91,13 @@ public class SolrServiceImpl implements SolrService {
         query.setRows(queryResult.getPageSize());
         try {
             SolrDocumentList solrDocumentList = server.query(query).getResults();
-            Class clazz = Class.forName("com.zhy.listen.bean." + queryResult.getIndexerClass().getAlias());
+            Class clazz = Class.forName(Constant.BEAN_PACKAGE_PATH + queryResult.getIndexerClass().getAlias());
             List<Page> pageList = new ArrayList<Page>(); 
             for(SolrDocument doc : solrDocumentList) {
                 Page p = packageDoc(doc, clazz);
-                pageList.add(p);
+                if(p != null) {
+                    pageList.add(p);
+                }
             }
             queryResult.setResult(pageList);
             queryResult.setTotalRecord(solrDocumentList.getNumFound());

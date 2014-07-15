@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 import com.zhy.listen.bean.Author;
 import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.query.SearchService;
 import com.zhy.listen.series.SeriesService;
 import com.zhy.listen.service.AuthorService;
 import com.zhy.listen.service.FetchMusicService;
 import com.zhy.listen.service.MusicService;
+import com.zhy.listen.solr.SolrService;
+import com.zhy.listen.util.StringUtil;
 
 @Service
 public class SeriesServiceImpl implements SeriesService {
@@ -23,7 +26,7 @@ public class SeriesServiceImpl implements SeriesService {
     private AuthorService authorService;
     
     @Autowired
-    private SearchService searchService;
+    private SolrService solrService;
     
     @Autowired
     private FetchMusicService fetchMusicService;
@@ -32,7 +35,8 @@ public class SeriesServiceImpl implements SeriesService {
     private MusicService musicService;
     
     @Override
-    public QueryResult findMusicByText(String text) {
+    public QueryResult findMusicByText(QueryResult queryResult) {
+        String text = queryResult.getKeywords();
         String str = text;
         Music music = new Music();
         Paging<Author> authors = authorService.findAuthorsByConditions(new Author());
@@ -44,7 +48,17 @@ public class SeriesServiceImpl implements SeriesService {
                 break;
             }
         }
-        QueryResult queryResult = searchService.search(music);
+        List<QueryField> fields = new ArrayList<QueryField>();
+        if(!StringUtil.isNullOrEmpty(music.getAuthor())) {
+            QueryField queryField = new QueryField("author", music.getAuthor());
+            fields.add(queryField);
+        }
+        if(!StringUtil.isNullOrEmpty(music.getTitle())) {
+            QueryField queryField = new QueryField("title", music.getTitle());
+            fields.add(queryField);
+        }
+        queryResult.setQueryFields(fields);
+        queryResult = solrService.query(queryResult);
         if(queryResult.getHitCount() <= 0) {
             try {
                 Music m = fetchMusicService.findMusicByBaidu(music.getAuthor(), music.getTitle());

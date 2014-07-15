@@ -142,7 +142,7 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
      * @param booleanQuery
      */
     private void addTermQuery(QueryField queryField, BooleanQuery booleanQuery) {
-        for (String value : queryField.getFieldExcept().split(" ")) {
+        for (String value : queryField.getValue().split(" ")) {
             TermQuery query = new TermQuery(new Term(queryField.getFieldName(), value));
             booleanQuery.add(query, Occur.SHOULD);
         }

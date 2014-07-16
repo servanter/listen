@@ -9,7 +9,7 @@ import java.util.List;
  * @author zhy19890221@gmail.com
  * 
  */
-public class User extends Paging implements java.io.Serializable {
+public class User extends Page implements java.io.Serializable {
 
     /**
      * 

@@ -1,12 +1,14 @@
 package com.zhy.listen.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.User;
@@ -73,8 +75,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByPaging(Paging paging) {
-        return userDAO.getUsers(paging.toMap());
+    public List<User> getUsersByPaging(Page page) {
+        return userDAO.getUsers(new HashMap<String, Object>());
     }
 
     @Override

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -34,6 +35,7 @@ import com.zhy.listen.common.SolrConstant;
 import com.zhy.listen.create.GenerateIndexServiceAdapter;
 import com.zhy.listen.solr.SolrService;
 import com.zhy.listen.template.TemplateService;
+import com.zhy.listen.util.FieldUtils;
 
 @Service
 public class SolrServiceImpl implements SolrService {
@@ -80,7 +82,7 @@ public class SolrServiceImpl implements SolrService {
         query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
         if(queryResult.getQueryFields() != null) {
             for(QueryField field : queryResult.getQueryFields()) {
-                query.setQuery(field.getFieldName() + SolrConstant.FIELD_SPLIT + field.getFieldExcept());
+                query.setQuery(field.getFieldName() + SolrConstant.FIELD_SPLIT + field.getValue());
             }
         }
         int currentPage = 1;
@@ -100,6 +102,7 @@ public class SolrServiceImpl implements SolrService {
                 }
             }
             queryResult.setResult(pageList);
+            queryResult.setHitCount(pageList.size());
             queryResult.setTotalRecord(solrDocumentList.getNumFound());
         } catch (SolrServerException e) {
             e.printStackTrace();
@@ -159,7 +162,7 @@ public class SolrServiceImpl implements SolrService {
             for (Field field : fields) {
 
                 // 设置每一个field
-                String docField = getDocField(field);
+                String docField = FieldUtils.getDocField(field);
                 Object value = solrDocument.get(docField);
                 if (value == null) {
                     continue;
@@ -194,37 +197,5 @@ public class SolrServiceImpl implements SolrService {
         }
         return bean;
     }
-    
-    /**
-     * 获取 solr 中doc的fieldname
-     * @param field
-     * @return
-     */
-    private String getDocField(Field field) {
-        String fieldName = field.getName();
-        String result = fieldName;
-        Pattern pattern = Pattern.compile("[A-Z]");
-        Matcher matcher = pattern.matcher(fieldName);
-        while(matcher.find()) {
-            result = result.substring(0, result.indexOf(matcher.group())) + "_" + matcher.group().toLowerCase() + result.substring(result.indexOf(matcher.group()) + 1);
-        }
-        return result;
-    }
 
-    /**
-     * 缓存类属性
-     * @param type
-     * @return
-     */
-    private Field[] getFields(Class<?> type) {
-        Field[] fields = cacheKey.get(type);
-        if (fields == null) {
-            fields = type.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-            }
-            cacheKey.put(type, fields);
-        }
-        return fields;
-    }
 }

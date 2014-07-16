@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 
 /**
@@ -16,7 +17,7 @@ import com.zhy.listen.bean.Paging;
  * @author zhanghongyan
  * 
  */
-public abstract class AbstractDBSearch<T extends Paging> implements ApplicationContextAware{
+public abstract class AbstractDBSearch<T extends Page> implements ApplicationContextAware{
 
     private ApplicationContext applicationContext;
     

@@ -40,4 +40,8 @@ public class StringUtil {
             return str.toUpperCase();
         }
     }
+    
+    public static boolean isNullOrEmpty(String text) {
+        return (text == null || text.length() == 0) ? true : false;
+    }
 }

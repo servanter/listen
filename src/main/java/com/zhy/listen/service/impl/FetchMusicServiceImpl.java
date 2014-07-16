@@ -20,7 +20,12 @@ public class FetchMusicServiceImpl implements FetchMusicService {
     @Override
     public Music findMusicByBaidu(String author, String topic) throws Exception {
         Music result = new Music(author, topic);
-        String url = templateService.getMessage(Constant.BAIDU_MUSIC_URL, topic, author);
+        String url = "";
+        if(author == null || author.length() == 0) {
+            url = templateService.getMessage(Constant.BAIDU_MUSIC_URL, topic, author);
+        } else {
+            url = templateService.getMessage(Constant.BAIDU_MUSIC_NO_AUTHOR_URL, topic);
+        }
         Document document = Jsoup.connect(url).get();
         Elements elements = document.getElementsByTag("count");
         if(elements != null && elements.size() > 0 && Integer.parseInt(elements.get(0).text()) > 0) {

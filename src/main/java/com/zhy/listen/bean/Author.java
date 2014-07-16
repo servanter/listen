@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @author zhanghongyan@outlook.com
  * 
  */
-public class Author extends Paging implements java.io.Serializable {
+public class Author extends Page implements java.io.Serializable {
 
     /**
      * 

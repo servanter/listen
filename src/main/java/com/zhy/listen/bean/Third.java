@@ -17,7 +17,7 @@ import com.zhy.listen.bean.third.WangYi;
  * @author zhy1989021@gmail.com
  * 
  */
-public class Third extends Paging implements java.io.Serializable {
+public class Third extends Page implements java.io.Serializable {
 
     /**
      * 

@@ -137,6 +137,11 @@ public class Constant {
      * 百度下载音乐url
      */
     public static String BAIDU_MUSIC_URL = "listen.baidu.music.url";
+    
+    /**
+     * 百度下载音乐url(没有作者)
+     */
+    public static String BAIDU_MUSIC_NO_AUTHOR_URL = "listen.baidu.music.no.author.url";
 
     /**
      * 百度音乐歌词url

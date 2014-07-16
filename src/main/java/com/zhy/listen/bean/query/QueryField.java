@@ -13,18 +13,12 @@ public class QueryField {
      */
     private String fieldName;
 
-    /**
-     * 查询值 以空格分开,生成termQuery时,生成多个
-     */
-    private String fieldExcept;
+    private String value;
 
-    public QueryField() {
-
-    }
-
-    public QueryField(String fieldName, String fieldExcept) {
+    public QueryField(String fieldName, String value) {
+        super();
         this.fieldName = fieldName;
-        this.fieldExcept = fieldExcept;
+        this.value = value;
     }
 
     public String getFieldName() {
@@ -35,11 +29,48 @@ public class QueryField {
         this.fieldName = fieldName;
     }
 
-    public String getFieldExcept() {
-        return fieldExcept;
+    public String getValue() {
+        return value;
     }
 
-    public void setFieldExcept(String fieldExcept) {
-        this.fieldExcept = fieldExcept;
+    public void setValue(String value) {
+        this.value = value;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((fieldName == null) ? 0 : fieldName.hashCode());
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        QueryField other = (QueryField) obj;
+        if (fieldName == null) {
+            if (other.fieldName != null)
+                return false;
+        } else if (!fieldName.equals(other.fieldName))
+            return false;
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "QueryField [fieldName=" + fieldName + ", value=" + value + "]";
+    }
+
 }

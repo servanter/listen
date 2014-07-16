@@ -2,7 +2,7 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.User;
 
@@ -92,7 +92,7 @@ public interface UserService {
      * @param paging
      * @return
      */
-    public List<User> getUsersByPaging(Paging paging);
+    public List<User> getUsersByPaging(Page paging);
 
     /**
      * 获取所有用户昵称及ID

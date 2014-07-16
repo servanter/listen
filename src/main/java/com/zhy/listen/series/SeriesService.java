@@ -10,5 +10,5 @@ public interface SeriesService {
      * @param text
      * @return
      */
-    public QueryResult findMusicByText(String text);
+    public QueryResult findMusicByText(QueryResult queryResult);
 }

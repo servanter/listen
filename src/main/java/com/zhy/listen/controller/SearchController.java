@@ -20,12 +20,12 @@ public class SearchController {
     private SeriesService seriesService;
     
     
-    @RequestMapping(value="search", method = RequestMethod.GET)
-    public String search(@RequestParam("text") String text, ModelMap modelMap) {
+    @RequestMapping(method = RequestMethod.GET)
+    public String search() {
         return "index";
     }
     
-    @RequestMapping(value="search", method = RequestMethod.POST)
+    @RequestMapping(value="searchResult", method = RequestMethod.POST)
     public String searchResult(@RequestParam("text") String text, ModelMap modelMap) {
         QueryResult queryResult = new QueryResult();
         queryResult.setIndexerClass(IndexerClass.MUSIC);

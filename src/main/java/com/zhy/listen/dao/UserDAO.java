@@ -115,4 +115,18 @@ public interface UserDAO {
      * @return
      */
     public List<User> getUsersByIds(Long[] ids);
+
+    /**
+     * 根据修改时间查询用户
+     * @param time
+     * @return
+     */
+    public List<User> getUsersByModifyTime(String time);
+
+    /**
+     * 根据索引状态查询
+     * @param type
+     * @return
+     */
+    public List<User> getUsersByIndex(int type);
 }

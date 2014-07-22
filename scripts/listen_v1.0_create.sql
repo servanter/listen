@@ -22,7 +22,6 @@ CREATE TABLE `user` (
   `birthday` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '生日',
   `sex` int(1) NOT NULL DEFAULT '0' COMMENT '0未知;1为男,2为女',
   `user_img` varchar(100) DEFAULT NULL COMMENT '头像',
-  `is_company` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为企业,0为个人,1为企业',
   `province` varchar(20) DEFAULT NULL,
   `city` varchar(20) DEFAULT NULL,
   `introduction` varchar(200) DEFAULT NULL COMMENT '个人简介',
@@ -30,9 +29,8 @@ CREATE TABLE `user` (
   `email` varchar(200) DEFAULT NULL COMMENT '邮箱',
   `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最近一次修改时间',
-  `user_point` bigint(20) NOT NULL DEFAULT 0 COMMENT '用户积分',
-  `user_level` int(3) NOT NULL DEFAULT 1 COMMENT '用户等级',
   `is_valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
+  `is_index` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

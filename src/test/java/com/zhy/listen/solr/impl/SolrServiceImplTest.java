@@ -10,11 +10,15 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
+import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Music;
+import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
+import com.zhy.listen.service.MusicService;
+import com.zhy.listen.service.UserService;
 import com.zhy.listen.solr.SolrService;
 
 public class SolrServiceImplTest extends SuperTest {
@@ -22,23 +26,19 @@ public class SolrServiceImplTest extends SuperTest {
     @Autowired
     private SolrService solrService;
     
+    @Autowired
+    private MusicService musicService;
+    
+    @Autowired
+    private UserService userService;
+    
     @Test
     public void testCreate() {
         Indexer indexer = new Indexer();
-        indexer.setIndexerClass(IndexerClass.MUSIC);
-        List<Music> ms = new ArrayList<Music>();
-        Music music = new Music();
-        music.setId(22L);
-        music.setTitle("怒放的生命");
-        music.setAuthor("汪峰");
-        music.setUrl("www.baidu.com");
-        music.setIsUpload(false);
-        music.setIsIndex(false);
-        music.setIsValid(true);
-        music.setLrc("asdasdasdadasdasd");
-        music.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        ms.add(music);
-        indexer.setNeedIndexList(ms);
+        indexer.setIndexerClass(IndexerClass.USER);
+//        List<Music> musics = musicService.findMusicsByIndex(IndexEnum.NOT_INDEXED);
+        List<User> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+        indexer.setNeedIndexList(users);
         solrService.create(indexer);
     }
 
@@ -49,8 +49,8 @@ public class SolrServiceImplTest extends SuperTest {
 //        QueryField field = new QueryField("author", "蔡依林");
 //        fields.add(field);
 //        queryResult.setQueryFields(fields);
-        queryResult.setIndexerClass(IndexerClass.MUSIC);
-        queryResult.setKeywords("我试个啊速第七章第七章度进空间按法律框架萨芬广场阿斯达");
+        queryResult.setIndexerClass(IndexerClass.USER);
+        queryResult.setKeywords("大声说阿斯达阿斯达达斡尔");
         System.out.println(solrService.query(queryResult));
     }
 

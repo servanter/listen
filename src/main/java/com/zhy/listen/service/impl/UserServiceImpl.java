@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SameType;
@@ -125,5 +126,15 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return userDAO.getUsersByIds(ids);
+    }
+
+    @Override
+    public List<User> getUsersByModifyTime(String time) {
+        return userDAO.getUsersByModifyTime(time);
+    }
+
+    @Override
+    public List<User> findUsersByIndex(IndexEnum indexEnum) {
+        return userDAO.getUsersByIndex(indexEnum.getType());
     }
 }

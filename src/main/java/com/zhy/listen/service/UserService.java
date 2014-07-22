@@ -2,6 +2,7 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
+import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.User;
@@ -118,4 +119,18 @@ public interface UserService {
      * @return
      */
     public List<User> getInterestedUser(User user, SameType sameType);
+    
+    /**
+     * 根据最后修改时间查询用户
+     * @param time
+     * @return
+     */
+    public List<User> getUsersByModifyTime(String time);
+    
+    /**
+     * 根据索引状态查询
+     * @param indexEnum
+     * @return
+     */
+    public List<User> findUsersByIndex(IndexEnum indexEnum);
 }

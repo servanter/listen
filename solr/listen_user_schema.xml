@@ -132,6 +132,8 @@
    <field name="email" type="string" indexed="true" stored="true" />
    <field name="reg_time" type="date" indexed="true" stored="true" />
    <field name="modify_time" type="date" indexed="true" stored="true"  />
+   <field name="content" type="string" indexed="true" stored="true"  />
+   <field name="status_time" type="date" indexed="true" stored="true"  />
    <field name="is_valid" type="boolean" indexed="true" stored="true" />
    <field name="all_in_one" type="text_ik" indexed="true" stored="true" omitNorms="true" multiValued="true"/>
 
@@ -207,6 +209,7 @@
         or to add multiple fields to the same field for easier/faster searching.  -->
 	<copyField source="user_nick" dest="all_in_one"/>
     <copyField source="introduction" dest="all_in_one"/>
+    <copyField source="content" dest="all_in_one"/>
 	
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 

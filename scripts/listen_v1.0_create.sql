@@ -30,7 +30,7 @@ CREATE TABLE `user` (
   `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最近一次修改时间',
   `is_valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
-  `is_index` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
+  `is_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否可用,0为注销;1为可用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -127,6 +127,19 @@ CREATE TABLE `music` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_upload` tinyint(1) NOT NULL DEFAULT '0',
   `is_index` tinyint(1) NOT NULL DEFAULT '0',
+  `is_valid` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+
+
+CREATE TABLE `status` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `content` varchar(200) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '1990-01-01 00:00:00',
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

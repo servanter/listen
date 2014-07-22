@@ -87,7 +87,7 @@ public class SolrServiceImpl implements SolrService {
         query.setRows(queryResult.getPageSize());
         try {
             SolrDocumentList solrDocumentList = server.query(query).getResults();
-            Class clazz = Class.forName(Constant.BEAN_PACKAGE_PATH + queryResult.getIndexerClass().getAlias());
+            Class clazz = Class.forName(queryResult.getIndexerClass().getPath() + "." + queryResult.getIndexerClass().getAlias());
             List<Page> pageList = new ArrayList<Page>(); 
             for(SolrDocument doc : solrDocumentList) {
                 Page p = packageDoc(doc, clazz);
@@ -147,8 +147,13 @@ public class SolrServiceImpl implements SolrService {
                         fields[i] = t.getDeclaredField(f);
                         fields[i].setAccessible(true);
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        logger.error("[Solr]: Get fields occur error, The " + f + " has not property");
+                        try {
+                            fields[i] = t.getSuperclass().getDeclaredField(f);
+                            fields[i].setAccessible(true);
+                        } catch (Exception e2) {
+                            e2.printStackTrace();
+                            logger.error("[Solr]: Get fields occur error, The " + f + " has not property");
+                        }
                     }
                 }
                 cacheKey.put(t, fields);

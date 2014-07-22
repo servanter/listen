@@ -1,5 +1,8 @@
 package com.zhy.listen.bean.indexer;
 
+import com.zhy.listen.bean.Music;
+import com.zhy.listen.bean.view.UserStatus;
+
 /**
  * 索引类别
  * 
@@ -11,17 +14,29 @@ public enum IndexerClass {
     /**
      * 音乐
      */
-    MUSIC("Music"),
+    MUSIC("Music", Music.class.getPackage().getName()),
 
     /**
      * 用户相关
      */
-    USER("User");
+    USER("UserStatus", UserStatus.class.getPackage().getName());
 
     private String alias;
+    
+    private String path;
 
-    private IndexerClass(String alias) {
+    private IndexerClass(String alias, String path) {
         this.alias = alias;
+        this.path = path;
+    }
+
+    
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getAlias() {

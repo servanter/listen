@@ -15,9 +15,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
+import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Src;
 import com.zhy.listen.bean.Third;
 import com.zhy.listen.bean.User;
+import com.zhy.listen.bean.view.UserStatus;
 import com.zhy.listen.service.UserService;
 
 public class UserServiceImplTest extends SuperTest {
@@ -137,10 +139,10 @@ public class UserServiceImplTest extends SuperTest {
         Assert.assertTrue("[UserTest]: Can't find user by user_nick?", users.size() > 0);
         logger.debug("[UserTest]: Get user by nick name is " + (users.size() > 0 ? "success" : "fail"));
     }
-
+    
     @Test
-    public void testUpgrade() {
-        Long id = userService.register(new User("ajsda12322da", "11234", "英雄"));
-        Assert.assertTrue("Can't update the user level and points.", userService.upgradePointAndLevel(id, 5000L, 10));
+    public void testFindUsersByIndex() {
+        List<UserStatus> userStatus = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+        Assert.assertTrue("Can't find the user status.", userStatus != null && userStatus.size() > 0);
     }
 }

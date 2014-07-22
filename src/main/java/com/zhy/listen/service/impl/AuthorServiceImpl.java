@@ -19,7 +19,9 @@ public class AuthorServiceImpl extends AbstractDBSearch<Author> implements Autho
 
     @Override
     public Paging<Author> findAuthorsByConditions(Author author) {
-        return super.findByPaging(author, "getAuthorsByConditions", author);
+        List<Author> result = getAuthorsByConditions(author);
+        int total = getAuthorsByConditionsCount(author);
+        return new Paging<Author>(total, author.getPage(), author.getPageSize(), result);
     }
 
     @Override

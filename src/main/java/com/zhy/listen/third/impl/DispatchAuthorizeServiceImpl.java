@@ -2,6 +2,8 @@ package com.zhy.listen.third.impl;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import com.zhy.listen.third.DispatchAuthorizeService;
 @Service("dispatchAuthorizeService")
 public class DispatchAuthorizeServiceImpl implements DispatchAuthorizeService {
 
-    @Autowired
+    @Resource
     private Map<String, AuthorizeService> thirdServices;
 
     @Autowired

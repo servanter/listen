@@ -1,5 +1,9 @@
 package com.zhy.listen.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,17 +24,20 @@ public class SearchController {
     private SeriesService seriesService;
     
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value="sear",method = RequestMethod.GET)
     public String search() {
         return "index";
     }
     
     @RequestMapping(value="searchResult", method = RequestMethod.POST)
-    public String searchResult(@RequestParam("text") String text, ModelMap modelMap) {
+    public String searchResult(@RequestParam("text") String text, ModelMap modelMap, HttpServletResponse response) throws Exception {
         QueryResult queryResult = new QueryResult();
+        queryResult.setKeywords(text);
         queryResult.setIndexerClass(IndexerClass.MUSIC);
         queryResult = seriesService.findMusicByText(queryResult);
         modelMap.put("result", queryResult);
-        return "search_result";
+        JSONObject jsonObject = JSONObject.fromObject(queryResult);
+        response.getWriter().print(jsonObject);
+        return null;
     }
 }

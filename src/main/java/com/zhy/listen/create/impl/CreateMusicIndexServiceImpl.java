@@ -11,7 +11,7 @@ import com.zhy.listen.create.GenerateIndexService;
 import com.zhy.listen.create.GenerateIndexServiceAdapter;
 
 @Service
-public class CreateMusicIndexServiceImpl extends GenerateIndexServiceAdapter implements GenerateIndexService<Music> {
+public class CreateMusicIndexServiceImpl implements GenerateIndexService<Music> {
 
     @Override
     public List<SolrInputDocument> create(List<Music> list) {

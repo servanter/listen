@@ -56,7 +56,7 @@ public class SolrServiceImpl implements SolrService {
     
     @Override
     public boolean create(Indexer indexer) {
-        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL));
+        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + indexer.getIndexerClass().name().toLowerCase());
         try {
             List<SolrInputDocument> documents = generateIndexServiceAdapter.getCreateIndexImpl(indexer.getIndexerClass()).create(indexer.getNeedIndexList());
             server.add(documents);
@@ -71,7 +71,7 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public QueryResult query(QueryResult queryResult) {
-        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL));
+        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
         SolrQuery query = new SolrQuery();
         query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
         if(queryResult.getQueryFields() != null) {

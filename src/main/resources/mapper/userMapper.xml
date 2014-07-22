@@ -10,7 +10,6 @@
 		<result property="sex" column="sex" />
 		<result property="userNick" column="user_nick" />
 		<result property="userImg" column="user_img" />
-		<result property="isCompany" column="is_company" />
 		<result property="province" column="province" />
 		<result property="city" column="city" />
 		<result property="introduction" column="introduction" />
@@ -18,9 +17,8 @@
 		<result property="email" column="email" />
 		<result property="regTime" column="reg_time" />
 		<result property="modifyTime" column="modify_time" />
-		<result property="userPoint" column="user_point" />
-		<result property="userLevel" column="user_level" />
 		<result property="isValid" column="is_valid" />
+		<result property="isIndex" column="is_index" />
 	</resultMap>
 
 	<!-- 验证该用户名是否可用 -->
@@ -68,7 +66,6 @@
 		<if test="sex != null">,sex</if>
 		<if test="userNick != null">,user_nick</if>
 		<if test="userImg != null">,user_img</if>
-		<if test="isCompany != null">,is_company</if>
 		<if test="introduction != null">,introduction</if>
 		<if test="province != null">,province</if>
 		<if test="city != null">,city</if>
@@ -83,7 +80,6 @@
 		<if test="sex != null">,#{sex}</if>
 		<if test="userNick != null">,#{userNick}</if>
 		<if test="userImg != null">,#{userImg}</if>
-		<if test="isCompany != null">,#{isCompany}</if>
 		<if test="introduction != null">,#{introduction}</if>
 		<if test="province != null">,#{province}</if>
 		<if test="city != null">,#{city}</if>
@@ -113,7 +109,6 @@
 			<if test="userNick != null">user_nick=#{userNick},</if>
 			<if test="userImg != null">user_img=#{userImg},</if>
 			<if test="birthday != null">birthday=#{birthday},</if>
-			<if test="isCompany != null">is_company=#{isCompany},</if>
 			<if test="province != null">province=#{province},</if>
 			<if test="city != null">city=#{city},</if>
 			<if test="introduction != null">
@@ -121,21 +116,25 @@
 			</if>
 			<if test="mobile != null">mobile=#{mobile},</if>
 			<if test="email != null">email=#{email},</if>
+			<if test="isValid != null">is_valid=#{isValid},</if>
+			<if test="isIndex != null">is_index=#{isIndex},</if>
 		</set>
 		WHERE id=#{id}
 	</update>
 
-	<!-- 更新用户等级及积分 -->
-	<update id="updatePointAndLevel" parameterType="java.util.Map">
-		UPDATE `user` SET user_level=#{userLevel},
-		user_point=#{userPoint} WHERE ID=#{userId}
-	</update>
-	
 	<!-- 查询一批用户 -->
 	<select id="getUsersByIds" parameterType="java.lang.Long">
 		SELECT * FROM `user` WHERE id IN
 		<foreach collection="ids" item="id" open="(" separator="," close=")">
 			#{id}
 		</foreach>
+	</select>
+	
+	<select id="getUsersByModifyTime" parameterType="java.lang.String" resultMap="userMap">
+		SELECT * FROM user WHERE modify_time > #{time}
+	</select>
+	
+	<select id="getUsersByIndex" parameterType="java.lang.Integer" resultMap="userMap">
+		SELECT * FROM user WHERE is_index = #{isIndex}
 	</select>
 </mapper>

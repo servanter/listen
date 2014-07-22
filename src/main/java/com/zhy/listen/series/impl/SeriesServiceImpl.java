@@ -48,6 +48,9 @@ public class SeriesServiceImpl implements SeriesService {
                 break;
             }
         }
+        if((music.getTitle() == null || music.getTitle().length() == 0) && (music.getAuthor() == null || music.getAuthor().length() == 0)) {
+            music.setTitle(text);
+        }
         List<QueryField> fields = new ArrayList<QueryField>();
         if(!StringUtil.isNullOrEmpty(music.getAuthor())) {
             QueryField queryField = new QueryField("author", music.getAuthor());

@@ -49,13 +49,6 @@ public class User extends Page implements java.io.Serializable {
     private String userImg;
 
     /**
-     * 公司还是个人<br>
-     * 公司为Ture<br>
-     * 个人为False
-     */
-    private Boolean isCompany;
-
-    /**
      * 个人简介
      */
     private String introduction;
@@ -96,29 +89,11 @@ public class User extends Page implements java.io.Serializable {
     private Timestamp modifyTime;
 
     /**
-     * 用户积分
-     */
-    private Long userPoint;
-
-    /**
-     * 用户等级
-     */
-    private Integer userLevel;
-
-    /**
      * 是否可用
      */
     private Boolean isValid = true;
 
-    /**
-     * 好友数(数据库没有该字段)
-     */
-    private int friendCount;
-
-    /**
-     * 访客数(数据库没有该字段)
-     */
-    private int visitorCount;
+    private boolean isIndex;
 
     public User() {
 
@@ -179,15 +154,6 @@ public class User extends Page implements java.io.Serializable {
         this.userNick = userNick;
         this.userImg = userImg;
         this.modifyTime = new Timestamp(System.currentTimeMillis());
-        this.isCompany = false;
-    }
-
-    public Boolean getIsCompany() {
-        return isCompany;
-    }
-
-    public void setIsCompany(Boolean isCompany) {
-        this.isCompany = isCompany;
     }
 
     public Long getId() {
@@ -302,22 +268,6 @@ public class User extends Page implements java.io.Serializable {
         this.thirds = thirds;
     }
 
-    public Long getUserPoint() {
-        return userPoint;
-    }
-
-    public void setUserPoint(Long userPoint) {
-        this.userPoint = userPoint;
-    }
-
-    public Integer getUserLevel() {
-        return userLevel;
-    }
-
-    public void setUserLevel(Integer userLevel) {
-        this.userLevel = userLevel;
-    }
-
     public String getMobile() {
         return mobile;
     }
@@ -334,20 +284,139 @@ public class User extends Page implements java.io.Serializable {
         this.email = email;
     }
 
-    public int getFriendCount() {
-        return friendCount;
+    public boolean isIndex() {
+        return isIndex;
     }
 
-    public void setFriendCount(int friendCount) {
-        this.friendCount = friendCount;
+    public void setIndex(boolean isIndex) {
+        this.isIndex = isIndex;
     }
 
-    public int getVisitorCount() {
-        return visitorCount;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((birthday == null) ? 0 : birthday.hashCode());
+        result = prime * result + ((city == null) ? 0 : city.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((introduction == null) ? 0 : introduction.hashCode());
+        result = prime * result + (isIndex ? 1231 : 1237);
+        result = prime * result + ((isValid == null) ? 0 : isValid.hashCode());
+        result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
+        result = prime * result + ((modifyTime == null) ? 0 : modifyTime.hashCode());
+        result = prime * result + ((passWord == null) ? 0 : passWord.hashCode());
+        result = prime * result + ((province == null) ? 0 : province.hashCode());
+        result = prime * result + ((regTime == null) ? 0 : regTime.hashCode());
+        result = prime * result + ((sex == null) ? 0 : sex.hashCode());
+        result = prime * result + ((thirds == null) ? 0 : thirds.hashCode());
+        result = prime * result + ((userImg == null) ? 0 : userImg.hashCode());
+        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+        result = prime * result + ((userNick == null) ? 0 : userNick.hashCode());
+        return result;
     }
 
-    public void setVisitorCount(int visitorCount) {
-        this.visitorCount = visitorCount;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (birthday == null) {
+            if (other.birthday != null)
+                return false;
+        } else if (!birthday.equals(other.birthday))
+            return false;
+        if (city == null) {
+            if (other.city != null)
+                return false;
+        } else if (!city.equals(other.city))
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (introduction == null) {
+            if (other.introduction != null)
+                return false;
+        } else if (!introduction.equals(other.introduction))
+            return false;
+        if (isIndex != other.isIndex)
+            return false;
+        if (isValid == null) {
+            if (other.isValid != null)
+                return false;
+        } else if (!isValid.equals(other.isValid))
+            return false;
+        if (mobile == null) {
+            if (other.mobile != null)
+                return false;
+        } else if (!mobile.equals(other.mobile))
+            return false;
+        if (modifyTime == null) {
+            if (other.modifyTime != null)
+                return false;
+        } else if (!modifyTime.equals(other.modifyTime))
+            return false;
+        if (passWord == null) {
+            if (other.passWord != null)
+                return false;
+        } else if (!passWord.equals(other.passWord))
+            return false;
+        if (province == null) {
+            if (other.province != null)
+                return false;
+        } else if (!province.equals(other.province))
+            return false;
+        if (regTime == null) {
+            if (other.regTime != null)
+                return false;
+        } else if (!regTime.equals(other.regTime))
+            return false;
+        if (sex == null) {
+            if (other.sex != null)
+                return false;
+        } else if (!sex.equals(other.sex))
+            return false;
+        if (thirds == null) {
+            if (other.thirds != null)
+                return false;
+        } else if (!thirds.equals(other.thirds))
+            return false;
+        if (userImg == null) {
+            if (other.userImg != null)
+                return false;
+        } else if (!userImg.equals(other.userImg))
+            return false;
+        if (userName == null) {
+            if (other.userName != null)
+                return false;
+        } else if (!userName.equals(other.userName))
+            return false;
+        if (userNick == null) {
+            if (other.userNick != null)
+                return false;
+        } else if (!userNick.equals(other.userNick))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", birthday=" + birthday
+                + ", sex=" + sex + ", userNick=" + userNick + ", userImg=" + userImg + ", introduction=" + introduction
+                + ", province=" + province + ", city=" + city + ", mobile=" + mobile + ", email=" + email + ", thirds="
+                + thirds + ", regTime=" + regTime + ", modifyTime=" + modifyTime + ", isValid=" + isValid
+                + ", isIndex=" + isIndex + "]";
     }
 
 }

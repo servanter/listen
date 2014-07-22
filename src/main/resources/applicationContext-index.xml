@@ -20,6 +20,25 @@
 			</list>
 		</constructor-arg>
 	</bean>
+	
+	<bean id="userCreateFields" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>id</value>
+				<value>sex</value>
+				<value>userNick</value>
+				<value>userImg</value>
+				<value>introduction</value>
+				<value>province</value>
+				<value>city</value>
+				<value>mobile</value>
+				<value>email</value>
+				<value>regTime</value>
+				<value>modifyTime</value>
+				<value>isValid</value>
+			</list>
+		</constructor-arg>
+	</bean>
 
 	<bean id="musicQueryFields" class="java.util.ArrayList">
 		<constructor-arg>
@@ -37,6 +56,7 @@
 		<constructor-arg>
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
+				<entry key="user" value-ref="userCreateFields" />
 			</map>
 		</constructor-arg>
 	</bean>

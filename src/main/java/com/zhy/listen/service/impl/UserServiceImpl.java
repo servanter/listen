@@ -13,6 +13,7 @@ import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.User;
+import com.zhy.listen.bean.view.UserStatus;
 import com.zhy.listen.dao.UserDAO;
 import com.zhy.listen.service.ThirdService;
 import com.zhy.listen.service.UserService;
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUsersByIndex(IndexEnum indexEnum) {
+    public List<UserStatus> findUsersByIndex(IndexEnum indexEnum) {
         return userDAO.getUsersByIndex(indexEnum.getType());
     }
 }

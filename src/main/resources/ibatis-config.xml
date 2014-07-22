@@ -10,5 +10,11 @@
 		<typeAlias alias="music" type="com.zhy.listen.bean.Music" />
 		<typeAlias alias="author" type="com.zhy.listen.bean.Author" />
 		<typeAlias alias="indexEnum" type="com.zhy.listen.bean.IndexEnum" />
+		<typeAlias alias="status" type="com.zhy.listen.bean.Status" />
+		
+		
+		
+		
+		<typeAlias alias="userStatus" type="com.zhy.listen.bean.view.UserStatus" />
 	</typeAliases>
 </configuration>

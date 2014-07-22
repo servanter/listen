@@ -6,6 +6,7 @@ import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.User;
+import com.zhy.listen.bean.view.UserStatus;
 
 
 /**
@@ -132,5 +133,5 @@ public interface UserService {
      * @param indexEnum
      * @return
      */
-    public List<User> findUsersByIndex(IndexEnum indexEnum);
+    public List<UserStatus> findUsersByIndex(IndexEnum indexEnum);
 }

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.zhy.listen.bean.User;
+import com.zhy.listen.bean.view.UserStatus;
 
 
 /**
@@ -128,5 +129,5 @@ public interface UserDAO {
      * @param type
      * @return
      */
-    public List<User> getUsersByIndex(int type);
+    public List<UserStatus> getUsersByIndex(int type);
 }

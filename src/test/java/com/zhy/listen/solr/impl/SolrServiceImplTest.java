@@ -17,6 +17,7 @@ import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
+import com.zhy.listen.bean.view.UserStatus;
 import com.zhy.listen.service.MusicService;
 import com.zhy.listen.service.UserService;
 import com.zhy.listen.solr.SolrService;
@@ -37,7 +38,7 @@ public class SolrServiceImplTest extends SuperTest {
         Indexer indexer = new Indexer();
         indexer.setIndexerClass(IndexerClass.USER);
 //        List<Music> musics = musicService.findMusicsByIndex(IndexEnum.NOT_INDEXED);
-        List<User> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+        List<UserStatus> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
         indexer.setNeedIndexList(users);
         solrService.create(indexer);
     }
@@ -50,7 +51,7 @@ public class SolrServiceImplTest extends SuperTest {
 //        fields.add(field);
 //        queryResult.setQueryFields(fields);
         queryResult.setIndexerClass(IndexerClass.USER);
-        queryResult.setKeywords("大声说阿斯达阿斯达达斡尔");
+        queryResult.setKeywords("我试个英雄哈哈");
         System.out.println(solrService.query(queryResult));
     }
 

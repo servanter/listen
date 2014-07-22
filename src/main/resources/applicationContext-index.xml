@@ -35,6 +35,8 @@
 				<value>email</value>
 				<value>regTime</value>
 				<value>modifyTime</value>
+				<value>content</value>
+				<value>statusTime</value>
 				<value>isValid</value>
 			</list>
 		</constructor-arg>
@@ -56,7 +58,7 @@
 		<constructor-arg>
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
-				<entry key="user" value-ref="userCreateFields" />
+				<entry key="userstatus" value-ref="userCreateFields" />
 			</map>
 		</constructor-arg>
 	</bean>

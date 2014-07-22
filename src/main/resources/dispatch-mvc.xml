@@ -13,16 +13,29 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
-      -->
+      
     <mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
-			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-		    	<constructor-arg value="UTF-8" />
-			</bean>
-  		</mvc:message-converters>
-	</mvc:annotation-driven>
-	
+	<mvc:message-converters>
+		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+			<property name="supportedMediaTypes">
+				<list>
+					<value>text/plain;charset=UTF-8</value>
+					<value>text/html;charset=UTF-8</value>
+				</list>
+			</property>
+		</bean>
+		<bean
+			class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+			<property name="supportedMediaTypes">
+				<list>
+					<value>application/json; charset=UTF-8</value>
+					<value>application/x-www-form-urlencoded; charset=UTF-8</value>
+				</list>
+			</property>
+		</bean>
+	</mvc:message-converters>
+</mvc:annotation-driven>
+	-->
 	<!-- 定义JSP文件的位置 --> 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"/>

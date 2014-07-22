@@ -23,7 +23,6 @@ public class SearchController {
     @Autowired
     private SeriesService seriesService;
     
-    
     @RequestMapping(value="sear",method = RequestMethod.GET)
     public String search() {
         return "index";
@@ -31,6 +30,7 @@ public class SearchController {
     
     @RequestMapping(value="searchResult", method = RequestMethod.POST)
     public String searchResult(@RequestParam("text") String text, ModelMap modelMap, HttpServletResponse response) throws Exception {
+        response.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
         QueryResult queryResult = new QueryResult();
         queryResult.setKeywords(text);
         queryResult.setIndexerClass(IndexerClass.MUSIC);

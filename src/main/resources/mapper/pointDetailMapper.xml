@@ -5,12 +5,12 @@
 	<resultMap id="pointDetailResult" type="pointDetail">
 		<result property="id" column="id" />
 		<result property="userId" column="user_id" />
-		<result property="pointType" column="type" typeHandler="com.zhy.libra.bean.typeHandler.PointTypeHandler" />
+		<result property="pointType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.PointTypeHandler" />
 		<result property="point" column="point" />
 		<result property="createTime" column="create_time" />
 	</resultMap>
 
-	<insert id="sav_by_point" parameterType="pointDetail">
+	<insert id="save" parameterType="pointDetail">
 		INSERT INTO `user_point_detail` (user_id, type, point) VALUES (#{userId}, #{pointType.type}, #{pointType.score})
 		<selectKey resultType="Long" keyProperty="id">
 			SELECT LAST_INSERT_ID()

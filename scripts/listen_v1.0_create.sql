@@ -161,3 +161,21 @@ CREATE TABLE `point_config` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+
+
+
+-- -----------------------------------------------
+-- Table structure for `user_point_detail` 积分配置
+-- -----------------------------------------------
+DROP TABLE if exists `user_point_detail`;
+CREATE TABLE `user_point_detail` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `type` int(2) NOT NULL DEFAULT 0 COMMENT '类别',
+  `point` int(2) NOT NULL DEFAULT 1 COMMENT '分数',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

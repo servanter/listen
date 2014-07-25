@@ -10,7 +10,7 @@
 		<result property="honour" column="honour" />
 	</resultMap>
 
-	<select id="sel_by_point" resultMap="pointConfigResult" parameterType="java.lang.String">
+	<select id="getPointConfigByPoint" resultMap="pointConfigResult" parameterType="java.lang.String">
 		SELECT * FROM `point_config` WHERE min_point &lt;= #{point} AND #{point} &lt;= max_point ORDER BY ID ASC
 	</select>
 </mapper>

@@ -30,7 +30,7 @@ CREATE TABLE `user` (
   `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最近一次修改时间',
   `is_valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
-  `is_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否可用,0为注销;1为可用',
+  `is_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已经被索引,0为未索引;1为已经索引',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -110,7 +110,7 @@ CREATE TABLE `author` (
   `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -129,7 +129,7 @@ CREATE TABLE `music` (
   `is_index` tinyint(1) NOT NULL DEFAULT '0',
   `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -142,4 +142,22 @@ CREATE TABLE `status` (
   `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_valid` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+-- -----------------------------------------------
+-- Table structure for `point_config` 积分配置
+-- -----------------------------------------------
+DROP TABLE if exists `point_config`;
+CREATE TABLE `point_config` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `min_point` bigint(20) NOT NULL DEFAULT 0 COMMENT '最小分',
+  `max_point` bigint(20) NOT NULL DEFAULT 0 COMMENT '最大分',
+  `level` int(3) NOT NULL DEFAULT 1 COMMENT '级别',
+  `honour` varchar(20) NOT NULL COMMENT '头衔',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

@@ -2204,3 +2204,23 @@ INSERT INTO `author` VALUES ('2197', '闫学晶', 'yanxuejing', 'Y', '2014-07-01
 INSERT INTO `author` VALUES ('2198', '闫旭', 'yanxu', 'Y', '2014-07-01 11:06:09', '1');
 INSERT INTO `author` VALUES ('2199', '闵惠芬', 'minhuifen', 'M', '2014-07-01 11:06:09', '1');
 INSERT INTO `author` VALUES ('2200', '阚立文', 'kanliwen', 'K', '2014-07-01 11:06:09', '1');
+
+
+
+
+ 
+  -- ----------------------------
+-- Records of point_config
+-- ----------------------------
+INSERT INTO point_config VALUES ('1', '0', '100', '1', '等级一');
+INSERT INTO point_config VALUES ('2', '101', '200', '2', '等级二');
+INSERT INTO point_config VALUES ('3', '201', '300', '3', '等级三');
+INSERT INTO point_config VALUES ('4', '301', '400', '4', '等级四');
+INSERT INTO point_config VALUES ('5', '401', '500', '5', '等级五');
+INSERT INTO point_config VALUES ('6', '501', '600', '6', '等级六');
+INSERT INTO point_config VALUES ('7', '601', '700', '7', '等级七');
+INSERT INTO point_config VALUES ('8', '701', '800', '8', '等级八');
+INSERT INTO point_config VALUES ('9', '801', '900', '9', '等级九');
+INSERT INTO point_config VALUES ('10', '901', '1000', '10', '等级十');
+
+ 

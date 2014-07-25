@@ -11,7 +11,8 @@
 		<typeAlias alias="author" type="com.zhy.listen.bean.Author" />
 		<typeAlias alias="indexEnum" type="com.zhy.listen.bean.IndexEnum" />
 		<typeAlias alias="status" type="com.zhy.listen.bean.Status" />
-		
+		<typeAlias alias="pointDetail" type="com.zhy.listen.bean.PointDetail" />
+		<typeAlias alias="pointConfig" type="com.zhy.listen.bean.PointConfig" />
 		
 		
 		

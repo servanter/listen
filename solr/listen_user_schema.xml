@@ -135,6 +135,8 @@
    <field name="content" type="string" indexed="true" stored="true"  />
    <field name="status_time" type="date" indexed="true" stored="true"  />
    <field name="is_valid" type="boolean" indexed="true" stored="true" />
+   <field name="point" type="int" indexed="false" stored="true" />
+   <field name="honour" type="string" indexed="true" stored="true" />
    <field name="all_in_one" type="text_ik" indexed="true" stored="true" omitNorms="true" multiValued="true"/>
 
    <!-- Common metadata fields, named specifically to match up with
@@ -210,6 +212,7 @@
 	<copyField source="user_nick" dest="all_in_one"/>
     <copyField source="introduction" dest="all_in_one"/>
     <copyField source="content" dest="all_in_one"/>
+    <copyField source="honour" dest="all_in_one"/>
 	
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 

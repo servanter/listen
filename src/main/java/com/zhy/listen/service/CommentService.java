@@ -2,7 +2,7 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Comment;
+import com.zhy.listen.entities.Comment;
 
 
 /**

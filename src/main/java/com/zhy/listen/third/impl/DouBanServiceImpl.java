@@ -9,9 +9,9 @@ import com.dongxuexidu.douban4j.model.user.DoubanUserObj;
 import com.dongxuexidu.douban4j.provider.OAuthDoubanProvider;
 import com.dongxuexidu.douban4j.service.DoubanShuoService;
 import com.dongxuexidu.douban4j.service.DoubanUserService;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.DouBan;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.third.AuthorizeService;
 
 @Service("douBanService")

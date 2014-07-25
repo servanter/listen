@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Friend;
 import com.zhy.listen.dao.FriendDAO;
+import com.zhy.listen.entities.Friend;
 import com.zhy.listen.service.FriendService;
 
 @Service

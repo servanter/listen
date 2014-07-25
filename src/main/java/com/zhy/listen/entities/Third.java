@@ -1,7 +1,9 @@
-package com.zhy.listen.bean;
+package com.zhy.listen.entities;
 
 import java.sql.Timestamp;
 
+import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.Src;
 import com.zhy.listen.bean.third.DouBan;
 import com.zhy.listen.bean.third.KaiXin;
 import com.zhy.listen.bean.third.QQ;

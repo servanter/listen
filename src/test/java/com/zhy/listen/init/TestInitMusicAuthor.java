@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.Author;
+import com.zhy.listen.entities.Author;
 import com.zhy.listen.service.AuthorService;
 import com.zhy.listen.util.PinyinUtil;
 

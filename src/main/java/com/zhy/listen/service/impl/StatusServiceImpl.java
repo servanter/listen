@@ -3,8 +3,8 @@ package com.zhy.listen.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Status;
 import com.zhy.listen.dao.StatusDAO;
+import com.zhy.listen.entities.Status;
 import com.zhy.listen.service.StatusService;
 
 @Service

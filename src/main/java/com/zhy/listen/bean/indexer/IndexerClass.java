@@ -1,7 +1,7 @@
 package com.zhy.listen.bean.indexer;
 
-import com.zhy.listen.bean.Music;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.entities.Music;
 
 /**
  * 索引类别

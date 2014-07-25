@@ -2,8 +2,8 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 
 
 /**

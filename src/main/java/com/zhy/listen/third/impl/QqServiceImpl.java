@@ -8,9 +8,9 @@ import com.qq.connect.api.qzone.UserInfo;
 import com.qq.connect.javabeans.AccessToken;
 import com.qq.connect.javabeans.GeneralResultBean;
 import com.qq.connect.oauth.Oauth;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.QQ;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.third.AuthorizeService;
 
 @Service("qQService")

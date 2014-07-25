@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.Status;
+import com.zhy.listen.entities.Status;
 import com.zhy.listen.service.StatusService;
 
 public class StatusServiceImplTest extends SuperTest {

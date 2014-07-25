@@ -32,8 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.common.Constant;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.service.KingsoftService;
 import com.zhy.listen.template.TemplateService;
 import com.zhy.listen.util.MD5Util;

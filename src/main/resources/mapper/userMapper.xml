@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhy.listen.dao.UserDAO">
 
-	<resultMap id="userMap" type="com.zhy.listen.bean.User">
+	<resultMap id="userMap" type="user">
 		<result property="id" column="id" />
 		<result property="userName" column="user_name" />
 		<result property="passWord" column="pass_word" />

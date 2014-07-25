@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.service.UserService;
 
 public class UserServiceImplTest extends SuperTest {

@@ -3,7 +3,7 @@ package com.zhy.listen.bean.third;
 import javax.servlet.http.HttpServletRequest;
 
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
+import com.zhy.listen.entities.Third;
 
 
 

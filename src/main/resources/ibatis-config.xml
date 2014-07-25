@@ -2,20 +2,20 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias alias="comment" type="com.zhy.listen.bean.Comment" />
-		<typeAlias alias="friend" type="com.zhy.listen.bean.Friend" />
+		<typeAlias alias="comment" type="com.zhy.listen.entities.Comment" />
+		<typeAlias alias="friend" type="com.zhy.listen.entities.Friend" />
+		<typeAlias alias="third" type="com.zhy.listen.entities.Third" />
+		<typeAlias alias="user" type="com.zhy.listen.entities.User" />
+		<typeAlias alias="music" type="com.zhy.listen.entities.Music" />
+		<typeAlias alias="author" type="com.zhy.listen.entities.Author" />
+		<typeAlias alias="status" type="com.zhy.listen.entities.Status" />
+		<typeAlias alias="pointDetail" type="com.zhy.listen.entities.PointDetail" />
+		<typeAlias alias="pointConfig" type="com.zhy.listen.entities.PointConfig" />
+		
+		
+		
 		<typeAlias alias="paging" type="com.zhy.listen.bean.Paging" />
-		<typeAlias alias="third" type="com.zhy.listen.bean.Third" />
-		<typeAlias alias="user" type="com.zhy.listen.bean.User" />
-		<typeAlias alias="music" type="com.zhy.listen.bean.Music" />
-		<typeAlias alias="author" type="com.zhy.listen.bean.Author" />
 		<typeAlias alias="indexEnum" type="com.zhy.listen.bean.IndexEnum" />
-		<typeAlias alias="status" type="com.zhy.listen.bean.Status" />
-		<typeAlias alias="pointDetail" type="com.zhy.listen.bean.PointDetail" />
-		<typeAlias alias="pointConfig" type="com.zhy.listen.bean.PointConfig" />
-		
-		
-		
-		<typeAlias alias="userStatus" type="com.zhy.listen.bean.view.UserStatus" />
+		<typeAlias alias="userStatus" type="com.zhy.listen.bean.UserStatus" />
 	</typeAliases>
 </configuration>

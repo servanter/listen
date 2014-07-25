@@ -1,6 +1,6 @@
 package com.zhy.listen.service;
 
-import com.zhy.listen.bean.PointConfig;
+import com.zhy.listen.entities.PointConfig;
 
 /**
  * 积分配置

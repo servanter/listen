@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Author;
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
+import com.zhy.listen.entities.Author;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.query.SearchService;
 import com.zhy.listen.series.SeriesService;
 import com.zhy.listen.service.AuthorService;

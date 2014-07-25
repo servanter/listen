@@ -1,8 +1,8 @@
 package com.zhy.listen.third;
 
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 
 
 /**

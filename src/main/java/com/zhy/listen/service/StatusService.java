@@ -1,6 +1,6 @@
 package com.zhy.listen.service;
 
-import com.zhy.listen.bean.Status;
+import com.zhy.listen.entities.Status;
 
 /**
  * 状态业务层

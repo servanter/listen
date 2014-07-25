@@ -3,8 +3,8 @@ package com.zhy.listen.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.PointDetail;
 import com.zhy.listen.dao.PointDetailDAO;
+import com.zhy.listen.entities.PointDetail;
 import com.zhy.listen.service.PointDetailService;
 
 @Service

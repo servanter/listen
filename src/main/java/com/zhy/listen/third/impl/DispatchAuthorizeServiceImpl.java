@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.common.Constant;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.template.TemplateService;
 import com.zhy.listen.third.AuthorizeService;
 import com.zhy.listen.third.DispatchAuthorizeService;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhy.listen.dao.AuthorDAO">
 
-	<resultMap id="authorResult" type="com.zhy.listen.bean.Author">
+	<resultMap id="authorResult" type="author">
 		<result property="id" column="id" />
 		<result property="name" column="title" />
 		<result property="enName" column="en_name" />

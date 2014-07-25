@@ -14,10 +14,10 @@ import com.renren.api.client.RenrenApiClient;
 import com.renren.api.client.RenrenApiConfig;
 import com.renren.api.client.param.impl.AccessToken;
 import com.renren.api.client.utils.HttpURLUtils;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.RenRen;
 import com.zhy.listen.common.Constant;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.template.TemplateService;
 import com.zhy.listen.third.AuthorizeService;
 

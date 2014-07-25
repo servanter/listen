@@ -3,7 +3,7 @@ package com.zhy.listen.service;
 import java.util.List;
 
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Music;
+import com.zhy.listen.entities.Music;
 
 /**
  * 

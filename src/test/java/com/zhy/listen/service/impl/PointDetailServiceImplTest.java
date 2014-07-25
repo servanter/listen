@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.PointDetail;
 import com.zhy.listen.bean.PointType;
+import com.zhy.listen.entities.PointDetail;
 import com.zhy.listen.service.PointDetailService;
 
 public class PointDetailServiceImplTest extends SuperTest {

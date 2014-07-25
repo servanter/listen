@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.User;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.entities.User;
 
 
 /**

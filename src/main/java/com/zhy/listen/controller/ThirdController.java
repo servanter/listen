@@ -16,8 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.qq.connect.QQConnectException;
 import com.qq.connect.oauth.Oauth;
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.DouBan;
 import com.zhy.listen.bean.third.KaiXin;
 import com.zhy.listen.bean.third.QQ;
@@ -26,6 +24,8 @@ import com.zhy.listen.bean.third.RenRen;
 import com.zhy.listen.bean.third.Sina;
 import com.zhy.listen.bean.third.Sohu;
 import com.zhy.listen.bean.third.WangYi;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.third.DispatchAuthorizeService;
 
 /**

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhy.listen.dao.StatusDAO">
 
-	<resultMap id="statusResult" type="com.zhy.listen.bean.Status">
+	<resultMap id="statusResult" type="status">
 		<result property="id" column="id" />
 		<result property="userId" column="user_id" />
 		<result property="content" column="content" />

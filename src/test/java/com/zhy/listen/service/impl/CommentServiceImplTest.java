@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.Comment;
 import com.zhy.listen.bean.CommentType;
+import com.zhy.listen.entities.Comment;
 import com.zhy.listen.service.CommentService;
 
 public class CommentServiceImplTest extends SuperTest {

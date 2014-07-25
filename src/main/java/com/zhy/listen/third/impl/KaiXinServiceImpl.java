@@ -11,9 +11,9 @@ import kx2_4j.model.KxModel;
 import kx2_4j.oauth2.AccessToken;
 import kx2_4j.oauth2.KxOAuth;
 
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.KaiXin;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.third.AuthorizeService;
 
 @Service("kaiXinService")

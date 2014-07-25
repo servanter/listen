@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.Author;
+import com.zhy.listen.entities.Author;
 
 @Repository
 public interface AuthorDAO {

@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.MusicUploadEnum;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.dao.MusicDAO;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.query.AbstractLuceneSearch;
 import com.zhy.listen.service.MusicService;
 

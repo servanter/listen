@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.Author;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.entities.Author;
 import com.zhy.listen.service.AuthorService;
 
 public class AuthorServiceImplTest extends SuperTest{

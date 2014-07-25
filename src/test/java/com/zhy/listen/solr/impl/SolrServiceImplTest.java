@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Music;
-import com.zhy.listen.bean.User;
+import com.zhy.listen.bean.UserStatus;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.entities.Music;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.service.MusicService;
 import com.zhy.listen.service.UserService;
 import com.zhy.listen.solr.SolrService;

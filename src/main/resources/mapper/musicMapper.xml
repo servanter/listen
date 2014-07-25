@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhy.listen.dao.MusicDAO">
 
-	<resultMap id="musicResult" type="com.zhy.listen.bean.Music">
+	<resultMap id="musicResult" type="music">
 		<result property="id" column="id" />
 		<result property="url" column="download_url" />
 		<result property="lrc" column="lrc" />

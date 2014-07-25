@@ -1,6 +1,6 @@
 package com.zhy.listen.service;
 
-import com.zhy.listen.bean.PointDetail;
+import com.zhy.listen.entities.PointDetail;
 
 /**
  * 积分业务

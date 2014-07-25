@@ -2,7 +2,7 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Friend;
+import com.zhy.listen.entities.Friend;
 
 
 public interface FriendService {

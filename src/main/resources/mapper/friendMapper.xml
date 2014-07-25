@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhy.listen.dao.FriendDAO">
 
-	<resultMap id="friendResult" type="com.zhy.listen.bean.Friend">
+	<resultMap id="friendResult" type="friend">
 		<result property="id" column="id" />
 		<result property="userId" column="user_id" />
 		<result property="friendId" column="friend_id" />

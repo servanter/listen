@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.Friend;
+import com.zhy.listen.entities.Friend;
 
 /**
  * 好友DAO层

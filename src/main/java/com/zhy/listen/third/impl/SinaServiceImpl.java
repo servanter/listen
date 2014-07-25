@@ -9,9 +9,9 @@ import weibo4j.Users;
 import weibo4j.Weibo;
 import weibo4j.http.AccessToken;
 
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.Sina;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.third.AuthorizeService;
 import com.zhy.listen.util.AreaUtil;
 

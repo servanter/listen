@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.create.CreateService;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.service.MusicService;
 
 /**

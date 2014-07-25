@@ -1,4 +1,4 @@
-package com.zhy.listen.bean;
+package com.zhy.listen.entities;
 
 /**
  * 积分配置

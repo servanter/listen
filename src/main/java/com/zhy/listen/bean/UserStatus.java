@@ -1,8 +1,8 @@
-package com.zhy.listen.bean.view;
+package com.zhy.listen.bean;
 
 import java.sql.Timestamp;
 
-import com.zhy.listen.bean.User;
+import com.zhy.listen.entities.User;
 
 /**
  * 用户基本信息及状态信息

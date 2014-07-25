@@ -12,9 +12,9 @@ import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SameType;
-import com.zhy.listen.bean.User;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.bean.UserStatus;
 import com.zhy.listen.dao.UserDAO;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.service.ThirdService;
 import com.zhy.listen.service.UserService;
 

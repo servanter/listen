@@ -1,6 +1,9 @@
-package com.zhy.listen.bean;
+package com.zhy.listen.entities;
 
 import java.sql.Timestamp;
+
+import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.PointType;
 
 /**
  * 积分详情

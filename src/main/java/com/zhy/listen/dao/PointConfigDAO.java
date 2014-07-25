@@ -2,7 +2,7 @@ package com.zhy.listen.dao;
 
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.PointConfig;
+import com.zhy.listen.entities.PointConfig;
 
 @Repository
 public interface PointConfigDAO {

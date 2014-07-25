@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
-import com.zhy.listen.bean.Music;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.service.KingsoftService;
 
 

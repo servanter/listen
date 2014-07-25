@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Author;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.dao.AuthorDAO;
+import com.zhy.listen.entities.Author;
 import com.zhy.listen.query.AbstractDBSearch;
 import com.zhy.listen.service.AuthorService;
 

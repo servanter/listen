@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.User;
-import com.zhy.listen.bean.view.UserStatus;
+import com.zhy.listen.bean.UserStatus;
 import com.zhy.listen.create.GenerateIndexService;
+import com.zhy.listen.entities.User;
 
 @Service
 public class CreateUserStatusIndexServiceImpl implements GenerateIndexService<UserStatus> {

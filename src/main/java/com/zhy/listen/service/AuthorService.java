@@ -2,8 +2,8 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Author;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.entities.Author;
 
 /**
  * 作者字典业务

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.Third;
+import com.zhy.listen.entities.Third;
 
 @Repository
 public interface ThirdDAO {

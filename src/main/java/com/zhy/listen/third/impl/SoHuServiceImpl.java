@@ -7,10 +7,10 @@ import t4j.sohu.OAuthVersion;
 import t4j.sohu.TBlog;
 import t4j.sohu.http.OAuth2AccessToken;
 
-import com.zhy.listen.bean.Third;
-import com.zhy.listen.bean.User;
 import com.zhy.listen.bean.third.Sohu;
 import com.zhy.listen.common.Constant;
+import com.zhy.listen.entities.Third;
+import com.zhy.listen.entities.User;
 import com.zhy.listen.template.TemplateService;
 import com.zhy.listen.third.AuthorizeService;
 

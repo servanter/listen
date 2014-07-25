@@ -1,7 +1,7 @@
 package com.zhy.listen.bean.third;
 
 import com.zhy.listen.bean.Src;
-import com.zhy.listen.bean.Third;
+import com.zhy.listen.entities.Third;
 
 
 /**

@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.create.GenerateIndexService;
 import com.zhy.listen.create.GenerateIndexServiceAdapter;
+import com.zhy.listen.entities.Music;
 
 @Service
 public class CreateMusicIndexServiceImpl implements GenerateIndexService<Music> {

@@ -6,8 +6,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.common.Constant;
+import com.zhy.listen.entities.Music;
 import com.zhy.listen.service.FetchMusicService;
 import com.zhy.listen.template.TemplateService;
 

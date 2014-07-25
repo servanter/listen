@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Music;
 import com.zhy.listen.bean.MusicUploadEnum;
+import com.zhy.listen.entities.Music;
 
 @Repository
 public interface MusicDAO {

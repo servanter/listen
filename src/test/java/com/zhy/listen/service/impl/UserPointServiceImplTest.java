@@ -19,13 +19,13 @@ public class UserPointServiceImplTest extends SuperTest{
     
     @Test
     public void testAddAndFind() {
-//        UserPoint userPoint = new UserPoint();
-//        userPoint.setCreateTime(new Timestamp(System.currentTimeMillis()));
-//        userPoint.setUserHonour("等级一");
-//        userPoint.setPoint(100L);
-//        userPoint.setUserId(1L);
-//        boolean isSuccess = userPointService.add(userPoint);
-//        Assert.assertTrue("Can't save the user point ?", isSuccess);
+        UserPoint userPoint = new UserPoint();
+        userPoint.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        userPoint.setUserHonour("等级一");
+        userPoint.setPoint(100L);
+        userPoint.setUserId(1L);
+        boolean isSuccess = userPointService.add(userPoint);
+        Assert.assertTrue("Can't save the user point ?", isSuccess);
         
         UserPoint point = userPointService.findByUserId(1L);
         Assert.assertTrue("Can't find the user point ?", point != null);

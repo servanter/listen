@@ -37,7 +37,8 @@
 				<value>modifyTime</value>
 				<value>content</value>
 				<value>statusTime</value>
-				<value>isValid</value>
+				<value>point</value>
+				<value>honour</value>
 			</list>
 		</constructor-arg>
 	</bean>
@@ -58,7 +59,7 @@
 		<constructor-arg>
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
-				<entry key="userstatus" value-ref="userCreateFields" />
+				<entry key="userstatuspoint" value-ref="userCreateFields" />
 			</map>
 		</constructor-arg>
 	</bean>

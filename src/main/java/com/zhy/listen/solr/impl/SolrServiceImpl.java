@@ -136,28 +136,8 @@ public class SolrServiceImpl implements SolrService {
             if(fieldList == null) {
                 return null;
             }
-            Field[] fields = cacheKey.get(t);
             
-            // setfileds
-            if(fields == null || fields.length == 0) {
-                fields = new Field[fieldList.size()];
-                for (int i = 0; i < fieldList.size(); i++) {
-                    String f = fieldList.get(i);
-                    try {
-                        fields[i] = t.getDeclaredField(f);
-                        fields[i].setAccessible(true);
-                    } catch (Exception e) {
-                        try {
-                            fields[i] = t.getSuperclass().getDeclaredField(f);
-                            fields[i].setAccessible(true);
-                        } catch (Exception e2) {
-                            e2.printStackTrace();
-                            logger.error("[Solr]: Get fields occur error, The " + f + " has not property");
-                        }
-                    }
-                }
-                cacheKey.put(t, fields);
-            }
+            Field[] fields = getFieldsByFieldString(t, fieldList);
             for (Field field : fields) {
 
                 // 设置每一个field
@@ -195,6 +175,59 @@ public class SolrServiceImpl implements SolrService {
             logger.error("[Solr] Convert bean occur error");
         }
         return bean;
+    }
+
+    /**
+     * 根据spring配置的 field strings 获取每个field
+     * @param <X>
+     * @param t
+     * @param fieldList
+     * @param fields
+     * @return
+     */
+    public <X> Field[] getFieldsByFieldString(Class<X> t, List<String> fieldList) {
+        Field[] fields = cacheKey.get(t);
+        if(fields == null || fields.length == 0) {
+            
+            // setfileds
+            if(fields == null || fields.length == 0) {
+                fields = new Field[fieldList.size()];
+                for (int i = 0; i < fieldList.size(); i++) {
+                    String f = fieldList.get(i);
+                    try {
+                        fields[i] = t.getDeclaredField(f);
+                        fields[i].setAccessible(true);
+                    } catch (Exception e) {
+                        getFieldFromParentClass(t, fields, i, f);
+                    }
+                }
+                cacheKey.put(t, fields);
+            }
+        }
+        return fields;
+    }
+
+    /**
+     * 从父类中获取field
+     * 
+     * @param <X>
+     * @param t
+     * @param fields
+     * @param i
+     * @param f
+     */
+    public <X> void getFieldFromParentClass(Class<X> t, Field[] fields, int i, String f) {
+        try {
+            fields[i] = t.getSuperclass().getDeclaredField(f);
+            fields[i].setAccessible(true);
+        } catch (Exception e2) {
+            if(t.getSuperclass() != Object.class) {
+                getFieldFromParentClass(t.getSuperclass(), fields, i, f);
+            } else {
+                e2.printStackTrace();
+                logger.error("[Solr]: Get fields occur error, The " + f + " has not property");
+            }
+        }
     }
 
 }

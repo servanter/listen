@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.bean.UserStatusPoint;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
@@ -38,7 +39,7 @@ public class SolrServiceImplTest extends SuperTest {
         Indexer indexer = new Indexer();
         indexer.setIndexerClass(IndexerClass.USER);
 //        List<Music> musics = musicService.findMusicsByIndex(IndexEnum.NOT_INDEXED);
-        List<UserStatus> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+        List<UserStatusPoint> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
         indexer.setNeedIndexList(users);
         solrService.create(indexer);
     }
@@ -51,7 +52,7 @@ public class SolrServiceImplTest extends SuperTest {
 //        fields.add(field);
 //        queryResult.setQueryFields(fields);
         queryResult.setIndexerClass(IndexerClass.USER);
-        queryResult.setKeywords("我试个英雄哈哈");
+        queryResult.setKeywords("等级");
         System.out.println(solrService.query(queryResult));
     }
 

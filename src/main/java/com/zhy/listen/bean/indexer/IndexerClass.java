@@ -1,6 +1,7 @@
 package com.zhy.listen.bean.indexer;
 
 import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.bean.UserStatusPoint;
 import com.zhy.listen.entities.Music;
 
 /**
@@ -19,7 +20,7 @@ public enum IndexerClass {
     /**
      * 用户相关
      */
-    USER("UserStatus", UserStatus.class.getPackage().getName());
+    USER("UserStatusPoint", UserStatusPoint.class.getPackage().getName());
 
     private String alias;
     

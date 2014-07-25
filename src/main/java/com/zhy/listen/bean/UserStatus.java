@@ -15,11 +15,6 @@ import com.zhy.listen.entities.User;
  * @author zhanghongyan@outlook.com
  *
  */
-/**
- *
- * @author zhanghongyan@outlook.com
- *
- */
 public class UserStatus extends User{
 
     /**

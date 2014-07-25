@@ -3,16 +3,14 @@ package com.zhy.listen.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
-import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SameType;
-import com.zhy.listen.bean.UserStatus;
+import com.zhy.listen.bean.UserStatusPoint;
 import com.zhy.listen.dao.UserDAO;
 import com.zhy.listen.entities.User;
 import com.zhy.listen.service.ThirdService;
@@ -135,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserStatus> findUsersByIndex(IndexEnum indexEnum) {
+    public List<UserStatusPoint> findUsersByIndex(IndexEnum indexEnum) {
         return userDAO.getUsersByIndex(indexEnum.getType());
     }
 }

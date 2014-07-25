@@ -18,5 +18,6 @@
 		<typeAlias alias="paging" type="com.zhy.listen.bean.Paging" />
 		<typeAlias alias="indexEnum" type="com.zhy.listen.bean.IndexEnum" />
 		<typeAlias alias="userStatus" type="com.zhy.listen.bean.UserStatus" />
+		<typeAlias alias="userStatusPoint" type="com.zhy.listen.bean.UserStatusPoint" />
 	</typeAliases>
 </configuration>

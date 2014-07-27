@@ -59,13 +59,14 @@ public class SolrServiceImplTest extends SuperTest {
     public void testQuery() {
         QueryResult queryResult = new QueryResult();
         List<QueryField> fields = new ArrayList<QueryField>();
-        QueryField field = new QueryField("pt", "66.21,40.04");
-        QueryField field2 = new QueryField("mileage", "50");
-        fields.add(field);
-        fields.add(field2);
+        QueryField field = new QueryField("province", "北京");
+//        QueryField field2 = new QueryField("mileage", "50");
+//        fields.add(field);
+//        fields.add(field2);
 //        queryResult.setQueryFields(fields);
-        queryResult.setIndexerClass(IndexerClass.PATH);
+        queryResult.setIndexerClass(IndexerClass.USER);
 //        queryResult.setKeywords("等级");
+        fields.add(field);
         queryResult.setQueryFields(fields);
         System.out.println(solrService.query(queryResult));
     }

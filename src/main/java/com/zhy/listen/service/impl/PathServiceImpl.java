@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
@@ -26,7 +27,12 @@ public class PathServiceImpl implements PathService {
 
     @Override
     public boolean sign(Path path) {
-        return false;
+        Indexer indexer = new Indexer();
+        indexer.setIndexerClass(IndexerClass.PATH);
+        List<Path> needIndexList = new ArrayList<Path>();
+        needIndexList.add(path);
+        indexer.setNeedIndexList(needIndexList);
+        return solrService.create(indexer);
     }
 
     @Override

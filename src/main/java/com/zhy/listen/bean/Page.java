@@ -6,7 +6,12 @@ package com.zhy.listen.bean;
  * @author zhy
  * 
  */
-public class Page {
+public class Page implements java.io.Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6383539006738508408L;
 
     /**
      * 默认页大小

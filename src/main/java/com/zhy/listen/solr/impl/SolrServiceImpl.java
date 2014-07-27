@@ -11,17 +11,21 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.MapSolrParams;
+import org.apache.solr.common.params.SolrParams;
 import org.directwebremoting.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.indexer.Indexer;
+import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.common.Constant;
@@ -71,12 +75,15 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public QueryResult query(QueryResult queryResult) {
+        if(queryResult.getIndexerClass() == IndexerClass.PATH) {
+            return queryPath(queryResult);
+        }
         HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
         SolrQuery query = new SolrQuery();
         query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
         if(queryResult.getQueryFields() != null) {
             for(QueryField field : queryResult.getQueryFields()) {
-                query.setQuery(field.getFieldName() + SolrConstant.FIELD_SPLIT + field.getValue());
+                query.addFilterQuery(field.getFieldName() + SolrConstant.FIELD_SPLIT + field.getValue());
             }
         }
         int currentPage = 1;
@@ -85,6 +92,7 @@ public class SolrServiceImpl implements SolrService {
         }
         query.setStart(currentPage * queryResult.getPageSize());
         query.setRows(queryResult.getPageSize());
+        
         try {
             SolrDocumentList solrDocumentList = server.query(query).getResults();
             Class clazz = Class.forName(queryResult.getIndexerClass().getPath() + "." + queryResult.getIndexerClass().getAlias());
@@ -104,6 +112,62 @@ public class SolrServiceImpl implements SolrService {
             e.printStackTrace();
         }
         return queryResult;
+    }
+
+    /**
+     * 查询位置信息
+     * 
+     * @return
+     */
+    private QueryResult queryPath(QueryResult queryResult) {
+        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
+        
+        int currentPage = 1;
+        if(queryResult.getPage() >= 1) {
+            currentPage = queryResult.getPage() - 1;
+        }
+                
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("start", String.valueOf(currentPage * queryResult.getPageSize()));
+        map.put("rows", String.valueOf(queryResult.getPageSize()));
+        map.put("all_in_one", queryResult.getKeywords());
+        map.put("fq", "{!geofilt}");//距离过滤函数 
+        map.put("pt", queryResult.getQueryFields().get(0).getValue());//当前经纬度 
+        map.put("sfield", "loc");//经纬度的字段 
+        map.put("d", queryResult.getQueryFields().get(1).getValue());//就近2公里的所有酒店 
+        map.put("q", "*:*");
+        map.put("sort", "geodist() asc");//根据距离排序 
+        map.put("province", queryResult.getQueryFields().get(2).getValue());
+        map.put("city", queryResult.getQueryFields().get(3).getValue());
+        
+        
+        System.out.println(map);
+//        if(queryResult.getQueryFields() != null) {
+//            for(QueryField field : queryResult.getQueryFields()) {
+//                map.put(field.getFieldName(), field.getValue());
+//            }
+//        }
+        
+        try {
+            SolrDocumentList solrDocumentList = server.query(new MapSolrParams(map), METHOD.GET).getResults();
+            Class clazz = Class.forName(queryResult.getIndexerClass().getPath() + "." + queryResult.getIndexerClass().getAlias());
+            List<Page> pageList = new ArrayList<Page>(); 
+            for(SolrDocument doc : solrDocumentList) {
+                Page p = packageDoc(doc, clazz);
+                if(p != null) {
+                    pageList.add(p);
+                }
+            }
+            queryResult.setResult(pageList);
+            queryResult.setHitCount(pageList.size());
+            queryResult.setTotalRecord(solrDocumentList.getNumFound());
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return queryResult;
+        
     }
 
     /**

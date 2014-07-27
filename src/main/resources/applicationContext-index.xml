@@ -42,6 +42,20 @@
 			</list>
 		</constructor-arg>
 	</bean>
+	
+	<bean id="pathCreateFields" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>id</value>
+				<value>userId</value>
+				<value>loc</value>
+				<value>province</value>
+				<value>city</value>
+				<value>isClean</value>
+				<value>discoveryTime</value>
+			</list>
+		</constructor-arg>
+	</bean>
 
 	<bean id="musicQueryFields" class="java.util.ArrayList">
 		<constructor-arg>
@@ -60,6 +74,7 @@
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
 				<entry key="userstatuspoint" value-ref="userCreateFields" />
+				<entry key="path" value-ref="pathCreateFields" />
 			</map>
 		</constructor-arg>
 	</bean>

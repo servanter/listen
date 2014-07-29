@@ -135,14 +135,24 @@ public class SolrServiceImpl implements SolrService {
         map.put("start", String.valueOf(currentPage * queryResult.getPageSize()));
         map.put("rows", String.valueOf(queryResult.getPageSize()));
         map.put("all_in_one", queryResult.getKeywords());
-        map.put("fq", "{!geofilt}");//距离过滤函数 
-        map.put("pt", queryResult.getQueryFields().get(0).getValue());//当前经纬度 
-        map.put("sfield", "loc");//经纬度的字段 
-        map.put("d", queryResult.getQueryFields().get(1).getValue());//就近2公里的所有酒店 
+
+        // 距离过滤函数
+        map.put("fq", "{!geofilt}");
+
+        // 当前经纬度
+        map.put("pt", queryResult.getQueryFieldValue("pt"));
+
+        // 经纬度的字段
+        map.put("sfield", "loc");
+
+        // 就近x公里
+        map.put("d", queryResult.getQueryFieldValue("mileage"));
         map.put("q", "*:*");
-        map.put("sort", "geodist() asc");//根据距离排序 
-        map.put("province", queryResult.getQueryFields().get(2).getValue());
-        map.put("city", queryResult.getQueryFields().get(3).getValue());
+
+        // 根据距离排序
+        map.put("sort", "geodist() asc");
+        map.put("province", queryResult.getQueryFieldValue("province"));
+        map.put("city", queryResult.getQueryFieldValue("city"));
         
         try {
             SolrDocumentList solrDocumentList = server.query(new MapSolrParams(map), METHOD.GET).getResults();

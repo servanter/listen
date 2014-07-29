@@ -149,7 +149,7 @@ public class QueryResult extends Page {
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
-    
+
     public String getRawQuery() {
         return rawQuery;
     }
@@ -244,4 +244,20 @@ public class QueryResult extends Page {
                 + result + ", indexerClass=" + indexerClass + ", rawQuery=" + rawQuery + ", message=" + message + "]";
     }
 
+    /**
+     * 根据field name获取value
+     * 
+     * @param name
+     * @return
+     */
+    public String getQueryFieldValue(String name) {
+        String result = null;
+        for (QueryField field : getQueryFields()) {
+            if (field.getFieldName().equals(name)) {
+                result = field.getValue();
+                break;
+            }
+        }
+        return result;
+    }
 }

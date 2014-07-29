@@ -51,11 +51,25 @@ public class PathServiceImpl implements PathService {
         queryResult.setIndexerClass(IndexerClass.PATH);
         queryResult.setQueryFields(fields);
         solrService.query(queryResult);
+        StringBuilder builder = new StringBuilder();
+        String rowString = "";
         if (queryResult.getHitCount() > 0) {
             List<Path> paths = (List<Path>) queryResult.getResult();
             for (Path p : paths) {
-                result.add(userService.getUserById(p.getUserId()));
+                builder.append("id:(" + p.getUserId() + ") AND ");
             }
+            if(builder.length() > 0) {
+                rowString = builder.substring(0, builder.length() - 4);
+            }
+        }
+        QueryResult userQuery = new QueryResult();
+        userQuery.setIndexerClass(IndexerClass.USER);
+        fields.add(field3);
+        fields.add(field4);
+        userQuery.setRawQuery(rowString);
+        solrService.query(userQuery);
+        if(userQuery.getResult() != null && userQuery.getResult().size() > 0) {
+            result = (List<User>) userQuery.getResult();
         }
         return result;
     }

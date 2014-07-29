@@ -54,6 +54,11 @@ public class QueryResult extends Page {
     private IndexerClass indexerClass;
 
     /**
+     * 查询条件
+     */
+    private String rawQuery;
+
+    /**
      * 返回信息<br>
      * 如果有查询结果, "耗时xxx秒,查询xxx条"<br>
      * 如果没有返回结果,"没有相关内容"
@@ -144,6 +149,14 @@ public class QueryResult extends Page {
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
+    
+    public String getRawQuery() {
+        return rawQuery;
+    }
+
+    public void setRawQuery(String rawQuery) {
+        this.rawQuery = rawQuery;
+    }
 
     @Override
     public int hashCode() {
@@ -157,6 +170,7 @@ public class QueryResult extends Page {
         result = prime * result + ((message == null) ? 0 : message.hashCode());
         result = prime * result + ((queryFields == null) ? 0 : queryFields.hashCode());
         result = prime * result + ((queryTime == null) ? 0 : queryTime.hashCode());
+        result = prime * result + ((rawQuery == null) ? 0 : rawQuery.hashCode());
         result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
         result = prime * result + ((userId == null) ? 0 : userId.hashCode());
         return result;
@@ -205,6 +219,11 @@ public class QueryResult extends Page {
                 return false;
         } else if (!queryTime.equals(other.queryTime))
             return false;
+        if (rawQuery == null) {
+            if (other.rawQuery != null)
+                return false;
+        } else if (!rawQuery.equals(other.rawQuery))
+            return false;
         if (result == null) {
             if (other.result != null)
                 return false;
@@ -220,9 +239,9 @@ public class QueryResult extends Page {
 
     @Override
     public String toString() {
-        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime=" + endTime + ", userId=" + userId
-                + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result=" + result + ", indexerClass=" + indexerClass + ", message="
-                + message + "]";
+        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime="
+                + endTime + ", userId=" + userId + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result="
+                + result + ", indexerClass=" + indexerClass + ", rawQuery=" + rawQuery + ", message=" + message + "]";
     }
 
 }

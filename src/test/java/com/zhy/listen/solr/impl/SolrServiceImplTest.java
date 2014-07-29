@@ -46,7 +46,7 @@ public class SolrServiceImplTest extends SuperTest {
         path.setUserId(1L);
         path.setProvince("");
         path.setCity("北京");
-        path.setLoc("129.21,130.04");
+        path.setLoc("39.914889,116.403874");
         path.setIsClean(false);
         path.setDiscoveryTime(new Timestamp(System.currentTimeMillis()));
         List<Path> paths = new ArrayList<Path>();

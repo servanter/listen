@@ -80,7 +80,11 @@ public class SolrServiceImpl implements SolrService {
         }
         HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
         SolrQuery query = new SolrQuery();
-        query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
+        if(queryResult.getRawQuery() != null && queryResult.getRawQuery().length() > 0) {
+            query.setQuery(queryResult.getRawQuery());
+        } else {
+            query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
+        }
         if(queryResult.getQueryFields() != null) {
             for(QueryField field : queryResult.getQueryFields()) {
                 query.addFilterQuery(field.getFieldName() + SolrConstant.FIELD_SPLIT + field.getValue());
@@ -139,14 +143,6 @@ public class SolrServiceImpl implements SolrService {
         map.put("sort", "geodist() asc");//根据距离排序 
         map.put("province", queryResult.getQueryFields().get(2).getValue());
         map.put("city", queryResult.getQueryFields().get(3).getValue());
-        
-        
-        System.out.println(map);
-//        if(queryResult.getQueryFields() != null) {
-//            for(QueryField field : queryResult.getQueryFields()) {
-//                map.put(field.getFieldName(), field.getValue());
-//            }
-//        }
         
         try {
             SolrDocumentList solrDocumentList = server.query(new MapSolrParams(map), METHOD.GET).getResults();

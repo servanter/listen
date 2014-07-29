@@ -19,8 +19,8 @@ public class PathServiceImplTest extends SuperTest{
     @Test
     public void testQueryByPath() {
         Path path = new Path();
-        path.setLoc("66.21,40.04");
-        List<User> result = pathService.queryByPath(path, 10);
+        path.setLoc("39.914889,116");
+        List<User> result = pathService.queryByPath(path, 50);
         System.out.println(result);
         Assert.assertTrue("Can't find the user from path?", result != null && result.size() > 0);
     }

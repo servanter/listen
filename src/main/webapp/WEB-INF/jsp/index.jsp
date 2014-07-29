@@ -23,13 +23,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					$("#result").text(data);
 				}});
 			});
+			$("#near_btn").click(function(){
+				$.ajax({url:"${ctx}/path/nearby/", type:"POST", data:$("#path_div").serialize(), success:function (data) {
+					$("#result").text(data);
+				}});
+			})
 		});
 	</script>
   </head>
   
   <body>
   	<input type="text" name="text" id="t" >
-  	<input type="button" id="btn" value="搜素">
+  	<input type="button" id="btn" value="搜素"><br>
+  	<div id="path_div">
+  	纬度,经度<input name="path.loc" type="text">&nbsp;公里数<input name="path.mile" type="text">&nbsp;省份<input name="path.province" type="text">&nbsp;城市<input name="path.city" type="text"><input type="button" id="near_btn" value="搜索附近的人"><br>
+  	</div>
   	<div id="result"></div>
   </body>
 </html>

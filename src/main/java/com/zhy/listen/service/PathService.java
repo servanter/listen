@@ -1,9 +1,7 @@
 package com.zhy.listen.service;
 
-import java.util.List;
-
+import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.Path;
-import com.zhy.listen.entities.User;
 
 /**
  * 位置服务
@@ -15,5 +13,5 @@ public interface PathService {
 
     public boolean sign(Path path);
     
-    public List<User> queryByPath(Path path, Integer mile);
+    public QueryResult queryByPath(Path path, Integer mile);
 }

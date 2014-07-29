@@ -11,9 +11,7 @@ import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.Path;
-import com.zhy.listen.entities.User;
 import com.zhy.listen.service.PathService;
-import com.zhy.listen.service.UserService;
 import com.zhy.listen.solr.SolrService;
 
 @Service
@@ -21,9 +19,6 @@ public class PathServiceImpl implements PathService {
 
     @Autowired
     private SolrService solrService;
-
-    @Autowired
-    private UserService userService;
 
     @Override
     public boolean sign(Path path) {
@@ -36,8 +31,7 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    public List<User> queryByPath(Path path, Integer mile) {
-        List<User> result = new ArrayList<User>();
+    public QueryResult queryByPath(Path path, Integer mile) {
         QueryResult queryResult = new QueryResult();
         List<QueryField> fields = new ArrayList<QueryField>();
         QueryField field = new QueryField("pt", path.getLoc());
@@ -68,10 +62,7 @@ public class PathServiceImpl implements PathService {
         fields.add(field4);
         userQuery.setRawQuery(rowString);
         solrService.query(userQuery);
-        if(userQuery.getResult() != null && userQuery.getResult().size() > 0) {
-            result = (List<User>) userQuery.getResult();
-        }
-        return result;
+        return userQuery;
     }
 
 }

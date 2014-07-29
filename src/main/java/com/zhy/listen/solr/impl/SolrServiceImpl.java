@@ -115,6 +115,7 @@ public class SolrServiceImpl implements SolrService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        queryResult.setEndTime(new Timestamp(System.currentTimeMillis()));
         return queryResult;
     }
 
@@ -172,6 +173,7 @@ public class SolrServiceImpl implements SolrService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        queryResult.setEndTime(new Timestamp(System.currentTimeMillis()));
         return queryResult;
         
     }

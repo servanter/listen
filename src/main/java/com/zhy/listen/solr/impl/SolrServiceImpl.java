@@ -49,9 +49,6 @@ public class SolrServiceImpl implements SolrService {
     @Resource
     private Map<String, List<String>> solrCreateFields;
     
-    @Resource
-    private Map<String, List<String>> solrQueryFields;
-    
     /**
      * 缓存字段<br>
      * TODO 后期不用,此缓存跟requiredFields相同,用一个

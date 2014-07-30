@@ -62,32 +62,12 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="musicQueryFields" class="java.util.ArrayList">
-		<constructor-arg>
-			<list>
-				<value>id</value>
-				<value>title</value>
-				<value>author</value>
-				<value>lrc</value>
-				<value>isValid</value>
-			</list>
-		</constructor-arg>
-	</bean>
-
 	<bean id="solrCreateFields" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
 				<entry key="userstatuspointpath" value-ref="userCreateFields" />
 				<entry key="path" value-ref="pathCreateFields" />
-			</map>
-		</constructor-arg>
-	</bean>
-
-	<bean id="solrQueryFields" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="music" value-ref="musicQueryFields" />
 			</map>
 		</constructor-arg>
 	</bean>

@@ -24,7 +24,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}});
 			});
 			$("#near_btn").click(function(){
-				alert($("#path_div").serialize());
 				$.ajax({url:"${ctx}/path/nearby/", type:"POST", data:$("#path_div").serialize(), success:function (data) {
 					$("#result").text(data);
 				}});

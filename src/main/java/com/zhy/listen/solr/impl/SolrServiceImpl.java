@@ -152,11 +152,22 @@ public class SolrServiceImpl implements SolrService {
 
         // 根据距离排序
         map.put("sort", "geodist() asc");
-        map.put("province", queryResult.getQueryFieldValue("province"));
-        map.put("city", queryResult.getQueryFieldValue("city"));
-        
+        String fq = "";
+        boolean hasProvince = false;
+        if(queryResult.getQueryFieldValue("province") != null && queryResult.getQueryFieldValue("province").length() > 0) {
+            fq = "province:(" + queryResult.getQueryFieldValue("province") + ")";
+            hasProvince = true;
+        }
+        if(queryResult.getQueryFieldValue("city") != null && queryResult.getQueryFieldValue("city").length() > 0) {
+            if(hasProvince) {
+                fq += " AND ";
+            }
+            fq += "city:(" + queryResult.getQueryFieldValue("city") + ")";
+        }
+        map.put("fq", fq);
+        MapSolrParams params = new MapSolrParams(map);
         try {
-            SolrDocumentList solrDocumentList = server.query(new MapSolrParams(map), METHOD.GET).getResults();
+            SolrDocumentList solrDocumentList = server.query(params, METHOD.GET).getResults();
             Class clazz = Class.forName(queryResult.getIndexerClass().getPath() + "." + queryResult.getIndexerClass().getAlias());
             List<Page> pageList = new ArrayList<Page>(); 
             for(SolrDocument doc : solrDocumentList) {

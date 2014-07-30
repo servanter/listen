@@ -124,8 +124,8 @@
    
    <field name="user_id" type="int" indexed="true" stored="true"/>
    <field name="loc" type="location" indexed="true" stored="true"/>
-   <field name="province" type="string" indexed="false" stored="true"/>
-   <field name="city" type="string" indexed="false" stored="true" />
+   <field name="province" type="string" indexed="true" stored="true"/>
+   <field name="city" type="string" indexed="true" stored="true" />
    <field name="is_clean" type="boolean" indexed="true" stored="true" />
    <field name="discovery_time" type="date" indexed="true" stored="true"/>
    

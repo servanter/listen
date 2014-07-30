@@ -55,8 +55,8 @@ public class PathServiceImpl implements PathService {
         List<QueryField> fields = new ArrayList<QueryField>();
         QueryField field = new QueryField("pt", path.getLoc());
         QueryField field2 = new QueryField("mileage", String.valueOf(mile));
-        QueryField field3 = new QueryField("province", path.getProvince());
-        QueryField field4 = new QueryField("city", path.getCity());
+        QueryField field3 = new QueryField("province", path.getDiscoveryProvince());
+        QueryField field4 = new QueryField("city", path.getDiscoveryCity());
         fields.add(field);
         fields.add(field2);
         fields.add(field3);

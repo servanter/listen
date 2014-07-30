@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<input type="text" name="text" id="t" >
   	<input type="button" id="btn" value="搜素"><br>
   	<form id="path_div">
-  	纬度,经度<input name="path.loc" type="text">&nbsp;公里数<input name="mile" type="text">&nbsp;省份<input name="path.province" type="text">&nbsp;城市<input name="path.city" type="text"><input type="button" id="near_btn" value="搜索附近的人"><br>
+  	纬度,经度<input name="loc" type="text">&nbsp;公里数<input name="mile" type="text">&nbsp;省份<input name="discoveryProvince" type="text">&nbsp;城市<input name="discoveryCity" type="text"><input type="button" id="near_btn" value="搜索附近的人"><br>
   	</form>
   	<div id="result"></div>
   </body>

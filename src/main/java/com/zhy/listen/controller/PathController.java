@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.query.QueryResult;
-import com.zhy.listen.entities.Path;
 import com.zhy.listen.service.PathService;
 
 @Controller
@@ -35,9 +34,9 @@ public class PathController {
         return null;
     }
     
-    @InitBinder("path")
-    public void initBinderToPath(WebDataBinder binder) {
-        binder.setFieldDefaultPrefix("path.");
-    }
+//    @InitBinder("path")
+//    public void initBinderToPath(WebDataBinder binder) {
+//        binder.setFieldDefaultPrefix("path.");
+//    }
     
 }

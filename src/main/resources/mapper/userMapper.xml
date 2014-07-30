@@ -21,17 +21,11 @@
 		<result property="isIndex" column="is_index" />
 	</resultMap>
 
-	<resultMap id="userStatusResult" type="userStatus" extends="userMap">
+	<resultMap id="userStatusPointPathResult" type="userStatusPointPath" extends="userMap">
 		<result property="content" column="content"/>
 		<result property="statusTime" column="status_time"/>
-	</resultMap>
-	
-	<resultMap id="userStatusPointResult" type="userStatusPoint" extends="userStatusResult">
 		<result property="point" column="point"/>
 		<result property="honour" column="user_honour"/>
-	</resultMap>
-	
-	<resultMap id="userStatusPointPathResult" type="userStatusPointPath" extends="userStatusPointResult">
 	</resultMap>
 	
 	<!-- 验证该用户名是否可用 -->

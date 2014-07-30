@@ -1,9 +1,7 @@
 package com.zhy.listen.bean.indexer;
 
-import com.zhy.listen.bean.UserStatusPoint;
 import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.Music;
-import com.zhy.listen.entities.Path;
 
 /**
  * 索引类别

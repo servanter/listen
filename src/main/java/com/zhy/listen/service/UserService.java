@@ -5,7 +5,7 @@ import java.util.List;
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.SameType;
-import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.User;
 
 
@@ -133,5 +133,5 @@ public interface UserService {
      * @param indexEnum
      * @return
      */
-    public List<UserStatusPoint> findUsersByIndex(IndexEnum indexEnum);
+    public List<UserStatusPointPath> findUsersByIndex(IndexEnum indexEnum);
 }

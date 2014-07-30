@@ -13,4 +13,6 @@ public interface SolrService {
     public boolean create(Indexer indexer);
     
     public QueryResult query(QueryResult queryResult);
+    
+    public QueryResult queryPath(QueryResult queryResult);
 }

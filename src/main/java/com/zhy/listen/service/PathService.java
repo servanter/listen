@@ -1,7 +1,7 @@
 package com.zhy.listen.service;
 
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.query.QueryResult;
-import com.zhy.listen.entities.Path;
 
 /**
  * 位置服务
@@ -11,7 +11,7 @@ import com.zhy.listen.entities.Path;
  */
 public interface PathService {
 
-    public boolean sign(Path path);
+    public boolean sign(UserStatusPointPath path);
     
-    public QueryResult queryByPath(Path path, Integer mile);
+    public QueryResult queryByPath(UserStatusPointPath path, Integer mile);
 }

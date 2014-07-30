@@ -75,15 +75,16 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public QueryResult query(QueryResult queryResult) {
-        if(queryResult.getIndexerClass() == IndexerClass.PATH) {
-            return queryPath(queryResult);
-        }
         HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
         SolrQuery query = new SolrQuery();
         if(queryResult.getRawQuery() != null && queryResult.getRawQuery().length() > 0) {
             query.setQuery(queryResult.getRawQuery());
         } else {
-            query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
+            if(queryResult.getKeywords() != null && queryResult.getKeywords().length() > 0) {
+                query.setQuery(SolrConstant.ALL_IN_ONE + SolrConstant.FIELD_SPLIT + queryResult.getKeywords());
+            } else {
+                query.setQuery("*:*");
+            }
         }
         if(queryResult.getQueryFields() != null) {
             for(QueryField field : queryResult.getQueryFields()) {
@@ -124,8 +125,9 @@ public class SolrServiceImpl implements SolrService {
      * 
      * @return
      */
-    private QueryResult queryPath(QueryResult queryResult) {
-        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_" + queryResult.getIndexerClass().name().toLowerCase());
+    @Override
+    public QueryResult queryPath(QueryResult queryResult) {
+        HttpSolrServer server = getConnection(templateService.getMessage(Constant.SOLR_URL) + "listen_user"); 
         
         int currentPage = 1;
         if(queryResult.getPage() >= 1) {

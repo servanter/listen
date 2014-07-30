@@ -1,6 +1,7 @@
 package com.zhy.listen.bean.indexer;
 
 import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.Music;
 import com.zhy.listen.entities.Path;
 
@@ -20,13 +21,8 @@ public enum IndexerClass {
     /**
      * 用户相关
      */
-    USER("UserStatusPoint", UserStatusPoint.class.getPackage().getName()),
+    USER("UserStatusPointPath", UserStatusPointPath.class.getPackage().getName());
     
-    /**
-     * 位置信息
-     */
-    PATH("Path", Path.class.getPackage().getName());
-
     private String alias;
     
     private String path;

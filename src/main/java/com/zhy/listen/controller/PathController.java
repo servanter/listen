@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.Path;
 import com.zhy.listen.service.PathService;
@@ -25,7 +26,7 @@ public class PathController {
     private PathService pathService;
     
     @RequestMapping(value="nearby", method = RequestMethod.POST)
-    public String searchResult(Path path, @RequestParam("mile") Integer mile, ModelMap modelMap, HttpServletResponse response) throws Exception {
+    public String searchResult(UserStatusPointPath path, @RequestParam("mile") Integer mile, ModelMap modelMap, HttpServletResponse response) throws Exception {
         response.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
         QueryResult queryResult = pathService.queryByPath(path, mile);
         modelMap.put("result", queryResult);

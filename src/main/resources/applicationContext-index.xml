@@ -39,6 +39,11 @@
 				<value>statusTime</value>
 				<value>point</value>
 				<value>honour</value>
+				<value>loc</value>
+				<value>discoveryProvince</value>
+				<value>discoveryCity</value>
+				<value>discoveryTime</value>
+				<value>isClean</value>
 			</list>
 		</constructor-arg>
 	</bean>
@@ -73,7 +78,7 @@
 		<constructor-arg>
 			<map>
 				<entry key="music" value-ref="musicCreateFields" />
-				<entry key="userstatuspoint" value-ref="userCreateFields" />
+				<entry key="userstatuspointpath" value-ref="userCreateFields" />
 				<entry key="path" value-ref="pathCreateFields" />
 			</map>
 		</constructor-arg>

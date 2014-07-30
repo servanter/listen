@@ -13,6 +13,7 @@ import com.zhy.listen.SuperTest;
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.UserStatus;
 import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
@@ -38,20 +39,20 @@ public class SolrServiceImplTest extends SuperTest {
     @Test
     public void testCreate() {
         Indexer indexer = new Indexer();
-        indexer.setIndexerClass(IndexerClass.PATH);
+        indexer.setIndexerClass(IndexerClass.USER);
 //        List<Music> musics = musicService.findMusicsByIndex(IndexEnum.NOT_INDEXED);
-//        List<UserStatusPoint> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
-        Path path = new Path();
-        path.setId(5L);
-        path.setUserId(1L);
-        path.setProvince("");
-        path.setCity("北京");
-        path.setLoc("39.914889,116.403874");
-        path.setIsClean(false);
-        path.setDiscoveryTime(new Timestamp(System.currentTimeMillis()));
-        List<Path> paths = new ArrayList<Path>();
-        paths.add(path);
-        indexer.setNeedIndexList(paths);
+        List<UserStatusPointPath> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+//        Path path = new Path();
+//        path.setId(5L);
+//        path.setUserId(1L);
+//        path.setProvince("");
+//        path.setCity("北京");
+//        path.setLoc("39.914889,116.403874");
+//        path.setIsClean(false);
+//        path.setDiscoveryTime(new Timestamp(System.currentTimeMillis()));
+//        List<Path> paths = new ArrayList<Path>();
+//        paths.add(path);
+        indexer.setNeedIndexList(users);
         solrService.create(indexer);
     }
 

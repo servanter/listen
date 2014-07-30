@@ -6,16 +6,16 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.create.GenerateIndexService;
 
 @Service
-public class CreateUserStatusPointIndexServiceImpl implements GenerateIndexService<UserStatusPoint> {
+public class CreateUserStatusPointPathIndexServiceImpl implements GenerateIndexService<UserStatusPointPath> {
 
     @Override
-    public List<SolrInputDocument> create(List<UserStatusPoint> list) {
+    public List<SolrInputDocument> create(List<UserStatusPointPath> list) {
         List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-        for (UserStatusPoint u : list) {
+        for (UserStatusPointPath u : list) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", u.getId());
             document.addField("sex", u.getSex());
@@ -32,6 +32,11 @@ public class CreateUserStatusPointIndexServiceImpl implements GenerateIndexServi
             document.addField("status_time", u.getStatusTime());
             document.addField("point", u.getPoint());
             document.addField("honour", u.getHonour());
+            document.addField("loc", u.getLoc());
+            document.addField("discovery_province", u.getDiscoveryProvince());
+            document.addField("discovery_city", u.getDiscoveryCity());
+            document.addField("discovery_time", u.getDiscoveryTime());
+            document.addField("is_clean", u.getIsClean());
             docs.add(document);
         }
         return docs;

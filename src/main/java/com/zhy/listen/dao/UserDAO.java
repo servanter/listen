@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.User;
 
 
@@ -129,5 +129,5 @@ public interface UserDAO {
      * @param type
      * @return
      */
-    public List<UserStatusPoint> getUsersByIndex(int type);
+    public List<UserStatusPointPath> getUsersByIndex(int type);
 }

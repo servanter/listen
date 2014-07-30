@@ -31,6 +31,9 @@
 		<result property="honour" column="user_honour"/>
 	</resultMap>
 	
+	<resultMap id="userStatusPointPathResult" type="userStatusPointPath" extends="userStatusPointResult">
+	</resultMap>
+	
 	<!-- 验证该用户名是否可用 -->
 	<select id="isExistUser" parameterType="java.lang.String"
 		resultMap="userMap">
@@ -144,7 +147,7 @@
 		SELECT * FROM user WHERE modify_time > #{time}
 	</select>
 	
-	<select id="getUsersByIndex" parameterType="java.lang.Integer" resultMap="userStatusPointResult">
+	<select id="getUsersByIndex" parameterType="java.lang.Integer" resultMap="userStatusPointPathResult">
 		SELECT u.*,t.status_time, t.content, p.point, p.user_honour FROM user u LEFT JOIN 
 		(SELECT s.create_time AS status_time, s.user_id, s.content FROM (
 			SELECT MAX(create_time) AS create_time  FROM status a WHERE a.is_valid = 1 	GROUP BY user_id 

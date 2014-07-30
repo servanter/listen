@@ -19,6 +19,7 @@ import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Src;
 import com.zhy.listen.bean.UserStatus;
 import com.zhy.listen.bean.UserStatusPoint;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.Third;
 import com.zhy.listen.entities.User;
 import com.zhy.listen.service.UserService;
@@ -143,7 +144,7 @@ public class UserServiceImplTest extends SuperTest {
     
     @Test
     public void testFindUsersByIndex() {
-        List<UserStatusPoint> userStatus = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
+        List<UserStatusPointPath> userStatus = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
         Assert.assertTrue("Can't find the user status.", userStatus != null && userStatus.size() > 0);
     }
 }

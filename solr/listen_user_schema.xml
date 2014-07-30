@@ -137,6 +137,13 @@
    <field name="is_valid" type="boolean" indexed="true" stored="true" />
    <field name="point" type="int" indexed="false" stored="true" />
    <field name="honour" type="string" indexed="true" stored="true" />
+
+	
+   <field name="loc" type="location" indexed="true" stored="true" />
+   <field name="discovery_province" type="string" indexed="true" stored="true" />
+   <field name="discovery_city" type="string" indexed="true" stored="true" />
+   <field name="discovery_time" type="date" indexed="true" stored="true" />
+   <field name="is_clean" type="string" indexed="true" stored="true" />
    <field name="all_in_one" type="text_ik" indexed="true" stored="true" omitNorms="true" multiValued="true"/>
 
    <!-- Common metadata fields, named specifically to match up with
@@ -163,7 +170,7 @@
      <field name="manu_exact" type="string" indexed="false" stored="false" docValues="true" />
      <field name="cat" type="string" indexed="true" stored="true" docValues="true" multiValued="true"/>
 
-
+	
      Although it would make indexing slightly slower and the index bigger, it
      would also make the index faster to load, more memory-efficient and more
      NRT-friendly.
@@ -175,7 +182,7 @@
        RESTRICTION: the glob-like pattern in the name attribute must have
        a "*" only at the start or the end.  -->
    
- 
+	   <dynamicField name="*_coordinate" type="double" indexed="true" stored="false" multiValued="false"/>
 
    <!-- uncomment the following to ignore any fields that don't already match an existing 
         field name or dynamic field, rather than reporting them as an error. 

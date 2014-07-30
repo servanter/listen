@@ -153,17 +153,13 @@ public class SolrServiceImpl implements SolrService {
         // 根据距离排序
         map.put("sort", "geodist() asc");
         String fq = "";
-        boolean hasProvince = false;
         if(queryResult.getQueryFieldValue("province") != null && queryResult.getQueryFieldValue("province").length() > 0) {
-            fq = "province:(" + queryResult.getQueryFieldValue("province") + ")";
-            hasProvince = true;
+            fq = "province:(" + queryResult.getQueryFieldValue("province") + ") AND ";
         }
         if(queryResult.getQueryFieldValue("city") != null && queryResult.getQueryFieldValue("city").length() > 0) {
-            if(hasProvince) {
-                fq += " AND ";
-            }
-            fq += "city:(" + queryResult.getQueryFieldValue("city") + ")";
+            fq += "city:(" + queryResult.getQueryFieldValue("city") + ") AND ";
         }
+        fq += " is_clean :(false)";
         map.put("fq", fq);
         MapSolrParams params = new MapSolrParams(map);
         try {

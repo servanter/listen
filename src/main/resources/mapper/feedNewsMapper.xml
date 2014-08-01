@@ -14,7 +14,7 @@
 	</resultMap>
 
 	<select id="getByNews" parameterType="feedNews" resultMap="feedNewsResult">
-		SELECT * FROM news
+		SELECT * FROM news LIMIT #{sinceCount}, #{pageSize}
 	</select>
 	
 	<insert id="save" parameterType="feedNews">

@@ -21,4 +21,8 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="statusResult">
+		SELECT * FROM status WHERE id = #{id}
+	</select>
 </mapper>

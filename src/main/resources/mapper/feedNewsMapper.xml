@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhy.listen.dao.FeedNewsDAO">
+
+	<resultMap id="feedNewsResult" type="feedNews">
+		<result property="id" column="id" />
+		<result property="subNewsId" column="sub_news_id" />
+		<result property="userId" column="user_id" />
+		<result property="content" column="content" />
+		<result property="link" column="link" />
+		<result property="createTime" column="create_time" />
+		<result property="subType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.SubTypeHandler" />
+		<result property="isValid" column="is_valid" />
+	</resultMap>
+
+	<select id="getByNews" parameterType="feedNews" resultMap="feedNewsResult">
+		SELECT * FROM news
+	</select>
+	
+	<insert id="save" parameterType="feedNews">
+		INSERT INTO news(sub_news_id, user_id, content, create_time, type
+		<if test="link != null and link != ''">
+			,link
+		</if>
+		)
+		VALUES
+		(#{subNewsId}, #{userId}, #{content}, #{createTime}, #{subType.type}
+		<if test="link != null and link != ''">
+			,#{link}
+		</if>
+		)
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+</mapper>

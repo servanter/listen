@@ -7,12 +7,12 @@ import com.zhy.listen.dao.StatusDAO;
 import com.zhy.listen.entities.Status;
 import com.zhy.listen.service.StatusService;
 
-@Service
+@Service("statusService")
 public class StatusServiceImpl implements StatusService {
 
     @Autowired
     private StatusDAO statusDAO;
-    
+
     @Override
     public Status findUserLastestStatus(Long userId) {
         return statusDAO.getUserLastestStatus(userId);
@@ -21,6 +21,11 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public boolean post(Status status) {
         return statusDAO.save(status) > 0;
+    }
+
+    @Override
+    public Status findById(Long id) {
+        return statusDAO.getById(id);
     }
 
 }

@@ -10,5 +10,7 @@ public interface StatusDAO {
     Status getUserLastestStatus(Long userId);
 
     int save(Status status);
+    
+    Status getById(Long id);
 
 }

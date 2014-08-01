@@ -179,3 +179,22 @@ CREATE TABLE `user_point_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+
+-- -----------------------------------------------
+-- Table structure for `news` 新鲜事
+-- -----------------------------------------------
+CREATE TABLE `news` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `sub_news_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `content` varchar(200) NOT NULL,
+  `link` varchar(200) NOT NULL DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `type` int(1) NOT NULL,
+  `is_valid` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

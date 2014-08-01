@@ -8,7 +8,7 @@ import com.zhy.listen.entities.Status;
  * @author zhanghongyan@outlook.com
  *
  */
-public interface StatusService {
+public interface StatusService extends SubNewsService<Status> {
 
     /**
      * 根据用户ID获取最近一条状态

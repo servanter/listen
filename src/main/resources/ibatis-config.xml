@@ -13,6 +13,7 @@
 		<typeAlias alias="pointConfig" type="com.zhy.listen.entities.PointConfig" />
 		<typeAlias alias="userPoint" type="com.zhy.listen.entities.UserPoint" />
 		<typeAlias alias="feedNews" type="com.zhy.listen.entities.FeedNews" />
+		<typeAlias alias="page" type="com.zhy.listen.bean.Page" />
 		
 		
 		

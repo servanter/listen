@@ -18,6 +18,9 @@
 	</select>
 	
 	<insert id="save" parameterType="feedNews">
+		<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 		INSERT INTO news(sub_news_id, user_id, content, create_time, type
 		<if test="link != null and link != ''">
 			,link
@@ -29,15 +32,16 @@
 			,#{link}
 		</if>
 		)
-		<selectKey resultType="Long" keyProperty="id">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 	</insert>
 	
-	<select id="getByIds" resultMap="feedNews">
+	<select id="getByIds" resultMap="feedNewsResult">
 		SELECT * FROM news WHERE id IN 
 		<foreach collection="list" item="l" open="(" close=")" separator=",">
 			#{l}
 		</foreach>
+	</select>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="feedNewsResult">
+		SELECT * FROM news WHERE id = #{id}
 	</select>
 </mapper>

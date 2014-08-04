@@ -16,4 +16,5 @@ public interface FeedNewsDAO {
 
     List<FeedNews> getByIds(List<Long> ids);
 
+    FeedNews getById(Long id);
 }

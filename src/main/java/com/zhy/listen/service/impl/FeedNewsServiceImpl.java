@@ -53,25 +53,37 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
     @Override
     public boolean push(Page page, SubType type) {
-        FeedNews feedNews = generateFeedNews(page, type);
-        int lastId = feedNewsDAO.save(feedNews);
+        try {
+            
+            FeedNews feedNews = generateFeedNews(page, type);
+            feedNewsDAO.save(feedNews);
+            
+            // 重新查询
+            FeedNews f = feedNewsDAO.getById(feedNews.getId());
+            memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
+            
+            // 这里应该用消息队列做
+            List<Long> ids = friendService.findFriendIds(f.getUserId());
+            if (ids != null && ids.size() > 0) {
+                List<Long> onlineUserIds = onlineService.findAllOnlineUserIds();
+                if (onlineUserIds != null && onlineUserIds.size() > 0) {
 
-        // 这里应该用消息队列做
-        List<Long> ids = friendService.findFriendIds(feedNews.getUserId());
-        List<Long> onlineUserIds = onlineService.findAllOnlineUserIds();
-
-        // 我的好友中在线列表
-        List<Long> onlineMyUserIds = new ArrayList<Long>();
-        for (Long id : ids) {
-            if (onlineUserIds.contains(id)) {
-                onlineMyUserIds.add(id);
+                    // 我的好友中在线列表
+                    List<Long> onlineMyUserIds = new ArrayList<Long>();
+                    for (Long id : ids) {
+                        if (onlineUserIds.contains(id)) {
+                            onlineMyUserIds.add(id);
+                        }
+                    }
+                    // push feed news
+                    onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), f.getId());
+                }
             }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, feedNews), feedNews, CacheConstants.TIME_HOUR * 2);
-        
-        // push feed news
-        onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), new Long(lastId));
-        return lastId > 0;
+        return false;
     }
 
     private FeedNews generateFeedNews(Page page, SubType type) {
@@ -94,25 +106,11 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = memcached.get(key);
 
-        // 不用list remove 怕数据量太大时 remove慢
-        // 在请求时间以后又增加新鲜事 请求时间13:31 流程没处理完 13:32时有增加新鲜事 13:35才处理完成流程
-        List<CacheNewFeed> surplusCacheNewFeeds = new ArrayList<CacheNewFeed>();
-        List<CacheNewFeed> unreadFeeds = new ArrayList<CacheNewFeed>();
-        if (newFeeds != null) {
-            for (CacheNewFeed newFeed : newFeeds) {
-                if (newFeed.getCreateTime().after(requestTime)) {
-                    unreadFeeds.add(newFeed);
-                } else {
-                    surplusCacheNewFeeds.add(newFeed);
-                }
-            }
-        }
-
         // 从缓存中取新鲜事
-        if (unreadFeeds.size() > 0) {
-            String[] keys = new String[unreadFeeds.size()];
-            for (int i = 0; i < unreadFeeds.size(); i++) {
-                keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, unreadFeeds.get(i));
+        if (newFeeds.size() > 0) {
+            String[] keys = new String[newFeeds.size()];
+            for (int i = 0; i < newFeeds.size(); i++) {
+                keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, newFeeds.get(i).getNewId());
             }
             List<Long> needFromDB = new ArrayList<Long>();
             Map<String, FeedNews> feedNews = memcached.getMulti(keys);
@@ -134,26 +132,23 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                 }
             }
         }
-        if (surplusCacheNewFeeds.size() > 0) {
-            memcached.set(key, surplusCacheNewFeeds, CacheConstants.TIME_HOUR * 4);
-        }
+        memcached.delete(key);
         return result;
     }
 
     @Override
     public int getUnreadCount(Long userId, Timestamp requestTime) {
         int result = 0;
-        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX,
-                userId);
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = memcached.get(key);
-        if (newFeeds != null) {
-            for (CacheNewFeed newFeed : newFeeds) {
-                if (newFeed.getCreateTime().after(requestTime)) {
-                    result++;
-                }
-            }
-        }
-        return result;
+//        if (newFeeds != null) {
+//            for (CacheNewFeed newFeed : newFeeds) {
+//                if (newFeed.getCreateTime().after(requestTime)) {
+//                    result++;
+//                }
+//            }
+//        }
+        return newFeeds != null && newFeeds.size() > 0 ? newFeeds.size() : 0;
     }
 
     @Override

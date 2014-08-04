@@ -46,7 +46,7 @@
 	</update>
 	
 	<select id="getFriendIds" parameterType="java.lang.Long" resultType="java.lang.Long">
-		SELECT id FROM user WHERE user_id = #{userId} 
+		SELECT friend_id FROM friend WHERE user_id = #{userId} AND is_valid = true 
 	</select>
 
 </mapper>

@@ -16,7 +16,7 @@ public class KeyGenerator {
 
     public static String getRowObject(String key, String prefix) {
         String str = key;
-        String arr[] = str.split("|");
+        String arr[] = str.split("\\" + SPLIT);
         if (arr.length == 2) {
             return arr[1];
         }

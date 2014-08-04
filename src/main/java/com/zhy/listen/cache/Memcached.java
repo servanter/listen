@@ -38,6 +38,11 @@ public class Memcached {
 
     @PostConstruct
     private void init() {
+        System.out.println("122222222222222222222222222222222222222222222222222222");
+        System.out.println("122222222222222222222222222222222222222222222222222222");
+        System.out.println("122222222222222222222222222222222222222222222222222222");
+        System.out.println("122222222222222222222222222222222222222222222222222222");
+        System.out.println("122222222222222222222222222222222222222222222222222222");
         String[] serverlist = templateService.getMessage(Constant.TEMPLATE_MEMCACHE_SERVER_WORDS).split(",");
         SockIOPool pool = SockIOPool.getInstance();
         pool.setServers(serverlist);

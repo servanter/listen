@@ -11,26 +11,28 @@
 		<result property="isValid" column="is_valid" />
 	</resultMap>
 
-	<select id="sel_by_frienduserId" parameterType="friend"
-		resultMap="friendResult">
-		SELECT * FROM `friend` WHERE friend_id = #{userId} AND is_valid
-		= true
-		<if test="sinceCount != 0">
-			LIMIT #{sinceCount} , #{pageSize}
-		</if>
-	</select>
-
-	<select id="sel_byfriendId" parameterType="java.lang.Long"
-		resultMap="friendResult">
-		SELECT * FROM `friend` WHERE id=#{id}
+	<select id="getFriendsByUserId" parameterType="page" resultMap="friendResult">
+		SELECT * FROM `friend` WHERE friend_id = #{userId} AND is_valid = true
+		<choose>
+			<when test="sinceCount > 0">
+				LIMIT #{sinceCount} , #{pageSize}
+			</when>
+			<otherwise>
+				LIMIT #{pageSize}
+			</otherwise>
+		</choose>
 	</select>
 	
-	<select id="sel_userFriendSize" parameterType="java.lang.Long"
+	<select id="getFriendsByUserIdCount" parameterType="page" resultMap="friendResult">
+		SELECT COUNT(*) FROM `friend` WHERE friend_id = #{userId} AND is_valid = true
+	</select>
+
+	<select id="getUserFriendSize" parameterType="java.lang.Long"
 		resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM `friend` WHERE user_id=#{id}
 	</select>
 
-	<insert id="sav_by_friend" parameterType="friend">
+	<insert id="makeFriends" parameterType="friend">
 		INSERT INTO `friend` (user_id, friend_id, modify_time, is_valid)
 		VALUES (#{userId}, #{friendId},#{modifyTime}, #{isValid})
 		<selectKey resultType="java.lang.Long" keyProperty="id">
@@ -38,9 +40,13 @@
 		</selectKey>
 	</insert>
 
-	<update id="upd_by_friend" parameterType="friend">
+	<update id="modifyFriendRelation" parameterType="friend">
 		UPDATE `friend` set is_valid = #{isValid} WHERE user_id =
 		#{userId} AND friend_id = #{friendId}
 	</update>
+	
+	<select id="getFriendIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT id FROM user WHERE user_id = #{userId} 
+	</select>
 
 </mapper>

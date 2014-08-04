@@ -33,4 +33,11 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+	
+	<select id="getByIds" resultMap="feedNews">
+		SELECT * FROM news WHERE id IN 
+		<foreach collection="list" item="l" open="(" close=")" separator=",">
+			#{l}
+		</foreach>
+	</select>
 </mapper>

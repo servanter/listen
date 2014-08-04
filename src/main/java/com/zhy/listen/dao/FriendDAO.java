@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.zhy.listen.bean.Page;
 import com.zhy.listen.entities.Friend;
 
 /**
@@ -29,7 +30,7 @@ public interface FriendDAO {
      * @param userId
      * @return
      */
-    public List<Friend> getFriendsByUserId(Friend friend);
+    public List<Friend> getFriendsByUserId(Page page);
 
     /**
      * 根据用户ID,好友ID,逻辑更新好友关系,并修改时间
@@ -54,5 +55,9 @@ public interface FriendDAO {
      * @return
      */
     public int getUserFriendSize(Long userId);
+
+    public int getFriendsByUserIdCount(Page page);
+
+    public List<Long> getFriendIds(Long userId);
 
 }

@@ -32,7 +32,7 @@ public class FeedNewsServiceImplTest extends SuperTest{
         status.setId(22L);
         status.setUserId(1L);
         status.setContent("这是");
-        feedNewsService.add(status, SubType.STATUS);
+        feedNewsService.push(status, SubType.STATUS);
     }
 
 }

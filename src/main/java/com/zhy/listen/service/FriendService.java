@@ -2,8 +2,9 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
+import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.Paging;
 import com.zhy.listen.entities.Friend;
-
 
 public interface FriendService {
 
@@ -13,16 +14,24 @@ public interface FriendService {
      * @param friend
      * @return
      */
-    public List<Friend> getFriendsByUserId(Friend friend);
-    
+    public Paging<Friend> findFriendsByUserId(Page page);
+
+    /**
+     * 获取用户好友id列表
+     * 
+     * @param userId
+     * @return
+     */
+    public List<Long> findFriendIds(Long userId);
+
     /**
      * 获取用户拥有的好友数
      * 
      * @param userId
      * @return
      */
-    public int getUserHaveFriendCount(Long userId); 
-    
+    public int findUserHaveFriendCount(Long userId);
+
     /**
      * 同意加为好友(数据库中两条记录,userid与friendid互换)
      * 

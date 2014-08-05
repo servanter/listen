@@ -68,4 +68,13 @@ public interface FeedNewsService {
      * @return
      */
     public List<FeedNews> findByIds(List<Long> ids);
+    
+    /**
+     * 获取用户新鲜事
+     * 
+     * @param userId
+     * @return
+     */
+    public List<FeedNews> findBaseFeedsByUserId(Long userId);
+    
 }

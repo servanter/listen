@@ -44,7 +44,7 @@ public class CacheConstants {
     public static final String CACHE_ONLINE_LAST_TIME = "OLT";
     
     /**
-     * 个人缓存好友发送新鲜事池 
+     * 个人缓存好友发送新鲜事池
      */
     public static final String CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX = "OUPIN";
     
@@ -52,4 +52,9 @@ public class CacheConstants {
      * 新鲜事实体
      */
     public static final String CACHE_FEED_NEWS = "FN";
+    
+    /**
+     * 个人新鲜事池
+     */
+    public static final String CACHE_USER_FEED_NEWS = "UFN";
 }

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
+import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SubType;
 import com.zhy.listen.entities.FeedNews;
 import com.zhy.listen.entities.Status;
@@ -25,10 +26,6 @@ public class FeedNewsServiceImplTest extends SuperTest{
     @Autowired
     private OnlineService onlineService;
     
-    @Test
-    public void testFindByNews() {
-    }
-
     @Test
     public void testFindDetailByIdAndType() {
         Status status = feedNewsService.findDetailByIdAndType(1L, SubType.STATUS);
@@ -57,4 +54,19 @@ public class FeedNewsServiceImplTest extends SuperTest{
         System.out.println(count);
     }
 
+    @Test
+    public void testFindBaseFeedsByUserId() {
+        System.out.println(feedNewsService.findBaseFeedsByUserId(1L));;
+    }
+    
+    @Test
+    public void testFindByNews() {
+        FeedNews feedNews = new FeedNews();
+        feedNews.setUserId(1L);
+        feedNews.setPageSize(20);
+        feedNews.setPage(2);
+        Paging<FeedNews> findByNews = feedNewsService.findByNews(feedNews);
+        System.out.println(findByNews.getResult().size() + "+++++++++++++++++++++++++++++++++++++++");
+        System.out.println();
+    }
 }

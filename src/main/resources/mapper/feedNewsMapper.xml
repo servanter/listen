@@ -14,7 +14,22 @@
 	</resultMap>
 
 	<select id="getByNews" parameterType="feedNews" resultMap="feedNewsResult">
-		SELECT * FROM news LIMIT #{sinceCount}, #{pageSize}
+		SELECT * FROM news 
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+		</where>
+		ORDER BY create_time DESC LIMIT #{sinceCount}, #{pageSize}
+	</select>
+	
+	<select id="getByNewsCount" parameterType="feedNews" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM news 
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+		</where>
 	</select>
 	
 	<insert id="save" parameterType="feedNews">

@@ -11,7 +11,12 @@ import java.util.Map;
  * @author zhy
  * 
  */
-public class Paging<T> {
+public class Paging<T> implements java.io.Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3377604936148179067L;
 
     /**
      * 默认页大小

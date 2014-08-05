@@ -101,7 +101,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     }
 
     @Override
-    public List<FeedNews> getUnreadList(Long userId, Timestamp requestTime) {
+    public List<FeedNews> findUnreadList(Long userId, Timestamp requestTime) {
         List<FeedNews> result = new ArrayList<FeedNews>();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = memcached.get(key);
@@ -137,7 +137,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     }
 
     @Override
-    public int getUnreadCount(Long userId, Timestamp requestTime) {
+    public int findUnreadCount(Long userId, Timestamp requestTime) {
         int result = 0;
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = memcached.get(key);

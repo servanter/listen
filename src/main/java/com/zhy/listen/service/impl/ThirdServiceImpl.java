@@ -24,14 +24,14 @@ public class ThirdServiceImpl implements ThirdService {
     }
 
     @Override
-    public List<Third> getThirdsById(Long userId) {
+    public List<Third> findThirdsById(Long userId) {
         return thirdDAO.getThirdsById(userId);
     }
 
     @Override
-    public List<Long> getSameThird(User user) {
+    public List<Long> findSameThird(User user) {
         List<Long> result = new ArrayList<Long>();
-        List<Third> thirds = getThirdsById(user.getId());
+        List<Third> thirds = findThirdsById(user.getId());
         if (thirds != null && thirds.size() > 0) {
             for (Third third : thirds) {
                 third.setPageSize(user.getPageSize());

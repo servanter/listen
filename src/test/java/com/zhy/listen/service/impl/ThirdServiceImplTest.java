@@ -42,7 +42,7 @@ public class ThirdServiceImplTest extends SuperTest {
         third.setEndTime(new Timestamp(System.currentTimeMillis() + 454545L));
         third.setMetaIndex3("asdhsdfksdjkghuirhgksjdhn");
         third = thirdService.add(third);
-        List<Third> thirds = thirdService.getThirdsById(userId);
+        List<Third> thirds = thirdService.findThirdsById(userId);
         Assert.assertNotNull("Can't save the third data", third.getId());
         Assert.assertNotNull("Can't find the third data", thirds);
     }

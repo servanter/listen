@@ -47,13 +47,13 @@ public class FeedNewsServiceImplTest extends SuperTest{
         status.setContent("这是");
         feedNewsService.push(status, SubType.STATUS);
         
-        int count = feedNewsService.getUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
+        int count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(count);
         
-        List<FeedNews> list = feedNewsService.getUnreadList(2L, new Timestamp(System.currentTimeMillis()));
+        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(list);
         
-        count = feedNewsService.getUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
+        count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(count);
     }
 

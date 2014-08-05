@@ -23,7 +23,7 @@ public interface UserService {
      * @param id
      * @return
      */
-    public User getUserById(Long id);
+    public User findUserById(Long id);
     
     /**
      * 获取一批用户
@@ -31,7 +31,7 @@ public interface UserService {
      * @param ids
      * @return
      */
-    public List<User> getUsersByIds(Long[] ids);
+    public List<User> findUsersByIds(Long[] ids);
 
     /**
      * 用户登录
@@ -46,7 +46,7 @@ public interface UserService {
      * 
      * @return
      */
-    public List<User> getUsersByRandom(User user);
+    public List<User> findUsersByRandom(User user);
 
     /**
      * 注册用户
@@ -94,14 +94,14 @@ public interface UserService {
      * @param paging
      * @return
      */
-    public List<User> getUsersByPaging(Page paging);
+    public List<User> findUsersByPaging(Page paging);
 
     /**
      * 获取所有用户昵称及ID
      * 
      * @return
      */
-    public List<User> getUserNames();
+    public List<User> findUserNames();
 
     /**
      * 提升积分和等级
@@ -119,14 +119,14 @@ public interface UserService {
      * @param user
      * @return
      */
-    public List<User> getInterestedUser(User user, SameType sameType);
+    public List<User> findInterestedUser(User user, SameType sameType);
     
     /**
      * 根据最后修改时间查询用户
      * @param time
      * @return
      */
-    public List<User> getUsersByModifyTime(String time);
+    public List<User> findUsersByModifyTime(String time);
     
     /**
      * 根据索引状态查询

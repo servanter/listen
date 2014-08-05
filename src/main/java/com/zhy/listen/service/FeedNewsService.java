@@ -50,7 +50,7 @@ public interface FeedNewsService {
      * @param requestTime
      * @return
      */
-    public List<FeedNews> getUnreadList(Long userId, Timestamp requestTime);
+    public List<FeedNews> findUnreadList(Long userId, Timestamp requestTime);
 
     /**
      * 获取未读条数
@@ -59,7 +59,7 @@ public interface FeedNewsService {
      * @param requestTime
      * @return
      */
-    public int getUnreadCount(Long userId, Timestamp requestTime);
+    public int findUnreadCount(Long userId, Timestamp requestTime);
 
     /**
      * 根据id查询

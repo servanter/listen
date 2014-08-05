@@ -74,7 +74,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/msbase.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mssqlserver.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/msutil.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mybatis-3.1.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mybatis-3.1.1.jar" sourcepath="D:/maven/repo/org/mybatis/mybatis/3.1.1/mybatis-3.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mybatis-spring-1.1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mysql-connector-java-5.1.13.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mysql-connector-java-5.1.22.jar"/>

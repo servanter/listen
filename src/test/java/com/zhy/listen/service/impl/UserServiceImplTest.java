@@ -43,14 +43,14 @@ public class UserServiceImplTest extends SuperTest {
         a.setMobile("15901000000");
         a.setEmail("aasdasd@125.com");
         Long userId = userService.register(a);
-        User user = userService.getUserById(userId);
+        User user = userService.findUserById(userId);
         Assert.assertNotNull("[UserTest]; Does not Exist this user.Maybe setUp save error.", user);
         logger.debug("[UserTest]: GetUserByIdExists is " + (user != null ? "success" : "fail"));
     }
 
     @Test
     public void testGetUserByIdNotExists() {
-        User user = userService.getUserById(10000000000L);
+        User user = userService.findUserById(10000000000L);
         Assert.assertNull("[UserTest]; Exists this user ?", user);
         logger.debug("[UserTest]: GetUserByIdNotExists is " + (user == null ? "success" : "fail"));
     }
@@ -63,7 +63,7 @@ public class UserServiceImplTest extends SuperTest {
         }
         User user = new User(ids[1]);
         user.setPageSize(20);
-        List<User> users = userService.getUsersByRandom(user);
+        List<User> users = userService.findUsersByRandom(user);
         Assert
                 .assertTrue("[UserTest]: GetUsersByRandom occur error.Maybe the database has no users.",
                         users.size() > 0);

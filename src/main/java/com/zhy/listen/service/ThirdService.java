@@ -28,7 +28,7 @@ public interface ThirdService {
      * @param userId
      * @return
      */
-    public List<Third> getThirdsById(Long userId);
+    public List<Third> findThirdsById(Long userId);
 
     /**
      * 随机获取授权统一开放平台的用户
@@ -36,5 +36,5 @@ public interface ThirdService {
      * @param user
      * @return
      */
-    public List<Long> getSameThird(User user);
+    public List<Long> findSameThird(User user);
 }

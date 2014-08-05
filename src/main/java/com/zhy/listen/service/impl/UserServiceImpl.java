@@ -26,12 +26,12 @@ public class UserServiceImpl implements UserService {
     private ThirdService thirdService;
 
     @Override
-    public User getUserById(Long id) {
+    public User findUserById(Long id) {
         return userDAO.getUserById(id);
     }
 
     @Override
-    public List<User> getUsersByRandom(User user) {
+    public List<User> findUsersByRandom(User user) {
         return userDAO.getUsersByRandom(user);
     }
 
@@ -75,12 +75,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByPaging(Page page) {
+    public List<User> findUsersByPaging(Page page) {
         return userDAO.getUsers(new HashMap<String, Object>());
     }
 
     @Override
-    public List<User> getUserNames() {
+    public List<User> findUserNames() {
         return userDAO.getUserNameAndId();
     }
 
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getInterestedUser(User user, SameType sameType) {
+    public List<User> findInterestedUser(User user, SameType sameType) {
         if (sameType == SameType.ALL) {
             int typeSize = SameType.values().length;
             int everySize = user.getPageSize() / typeSize;
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         List<Long> ids = new ArrayList<Long>();
         switch (sameType) {
         case FROM:
-            ids = thirdService.getSameThird(user);
+            ids = thirdService.findSameThird(user);
             break;
         case PATH:
             break;
@@ -116,11 +116,11 @@ public class UserServiceImpl implements UserService {
         }
         Long[] idsArr = new Long[ids.size()];
         ids.toArray(idsArr);
-        return getUsersByIds(idsArr);
+        return findUsersByIds(idsArr);
     }
 
     @Override
-    public List<User> getUsersByIds(Long[] ids) {
+    public List<User> findUsersByIds(Long[] ids) {
         if (ids == null || ids.length == 0) {
             return null;
         }
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByModifyTime(String time) {
+    public List<User> findUsersByModifyTime(String time) {
         return userDAO.getUsersByModifyTime(time);
     }
 

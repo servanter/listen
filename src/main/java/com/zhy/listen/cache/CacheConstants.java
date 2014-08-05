@@ -57,4 +57,9 @@ public class CacheConstants {
      * 个人新鲜事池
      */
     public static final String CACHE_USER_FEED_NEWS = "UFN";
+    
+    /**
+     * 个人好友
+     */
+    public static final String CACHE_USER_FRIENDS = "UF";
 }

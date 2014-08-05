@@ -58,7 +58,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     public boolean push(Page page, SubType type) {
         try {
 
-            FeedNews feedNews = generateFeedNews(page, type);
+            FeedNews feedNews = feedNewsFactory.generateFeedNews(page, type);
             feedNewsDAO.save(feedNews);
 
             // 重新查询
@@ -110,20 +110,6 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             e.printStackTrace();
         }
         return false;
-    }
-
-    private FeedNews generateFeedNews(Page page, SubType type) {
-        if (type == SubType.STATUS) {
-            Status status = (Status) page;
-            FeedNews feedNews = new FeedNews();
-            feedNews.setSubNewsId(status.getId());
-            feedNews.setUserId(status.getUserId());
-            feedNews.setContent(status.getContent());
-            feedNews.setSubType(SubType.STATUS);
-            feedNews.setCreateTime(status.getCreateTime());
-            return feedNews;
-        }
-        return null;
     }
 
     @Override

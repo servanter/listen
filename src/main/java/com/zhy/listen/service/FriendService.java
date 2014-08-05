@@ -2,19 +2,19 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
-import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.entities.Friend;
+import com.zhy.listen.entities.User;
 
 public interface FriendService {
 
     /**
-     * 根据用户ID获取好友列表
+     * 根据用户ID获取好友列表(不要分页了)
      * 
      * @param friend
      * @return
      */
-    public Paging<Friend> findFriendsByUserId(Page page);
+    public Paging<User> findFriendsByUserId(Friend friend);
 
     /**
      * 获取用户好友id列表
@@ -38,7 +38,7 @@ public interface FriendService {
      * @param friend
      * @return
      */
-    public Friend makeFriends(Friend friend);
+    public boolean makeFriends(Friend friend);
 
     /**
      * 删除好友关系(逻辑删除数据库中两条记录,userid与friendid互换)

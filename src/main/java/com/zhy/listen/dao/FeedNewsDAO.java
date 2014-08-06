@@ -18,4 +18,6 @@ public interface FeedNewsDAO {
     FeedNews getById(Long id);
 
     int getByNewsCount(FeedNews feedNews);
+    
+    int delete(FeedNews feedNews);
 }

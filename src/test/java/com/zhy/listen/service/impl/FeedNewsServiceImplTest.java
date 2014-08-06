@@ -47,11 +47,22 @@ public class FeedNewsServiceImplTest extends SuperTest{
         int count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(count);
         
-        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
-        System.out.println(list);
+//        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
+//        System.out.println(list);
+//        
+//        count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
+//        System.out.println(count);
+        
+        FeedNews feedNews = new FeedNews();
+        feedNews.setId(54L);
+        feedNews.setSubType(SubType.STATUS);
+        feedNewsService.destory(feedNews);
         
         count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(count);
+        
+        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
+        System.out.println(list);
     }
 
     @Test

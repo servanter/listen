@@ -45,6 +45,16 @@ public interface OnlineService {
     public int pushUsers(List<Long> ids, Timestamp currentTime, Long newId);
 
     /**
+     * 删除在线好友缓存中新鲜事ID
+     * 
+     * @param ids
+     * @param currentTime
+     * @param newId
+     * @return
+     */
+    public int removeUsers(List<Long> ids, Timestamp currentTime, Long newId);
+    
+    /**
      * 更新在线列表
      * 
      * @param id

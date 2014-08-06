@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SubType;
 import com.zhy.listen.entities.FeedNews;
 
@@ -76,5 +77,13 @@ public interface FeedNewsService {
      * @return
      */
     public List<FeedNews> findBaseFeedsByUserId(Long userId);
+    
+    /**
+     * 删除新鲜事
+     * 
+     * @param feedNews
+     * @return
+     */
+    public Response destory(FeedNews feedNews);
     
 }

@@ -39,4 +39,13 @@ public class FeedNewsFactory implements ApplicationContextAware{
         }
         return null;
     }
+    
+    public Page generateSub(FeedNews feedNews) {
+        if (feedNews.getSubType() == SubType.STATUS) {
+            Status status = new Status();
+            status.setId(feedNews.getSubNewsId());
+            return status;
+        }
+        return null;
+    }
 }

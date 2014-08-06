@@ -59,4 +59,8 @@
 	<select id="getById" parameterType="java.lang.Long" resultMap="feedNewsResult">
 		SELECT * FROM news WHERE id = #{id}
 	</select>
+	
+	<update id="delete" parameterType="feedNews">
+		UPDATE news SET is_valid = false WHERE id = #{id}
+	</update>
 </mapper>

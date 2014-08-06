@@ -13,4 +13,6 @@ public interface StatusDAO {
     
     Status getById(Long id);
 
+    int updateIsValid(Status status);
+
 }

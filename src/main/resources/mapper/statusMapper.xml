@@ -25,4 +25,8 @@
 	<select id="getById" parameterType="java.lang.Long" resultMap="statusResult">
 		SELECT * FROM status WHERE id = #{id}
 	</select>
+	
+	<update id="updateIsValid" parameterType="status">
+		UPDATE status set is_valid = false WHERE id = #{id}
+	</update>
 </mapper>

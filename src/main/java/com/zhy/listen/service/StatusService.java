@@ -1,5 +1,6 @@
 package com.zhy.listen.service;
 
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.entities.Status;
 
 /**
@@ -22,5 +23,14 @@ public interface StatusService extends SubNewsService<Status> {
      * @param status
      * @return
      */
-    public boolean post(Status status);
+    public Response post(Status status);
+    
+    /**
+     * 删除一条围脖
+     * 
+     * @param status
+     * @return
+     */
+    public Response destory(Status status);
+    
 }

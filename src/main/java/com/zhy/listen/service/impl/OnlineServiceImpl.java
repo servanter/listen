@@ -70,9 +70,14 @@ public class OnlineServiceImpl implements OnlineService {
             Iterator<String> it = currentUserCacheNews.keySet().iterator();
             while(it.hasNext()) {
                 String key = it.next();
+                List<CacheNewFeed> cache = new ArrayList<CacheNewFeed>();
                 List<CacheNewFeed> userCacheNewFeeds = currentUserCacheNews.get(key);
-                userCacheNewFeeds.add(cacheNewFeed);
-                memcached.set(key, userCacheNewFeeds, CacheConstants.TIME_HOUR * 4);                
+                if (userCacheNewFeeds == null || userCacheNewFeeds.isEmpty()) {
+                    userCacheNewFeeds = new ArrayList<CacheNewFeed>();
+                }
+                cache.add(cacheNewFeed);
+                cache.addAll(userCacheNewFeeds);
+                memcached.set(key, cache, CacheConstants.TIME_HOUR * 4);
                 hasUserCacheIds.add(Long.parseLong(KeyGenerator.getRowObject(key, CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX)));
                 count++;
             }
@@ -93,6 +98,31 @@ public class OnlineServiceImpl implements OnlineService {
                 List<CacheNewFeed> list = new ArrayList<CacheNewFeed>();
                 list.add(cacheNewFeed);
                 memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, id), list, CacheConstants.TIME_HOUR * 4);
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    @Override
+    public int removeUsers(List<Long> ids, Timestamp currentTime, Long newId) {
+        String[] keys = new String[ids.size()];
+        for(int i = 0; i < ids.size(); i++) {
+            keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, ids.get(i));
+        }
+        int count = 0;
+        CacheNewFeed current = new CacheNewFeed();
+        current.setNewId(newId);
+        Map<String, List<CacheNewFeed>> currentUserCacheNews = memcached.getMulti(keys);
+        if(currentUserCacheNews != null && currentUserCacheNews.size() > 0) {
+            Iterator<String> it = currentUserCacheNews.keySet().iterator();
+            while(it.hasNext()) {
+                String key = it.next();
+                List<CacheNewFeed> userCacheNewFeeds = currentUserCacheNews.get(key);
+                if(userCacheNewFeeds.contains(current)) {
+                    userCacheNewFeeds.remove(current);
+                }
+                memcached.set(key, userCacheNewFeeds, CacheConstants.TIME_HOUR * 4);
                 count++;
             }
         }

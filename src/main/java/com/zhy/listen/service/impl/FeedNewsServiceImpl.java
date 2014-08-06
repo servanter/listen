@@ -8,8 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SubType;
 import com.zhy.listen.bean.cache.CacheNewFeed;
 import com.zhy.listen.cache.CacheConstants;
@@ -120,7 +122,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         List<CacheNewFeed> newFeeds = memcached.get(key);
 
         // 从缓存中取新鲜事
-        if (newFeeds.size() > 0) {
+        if (newFeeds != null && newFeeds.size() > 0) {
             String[] keys = new String[newFeeds.size()];
             for (int i = 0; i < newFeeds.size(); i++) {
                 keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, newFeeds.get(i).getNewId());
@@ -252,6 +254,40 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             memcached.set(key, list, CacheConstants.TIME_HOUR * 2);
         }
         return result;
+    }
+
+    @Override
+    public Response destory(FeedNews feedNews) {
+        FeedNews news = feedNewsDAO.getById(feedNews.getId());
+        int affect = feedNewsDAO.delete(feedNews);
+        if(affect > 0) {
+            Page p = feedNewsFactory.generateSub(news);
+            affect = feedNewsFactory.generateService(feedNews.getSubType()).remove(p);
+            Response response = new Response();
+            response.setErrorCode(affect > 0 ? ErrorCode.SUCCESS : ErrorCode.ERROR);
+            
+            // 这里应该用消息队列做
+            List<Long> ids = friendService.findFriendIds(news.getUserId());
+            if (ids != null && ids.size() > 0) {
+                List<Long> onlineUserIds = onlineService.findAllOnlineUserIds();
+                if (onlineUserIds != null && onlineUserIds.size() > 0) {
+
+                    // 我的好友中在线列表
+                    List<Long> onlineMyUserIds = new ArrayList<Long>();
+                    for (Long id : ids) {
+                        if (onlineUserIds.contains(id)) {
+                            onlineMyUserIds.add(id);
+                        }
+                    }
+                    // remove feed news
+                    onlineService.removeUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), feedNews.getId());
+                    return response;
+                }
+            }
+            
+            // 异步更新缓存
+        }
+        return new Response();
     }
 
 }

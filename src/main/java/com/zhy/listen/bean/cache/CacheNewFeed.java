@@ -44,7 +44,6 @@ public class CacheNewFeed implements java.io.Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
         result = prime * result + ((newId == null) ? 0 : newId.hashCode());
         return result;
     }
@@ -58,11 +57,6 @@ public class CacheNewFeed implements java.io.Serializable {
         if (getClass() != obj.getClass())
             return false;
         CacheNewFeed other = (CacheNewFeed) obj;
-        if (createTime == null) {
-            if (other.createTime != null)
-                return false;
-        } else if (!createTime.equals(other.createTime))
-            return false;
         if (newId == null) {
             if (other.newId != null)
                 return false;

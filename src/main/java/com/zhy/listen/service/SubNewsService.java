@@ -10,4 +10,6 @@ package com.zhy.listen.service;
 public interface SubNewsService<T> {
 
     public T findById(Long id);
+    
+    public int remove(T t);
 }

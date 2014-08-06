@@ -184,6 +184,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return feedNewsDAO.getByIds(ids);
     }
 
+    /* (non-Javadoc)
+     * @see com.zhy.listen.service.FeedNewsService#findBaseFeedsByUserId(java.lang.Long)
+     */
     @Override
     public List<FeedNews> findBaseFeedsByUserId(Long userId) {
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, userId);
@@ -205,6 +208,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return new ArrayList<FeedNews>();
     }
 
+    /* (non-Javadoc)
+     * @see com.zhy.listen.service.FeedNewsService#findByNews(com.zhy.listen.entities.FeedNews)
+     */
     @Override
     public Paging<FeedNews> findByNews(FeedNews feedNews) {
 

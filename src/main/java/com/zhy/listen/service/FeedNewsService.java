@@ -18,7 +18,7 @@ import com.zhy.listen.entities.FeedNews;
 public interface FeedNewsService {
 
     /**
-     * 获取新鲜事
+     * 获取某用户新鲜事(点击头像进入个人主页)
      * 
      * @param feedNews
      * @return
@@ -71,7 +71,7 @@ public interface FeedNewsService {
     public List<FeedNews> findByIds(List<Long> ids);
     
     /**
-     * 获取用户新鲜事
+     * 获取某用户新鲜事(前5条)
      * 
      * @param userId
      * @return

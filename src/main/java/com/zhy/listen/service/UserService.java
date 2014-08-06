@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.User;
@@ -39,7 +40,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    public User login(User user);
+    public Response login(User user);
 
     /**
      * 随机获取用户(I'm feeling lucky)

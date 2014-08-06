@@ -3,6 +3,7 @@ package com.zhy.listen.bean.query;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.indexer.IndexerClass;
 
@@ -65,6 +66,8 @@ public class QueryResult extends Page {
      * 
      */
     private String message;
+    
+    private ErrorCode errorCode; 
 
     public QueryResult() {
 
@@ -158,11 +161,20 @@ public class QueryResult extends Page {
         this.rawQuery = rawQuery;
     }
 
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
+        result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
         result = prime * result + hitCount;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((indexerClass == null) ? 0 : indexerClass.hashCode());
@@ -189,6 +201,8 @@ public class QueryResult extends Page {
             if (other.endTime != null)
                 return false;
         } else if (!endTime.equals(other.endTime))
+            return false;
+        if (errorCode != other.errorCode)
             return false;
         if (hitCount != other.hitCount)
             return false;
@@ -239,9 +253,9 @@ public class QueryResult extends Page {
 
     @Override
     public String toString() {
-        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime="
-                + endTime + ", userId=" + userId + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result="
-                + result + ", indexerClass=" + indexerClass + ", rawQuery=" + rawQuery + ", message=" + message + "]";
+        return "QueryResult [id=" + id + ", queryFields=" + queryFields + ", queryTime=" + queryTime + ", endTime=" + endTime + ", userId=" + userId
+                + ", keywords=" + keywords + ", hitCount=" + hitCount + ", result=" + result + ", indexerClass=" + indexerClass + ", rawQuery="
+                + rawQuery + ", message=" + message + ", errorCode=" + errorCode + "]";
     }
 
     /**

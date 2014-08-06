@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.Paging;
 import com.zhy.listen.dao.CommentDAO;
 import com.zhy.listen.entities.Comment;
 import com.zhy.listen.service.CommentService;
@@ -16,14 +17,19 @@ public class CommentServiceImpl implements CommentService {
     private CommentDAO commentDAO;
 
     @Override
-    public Comment comment(Comment comment) {
-        commentDAO.save(comment);
-        return comment;
+    public boolean comment(Comment comment) {
+        return commentDAO.save(comment) > 0;
     }
 
     @Override
-    public List<Comment> getCommentsByTypeAndDependId(Comment comment) {
-        return commentDAO.getCommentsByTypeAndDependId(comment);
+    public Paging<Comment> getCommentsByTypeAndDependId(Comment comment) {
+        List<Comment> comments =  commentDAO.getCommentsByTypeAndDependId(comment);
+        int total = getCommentsByTypeAndDependIdCount(comment);
+        return new Paging<Comment>(total, comment.getPage(), comment.getPageSize(), comments);
+    }
+    
+    private int getCommentsByTypeAndDependIdCount(Comment comment) {
+        return commentDAO.getCommentsByTypeAndDependIdCount(comment);
     }
 
     @Override

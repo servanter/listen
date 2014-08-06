@@ -32,4 +32,12 @@ public interface CommentDAO {
      * @return
      */
     public int delete(Long commentId);
+
+    /**
+     * 总数
+     * 
+     * @param comment
+     * @return
+     */
+    public int getCommentsByTypeAndDependIdCount(Comment comment);
 }

@@ -10,6 +10,8 @@ public enum ErrorCode {
 
     SUCCESS(10000, "成功"),
     
+    USER_NOT_FOUNT(20001, "用户没有找到"),
+    
     ERROR(99999, "系统错误");
 
     private int code;

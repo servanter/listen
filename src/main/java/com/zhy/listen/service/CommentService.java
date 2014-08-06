@@ -2,6 +2,7 @@ package com.zhy.listen.service;
 
 import java.util.List;
 
+import com.zhy.listen.bean.Paging;
 import com.zhy.listen.entities.Comment;
 
 
@@ -19,7 +20,7 @@ public interface CommentService {
      * @param comment
      * @return
      */
-    public List<Comment> getCommentsByTypeAndDependId(Comment comment);
+    public Paging<Comment> getCommentsByTypeAndDependId(Comment comment);
 
     /**
      * 评论(save)
@@ -27,7 +28,7 @@ public interface CommentService {
      * @param comment
      * @return
      */
-    public Comment comment(Comment comment);
+    public boolean comment(Comment comment);
 
     /**
      * 删除评论(is_valid=0)

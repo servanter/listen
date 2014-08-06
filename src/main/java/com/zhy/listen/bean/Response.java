@@ -7,6 +7,16 @@ public class Response {
     private ErrorCode errorCode;
     
     private Timestamp responseTime;
+    
+    private Object result;
+
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
 
     public ErrorCode getErrorCode() {
         return errorCode;
@@ -26,7 +36,7 @@ public class Response {
 
     @Override
     public String toString() {
-        return "Response [errorCode=" + errorCode + ", responseTime=" + responseTime + "]";
+        return "Response [errorCode=" + errorCode + ", responseTime=" + responseTime + ", result=" + result + "]";
     }
 
     public Response() {
@@ -39,6 +49,7 @@ public class Response {
         int result = 1;
         result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
         result = prime * result + ((responseTime == null) ? 0 : responseTime.hashCode());
+        result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
         return result;
     }
 
@@ -57,6 +68,11 @@ public class Response {
             if (other.responseTime != null)
                 return false;
         } else if (!responseTime.equals(other.responseTime))
+            return false;
+        if (result == null) {
+            if (other.result != null)
+                return false;
+        } else if (!result.equals(other.result))
             return false;
         return true;
     }

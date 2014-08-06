@@ -268,7 +268,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     }
 
     @Override
-    public Response destory(FeedNews feedNews) {
+    public boolean destory(FeedNews feedNews) {
         FeedNews news = feedNewsDAO.getById(feedNews.getId());
         int affect = feedNewsDAO.delete(feedNews);
         if(affect > 0) {
@@ -297,13 +297,11 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                     }
                     // remove feed news
                     onlineService.removeUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), feedNews.getId());
-                    return response;
                 }
             }
-            
-            // 异步更新缓存
+            return true;
         }
-        return new Response();
+        return false;
     }
 
 }

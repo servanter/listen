@@ -7,8 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.dao.UserDAO;
@@ -36,8 +38,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(User user) {
-        return userDAO.getUserByNameAndPass(user);
+    public Response login(User user) {
+        User u =  userDAO.getUserByNameAndPass(user);
+        Response response = new Response();
+        response.setErrorCode(u != null ? ErrorCode.SUCCESS : ErrorCode.USER_NOT_FOUNT);
+        return response;
     }
 
     @Override

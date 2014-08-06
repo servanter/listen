@@ -84,6 +84,6 @@ public interface FeedNewsService {
      * @param feedNews
      * @return
      */
-    public Response destory(FeedNews feedNews);
+    public boolean destory(FeedNews feedNews);
     
 }

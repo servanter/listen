@@ -136,4 +136,9 @@ public class UserServiceImpl implements UserService {
     public List<UserStatusPointPath> findUsersByIndex(IndexEnum indexEnum) {
         return userDAO.getUsersByIndex(indexEnum.getType());
     }
+
+    @Override
+    public boolean modifyIsIndex(Long userId, boolean isIndex) {
+        return userDAO.updateIsIndex(userId, isIndex) > 0;
+    }
 }

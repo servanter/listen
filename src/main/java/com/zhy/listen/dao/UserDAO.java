@@ -130,4 +130,13 @@ public interface UserDAO {
      * @return
      */
     public List<UserStatusPointPath> getUsersByIndex(int type);
+
+    /**
+     * 修改索引状态
+     * 
+     * @param userId
+     * @param isIndex
+     * @return
+     */
+    public int updateIsIndex(@Param("userId") Long userId, @Param("isIndex") boolean isIndex);
 }

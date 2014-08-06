@@ -134,4 +134,12 @@ public interface UserService {
      * @return
      */
     public List<UserStatusPointPath> findUsersByIndex(IndexEnum indexEnum);
+    
+    /**
+     * 修改索引状态
+     * @param userId
+     * @param isIndex
+     * @return
+     */
+    public boolean modifyIsIndex(Long userId, boolean isIndex);
 }

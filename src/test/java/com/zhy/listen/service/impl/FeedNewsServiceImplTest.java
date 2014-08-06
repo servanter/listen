@@ -39,7 +39,7 @@ public class FeedNewsServiceImplTest extends SuperTest{
         onlineService.login(iii);
         
         Status status = new Status();
-        status.setId(22L);
+        status.setId(2L);
         status.setUserId(1L);
         status.setContent("这是");
         feedNewsService.push(status, SubType.STATUS);
@@ -54,7 +54,7 @@ public class FeedNewsServiceImplTest extends SuperTest{
 //        System.out.println(count);
         
         FeedNews feedNews = new FeedNews();
-        feedNews.setId(54L);
+        feedNews.setId(65L);
         feedNews.setSubType(SubType.STATUS);
         feedNewsService.destory(feedNews);
         

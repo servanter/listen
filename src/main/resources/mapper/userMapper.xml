@@ -149,4 +149,8 @@
 		LEFT JOIN status s ON ss.create_time = s.create_time 
 		) t ON u.id = t.user_id AND u.is_valid = 1 AND u.is_index = 0 LEFT JOIN user_point p ON u.id = p.user_id
 	</select>
+	
+	<update id="updateIsIndex">
+		UPDATE user SET is_index = #{isIndex} WHERE id = #{userId}
+	</update>
 </mapper>

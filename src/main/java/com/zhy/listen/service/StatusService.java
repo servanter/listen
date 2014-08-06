@@ -25,12 +25,4 @@ public interface StatusService extends SubNewsService<Status> {
      */
     public Response post(Status status);
     
-    /**
-     * 删除一条围脖
-     * 
-     * @param status
-     * @return
-     */
-    public Response destory(Status status);
-    
 }

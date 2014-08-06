@@ -24,6 +24,7 @@ import com.zhy.listen.service.FeedNewsFactory;
 import com.zhy.listen.service.FeedNewsService;
 import com.zhy.listen.service.FriendService;
 import com.zhy.listen.service.OnlineService;
+import com.zhy.listen.service.UserService;
 
 @Service
 public class FeedNewsServiceImpl implements FeedNewsService {
@@ -39,6 +40,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
     @Autowired
     private FriendService friendService;
+    
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private Memcached memcached;
@@ -61,53 +65,60 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         try {
 
             FeedNews feedNews = feedNewsFactory.generateFeedNews(page, type);
-            feedNewsDAO.save(feedNews);
+            int affect = feedNewsDAO.save(feedNews);
 
-            // 重新查询
-            FeedNews f = feedNewsDAO.getById(feedNews.getId());
-
-            // 放入新鲜事池
-            memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f,
-                    CacheConstants.TIME_HOUR * 2);
-
-            // 放入个人新鲜事池
-            String profileNewsKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-            Paging<FeedNews> profileNews = memcached.get(profileNewsKey);
-            if (profileNews != null && profileNews.getResult() != null && !profileNews.getResult().isEmpty()) {
-                List<FeedNews> news = new ArrayList<FeedNews>();
-                news.add(f);
-                for(FeedNews n : profileNews.getResult()) {
-                    news.add(n);
-                }
-                profileNews.setResult(news);
-                profileNews.setTotalRecord(profileNews.getTotalRecord() + 1);
-            } else {
-                profileNews = new Paging<FeedNews>();
-                profileNews.setTotalRecord(1L);
-                List<FeedNews> news = new ArrayList<FeedNews>();
-                news.add(f);
-                profileNews.setResult(news);
+            // 更新用户索引，定时重新建立
+            if (type == SubType.STATUS) {
+                userService.modifyIsIndex(feedNews.getUserId(), false);
             }
-            memcached.set(profileNewsKey, profileNews, CacheConstants.TIME_HOUR * 2);
+            if (affect > 0) {
+                
+                // 重新查询
+                FeedNews f = feedNewsDAO.getById(feedNews.getId());
 
-            // 这里应该用消息队列做
-            List<Long> ids = friendService.findFriendIds(f.getUserId());
-            if (ids != null && ids.size() > 0) {
-                List<Long> onlineUserIds = onlineService.findAllOnlineUserIds();
-                if (onlineUserIds != null && onlineUserIds.size() > 0) {
+                // 放入新鲜事池
+                memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
 
-                    // 我的好友中在线列表
-                    List<Long> onlineMyUserIds = new ArrayList<Long>();
-                    for (Long id : ids) {
-                        if (onlineUserIds.contains(id)) {
-                            onlineMyUserIds.add(id);
-                        }
+                // 放入个人新鲜事池
+                String profileNewsKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS,
+                        feedNews.getUserId());
+                Paging<FeedNews> profileNews = memcached.get(profileNewsKey);
+                if (profileNews != null && profileNews.getResult() != null && !profileNews.getResult().isEmpty()) {
+                    List<FeedNews> news = new ArrayList<FeedNews>();
+                    news.add(f);
+                    for (FeedNews n : profileNews.getResult()) {
+                        news.add(n);
                     }
-                    // push feed news
-                    onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), f.getId());
+                    profileNews.setResult(news);
+                    profileNews.setTotalRecord(profileNews.getTotalRecord() + 1);
+                } else {
+                    profileNews = new Paging<FeedNews>();
+                    profileNews.setTotalRecord(1L);
+                    List<FeedNews> news = new ArrayList<FeedNews>();
+                    news.add(f);
+                    profileNews.setResult(news);
                 }
+                memcached.set(profileNewsKey, profileNews, CacheConstants.TIME_HOUR * 2);
+
+                // 这里应该用消息队列做
+                List<Long> ids = friendService.findFriendIds(f.getUserId());
+                if (ids != null && ids.size() > 0) {
+                    List<Long> onlineUserIds = onlineService.findAllOnlineUserIds();
+                    if (onlineUserIds != null && onlineUserIds.size() > 0) {
+
+                        // 我的好友中在线列表
+                        List<Long> onlineMyUserIds = new ArrayList<Long>();
+                        for (Long id : ids) {
+                            if (onlineUserIds.contains(id)) {
+                                onlineMyUserIds.add(id);
+                            }
+                        }
+                        // push feed news
+                        onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), f.getId());
+                    }
+                }
+                return true;
             }
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,7 +276,12 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             affect = feedNewsFactory.generateService(feedNews.getSubType()).remove(p);
             Response response = new Response();
             response.setErrorCode(affect > 0 ? ErrorCode.SUCCESS : ErrorCode.ERROR);
-            
+            if(affect > 0 && feedNews.getSubType() == SubType.STATUS) {
+                
+                // 更新用户索引，定时重新建立
+                userService.modifyIsIndex(news.getUserId(), false);
+                
+            }
             // 这里应该用消息队列做
             List<Long> ids = friendService.findFriendIds(news.getUserId());
             if (ids != null && ids.size() > 0) {

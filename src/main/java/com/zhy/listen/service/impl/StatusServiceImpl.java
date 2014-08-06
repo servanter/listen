@@ -42,14 +42,6 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Response destory(Status status) {
-        boolean isSuccess = statusDAO.updateIsValid(status) > 0;
-        Response response = new Response();
-        response.setErrorCode(isSuccess ? ErrorCode.SUCCESS : ErrorCode.ERROR);
-        return response;
-    }
-
-    @Override
     public int remove(Status status) {
         return statusDAO.updateIsValid(status);
     }

@@ -27,17 +27,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$.ajax({url:"${ctx}/path/nearby/", type:"POST", data:$("#path_div").serialize(), success:function (data) {
 					$("#result").text(data);
 				}});
-			})
+			});
+			$("#btnPath").click(function(){
+				$.ajax({url:"${ctx}/path/pathSetting", type:"POST", data:{"id":$("#user_id").val(), "isClean":$("#is_clean").val()}, success:function (data) {
+					$("#result").text(data);
+				}});
+			});
 		});
 	</script>
   </head>
   
   <body>
   	<input type="text" name="text" id="t" >
-  	<input type="button" id="btn" value="搜素"><br>
+  	<input type="button" id="btn" value="搜素音乐"><br>
   	<form id="path_div">
-  	纬度,经度<input name="loc" type="text">&nbsp;公里数<input name="mile" type="text">&nbsp;省份<input name="discoveryProvince" type="text">&nbsp;城市<input name="discoveryCity" type="text"><input type="button" id="near_btn" value="搜索附近的人"><br>
+  	用户ID<input name="id" type="text">纬度,经度<input name="loc" type="text">&nbsp;公里数<input name="mile" type="text">&nbsp;省份<input name="discoveryProvince" type="text">&nbsp;城市<input name="discoveryCity" type="text"><input type="button" id="near_btn" value="搜索附近的人"><br>
   	</form>
+	用户ID<input type="text" name="text" id="user_id" >
+	是否清除<input type="text" name="text" id="is_clean" >
+  	<input type="button" id="btnPath" value="设置地理位置是否清除(true清除|false可见)"><br>
   	<div id="result"></div>
   </body>
 </html>

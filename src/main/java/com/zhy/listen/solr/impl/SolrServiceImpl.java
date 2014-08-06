@@ -159,6 +159,7 @@ public class SolrServiceImpl implements SolrService {
             fq += "discovery_city:(" + queryResult.getQueryFieldValue("discoveryCity") + ") AND ";
         }
         fq += " is_clean :(false)";
+        fq += " -id :(" + queryResult.getQueryFieldValue("id") + ")";
         map.put("fq", fq);
         MapSolrParams params = new MapSolrParams(map);
         try {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.service.PathService;
@@ -25,10 +26,9 @@ public class PathController {
     private PathService pathService;
     
     @RequestMapping(value="nearby", method = RequestMethod.POST)
-    public String searchResult(UserStatusPointPath path, @RequestParam("mile") Integer mile, ModelMap modelMap, HttpServletResponse response) throws Exception {
+    public String searchResult(UserStatusPointPath path, @RequestParam("mile") Integer mile, HttpServletResponse response) throws Exception {
         response.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
         QueryResult queryResult = pathService.queryByPath(path, mile);
-        modelMap.put("result", queryResult);
         JSONObject jsonObject = JSONObject.fromObject(queryResult);
         response.getWriter().print(jsonObject);
         return null;
@@ -39,5 +39,12 @@ public class PathController {
 //        binder.setFieldDefaultPrefix("path.");
 //    }
     
-    
+    @RequestMapping(value="pathSetting", method = RequestMethod.POST)
+    public String cleanPath(UserStatusPointPath path, HttpServletResponse response) throws Exception {
+        response.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
+        Response response2 = pathService.pathSetting(path);
+        JSONObject jsonObject = JSONObject.fromObject(response2);
+        response.getWriter().print(jsonObject);
+        return null;
+    }
 }

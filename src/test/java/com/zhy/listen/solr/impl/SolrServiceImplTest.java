@@ -1,5 +1,6 @@
 package com.zhy.listen.solr.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
+import com.zhy.listen.entities.Path;
 import com.zhy.listen.service.MusicService;
 import com.zhy.listen.service.UserService;
 import com.zhy.listen.solr.SolrService;
@@ -34,16 +36,12 @@ public class SolrServiceImplTest extends SuperTest {
         indexer.setIndexerClass(IndexerClass.USER);
 //        List<Music> musics = musicService.findMusicsByIndex(IndexEnum.NOT_INDEXED);
         List<UserStatusPointPath> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
-//        Path path = new Path();
-//        path.setId(5L);
-//        path.setUserId(1L);
-//        path.setProvince("");
-//        path.setCity("北京");
-//        path.setLoc("39.914889,116.403874");
-//        path.setIsClean(false);
-//        path.setDiscoveryTime(new Timestamp(System.currentTimeMillis()));
-//        List<Path> paths = new ArrayList<Path>();
-//        paths.add(path);
+        UserStatusPointPath path = users.get(0);
+        path.setDiscoveryProvince("");
+        path.setDiscoveryCity("北京");
+        path.setLoc("39.914889,116.403874");
+        path.setIsClean(false);
+        path.setDiscoveryTime(new Timestamp(System.currentTimeMillis()));
         indexer.setNeedIndexList(users);
         solrService.create(indexer);
     }

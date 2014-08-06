@@ -152,11 +152,11 @@ public class SolrServiceImpl implements SolrService {
         // 根据距离排序
         map.put("sort", "geodist() asc");
         String fq = "";
-        if(queryResult.getQueryFieldValue("province") != null && queryResult.getQueryFieldValue("province").length() > 0) {
-            fq = "province:(" + queryResult.getQueryFieldValue("province") + ") AND ";
+        if(queryResult.getQueryFieldValue("discoveryProvince") != null && queryResult.getQueryFieldValue("discoveryProvince").length() > 0) {
+            fq = "discovery_province:(" + queryResult.getQueryFieldValue("discoveryProvince") + ") AND ";
         }
-        if(queryResult.getQueryFieldValue("city") != null && queryResult.getQueryFieldValue("city").length() > 0) {
-            fq += "city:(" + queryResult.getQueryFieldValue("city") + ") AND ";
+        if(queryResult.getQueryFieldValue("discoveryCity") != null && queryResult.getQueryFieldValue("discoveryCity").length() > 0) {
+            fq += "discovery_city:(" + queryResult.getQueryFieldValue("discoveryCity") + ") AND ";
         }
         fq += " is_clean :(false)";
         map.put("fq", fq);

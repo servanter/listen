@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +54,8 @@ public class PathServiceImpl implements PathService {
         List<QueryField> fields = new ArrayList<QueryField>();
         QueryField field = new QueryField("pt", path.getLoc());
         QueryField field2 = new QueryField("mileage", String.valueOf(mile));
-        QueryField field3 = new QueryField("province", path.getDiscoveryProvince());
-        QueryField field4 = new QueryField("city", path.getDiscoveryCity());
+        QueryField field3 = new QueryField("discoveryProvince", path.getDiscoveryProvince());
+        QueryField field4 = new QueryField("discoveryCity", path.getDiscoveryCity());
         fields.add(field);
         fields.add(field2);
         fields.add(field3);
@@ -64,6 +63,9 @@ public class PathServiceImpl implements PathService {
         queryResult.setIndexerClass(IndexerClass.USER);
         queryResult.setQueryFields(fields);
         solrService.queryPath(queryResult);
+        
+        // 更新该用户地理信息
+//        sign(path);
         return queryResult;
     }
 

@@ -22,7 +22,7 @@
 		SELECT * FROM `comment` WHERE depend_id = #{dependId} AND type= #{commentType.type}
 	</select>
 	
-	<select id="getCommentsByTypeAndDependId" parameterType="comment" resultType="java.lang.Integer">
+	<select id="getCommentsByTypeAndDependIdCount" parameterType="comment" resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM comment WHERE depend_id = #{dependId} AND type= #{commentType.type}
 	</select>
 	<insert id="save" parameterType="comment">

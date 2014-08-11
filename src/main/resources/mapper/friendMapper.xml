@@ -17,13 +17,14 @@
 	</resultMap>
 	
 	<select id="getFriendsByUserId" parameterType="friend" resultMap="userResult">
-		SELECT u.user_nick, u.id FROM USER u INNER JOIN friend f ON u.id = f.friend_id WHERE f.user_id = #{userId} AND f.is_valid = true ORDER BY create_time DESC
+		SELECT u.user_nick, u.id FROM USER u INNER JOIN friend f ON u.id = f.friend_id WHERE f.user_id = #{userId} AND f.is_valid = true 
+		ORDER BY f.create_time DESC LIMIT #{sinceCount}, #{pageSize}
 	</select>
 	
 	<select id="getFriendsByUserIdCount" parameterType="friend" resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM `friend` WHERE user_id = #{userId} AND is_valid = true
 	</select>
-
+	
 	<select id="getUserFriendSize" parameterType="java.lang.Long"
 		resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM `friend` WHERE user_id=#{id}
@@ -43,7 +44,7 @@
 	</update>
 	
 	<select id="getFriendIds" parameterType="java.lang.Long" resultType="java.lang.Long">
-		SELECT friend_id FROM friend WHERE user_id = #{userId} AND is_valid = true 
+		SELECT friend_id FROM friend WHERE user_id = #{userId} AND is_valid = true ORDER BY create_time DESC
 	</select>
 
 </mapper>

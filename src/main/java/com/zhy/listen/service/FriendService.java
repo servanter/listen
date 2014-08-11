@@ -46,5 +46,5 @@ public interface FriendService {
      * @param friend
      * @return
      */
-    public boolean modifyFriendRelation(Friend friend);
+    public boolean removeFriendRelation(Friend friend);
 }

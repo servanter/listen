@@ -1,6 +1,6 @@
 package com.zhy.listen.util;
 
-public class StringUtil {
+public class StringUtils {
 
     /**
      * 全角转半角

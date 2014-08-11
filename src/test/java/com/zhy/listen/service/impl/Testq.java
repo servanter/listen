@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class Testq extends SuperTest {
 
+    @Autowired
+    private JedisClient jedisClient;
+    
     @Test
     public void te1st() {
-        JedisClient.getInstance().set("password", "123");
-        String a = JedisClient.getInstance().get("password");
-        System.out.println(a);
+        
     }
 }

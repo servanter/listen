@@ -1,6 +1,6 @@
 package com.zhy.listen.entities;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import com.zhy.listen.bean.Page;
@@ -33,7 +33,7 @@ public class User extends Page implements java.io.Serializable {
     /**
      * 生日
      */
-    private Timestamp birthday;
+    private Date birthday;
 
     /**
      * 用户性别
@@ -83,12 +83,12 @@ public class User extends Page implements java.io.Serializable {
     /**
      * 注册时间
      */
-    private Timestamp regTime;
+    private Date regTime;
 
     /**
      * 最近修改时间
      */
-    private Timestamp modifyTime;
+    private Date modifyTime;
 
     /**
      * 是否可用
@@ -148,14 +148,14 @@ public class User extends Page implements java.io.Serializable {
      * @param sex
      *            性别
      */
-    public User(String userName, String passWord, String userNick, String userImg, Timestamp birthday, Integer sex) {
+    public User(String userName, String passWord, String userNick, String userImg, Date birthday, Integer sex) {
         this.userName = userName;
         this.passWord = passWord;
         this.birthday = birthday;
         this.sex = sex;
         this.userNick = userNick;
         this.userImg = userImg;
-        this.modifyTime = new Timestamp(System.currentTimeMillis());
+        this.modifyTime = new Date();
     }
 
     public Long getId() {
@@ -182,11 +182,11 @@ public class User extends Page implements java.io.Serializable {
         this.passWord = passWord;
     }
 
-    public Timestamp getRegTime() {
+    public Date getRegTime() {
         return regTime;
     }
 
-    public void setRegTime(Timestamp regTime) {
+    public void setRegTime(Date regTime) {
         this.regTime = regTime;
     }
 
@@ -214,19 +214,19 @@ public class User extends Page implements java.io.Serializable {
         this.sex = sex;
     }
 
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
-    public Timestamp getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

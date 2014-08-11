@@ -62,4 +62,14 @@ public class CacheConstants {
      * 个人好友
      */
     public static final String CACHE_USER_FRIENDS = "UF";
+    
+    /**
+     * 个人好友数量
+     */
+    public static final String CACHE_USER_FRIENDS_COUNT = "UFC";
+    
+    /**
+     * 个人好友ID列表
+     */
+    public static final String CACHE_USER_FRIEND_IDS = "UFI";
 }

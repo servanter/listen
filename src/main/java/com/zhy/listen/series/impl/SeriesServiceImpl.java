@@ -17,7 +17,7 @@ import com.zhy.listen.service.AuthorService;
 import com.zhy.listen.service.FetchMusicService;
 import com.zhy.listen.service.MusicService;
 import com.zhy.listen.solr.SolrService;
-import com.zhy.listen.util.StringUtil;
+import com.zhy.listen.util.StringUtils;
 
 @Service
 public class SeriesServiceImpl implements SeriesService {
@@ -52,11 +52,11 @@ public class SeriesServiceImpl implements SeriesService {
             music.setTitle(text);
         }
         List<QueryField> fields = new ArrayList<QueryField>();
-        if(!StringUtil.isNullOrEmpty(music.getAuthor())) {
+        if(!StringUtils.isNullOrEmpty(music.getAuthor())) {
             QueryField queryField = new QueryField("author", music.getAuthor());
             fields.add(queryField);
         }
-        if(!StringUtil.isNullOrEmpty(music.getTitle())) {
+        if(!StringUtils.isNullOrEmpty(music.getTitle())) {
             QueryField queryField = new QueryField("title", music.getTitle());
             fields.add(queryField);
         }

@@ -36,7 +36,7 @@ import com.zhy.listen.bean.query.QueryField;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.common.Constant;
 import com.zhy.listen.template.TemplateService;
-import com.zhy.listen.util.StringUtil;
+import com.zhy.listen.util.StringUtils;
 
 /**
  * 基于lucene查询
@@ -119,7 +119,7 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
      * @throws IllegalArgumentException
      */
     private Query createQuery(QueryResult queryResult) throws IllegalArgumentException {
-        System.out.println(StringUtil.signUpChar(0, queryResult.getIndexerClass().name()));
+        System.out.println(StringUtils.signUpChar(0, queryResult.getIndexerClass().name()));
         if (requiredFields.get(queryResult.getIndexerClass().name().toLowerCase()) == null) {
             throw new IllegalArgumentException("Can't find the class name.");
         }
@@ -218,7 +218,7 @@ public abstract class AbstractLuceneSearch<T> extends AbstractSearch<T> {
             List<QueryField> queryFields = new ArrayList<QueryField>();
             List<String> fields = requiredFields.get(queryResult.getIndexerClass().name().toLowerCase());
             for (String f : fields) {
-                String getMethodName = "get" + StringUtil.signUpChar(0, f);
+                String getMethodName = "get" + StringUtils.signUpChar(0, f);
                 Object method = t.getClass().getMethod(getMethodName).invoke(t);
                 if(method == null) {
                     continue;

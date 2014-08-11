@@ -31,17 +31,17 @@ public class FriendServiceImplTest extends SuperTest{
     @Test
     public void testModifyFriendRelation() {
         Friend friend = new Friend();
-        friend.setUserId(1L);
+        friend.setUserId(2L);
         friend.setFriendId(3L);
         friend.setIsValid(false);
-        Assert.assertTrue("Can't remove the friendship.", friendService.modifyFriendRelation(friend));
+        Assert.assertTrue("Can't remove the friendship.", friendService.removeFriendRelation(friend));
     }
 
     @Test
     public void testMakeFriends() {
         Friend friend = new Friend();
-        friend.setUserId(1L);
-        friend.setFriendId(4L);
+        friend.setUserId(6L);
+        friend.setFriendId(7L);
         boolean isSuccess = friendService.makeFriends(friend);
         Assert.assertTrue("Can't make friends?", isSuccess);
     }

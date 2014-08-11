@@ -37,6 +37,12 @@ public class Page implements java.io.Serializable {
      * 从id
      */
     private int sinceCount = 0;
+    
+    /**
+     * redis 特性  首尾都包含
+     */
+    private int endPoint = pageSize - 1;
+
 
     public Page() {
 
@@ -64,6 +70,7 @@ public class Page implements java.io.Serializable {
         this.page = page;
         if (page >= 1) {
             sinceCount = (page - 1) * pageSize;
+            endPoint = sinceCount + pageSize - 1;
         }
     }
 
@@ -77,6 +84,14 @@ public class Page implements java.io.Serializable {
 
     public long getTotalRecord() {
         return totalRecord;
+    }
+    
+    public int getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(int endPoint) {
+        this.endPoint = endPoint;
     }
 
     public void setTotalRecord(Long totalRecord) {

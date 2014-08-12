@@ -1,6 +1,6 @@
 package com.zhy.listen.bean.cache;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 最新新鲜事缓存
@@ -17,7 +17,7 @@ public class CacheNewFeed implements java.io.Serializable {
 
     private Long newId;
 
-    private Timestamp createTime;
+    private Date createTime;
 
     public Long getNewId() {
         return newId;
@@ -27,11 +27,11 @@ public class CacheNewFeed implements java.io.Serializable {
         this.newId = newId;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

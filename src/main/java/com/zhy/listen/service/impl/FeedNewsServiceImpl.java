@@ -15,6 +15,7 @@ import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SubType;
 import com.zhy.listen.bean.cache.CacheNewFeed;
 import com.zhy.listen.cache.CacheConstants;
+import com.zhy.listen.cache.JedisClient;
 import com.zhy.listen.cache.KeyGenerator;
 import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.dao.FeedNewsDAO;
@@ -46,6 +47,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
     @Autowired
     private Memcached memcached;
+    
+    @Autowired
+    private JedisClient jedisClient;
 
     private List<FeedNews> findByNewsFromDB(FeedNews feedNews) {
         return feedNewsDAO.getByNews(feedNews);
@@ -128,9 +132,8 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     @Override
     public List<FeedNews> findUnreadList(Long userId, Timestamp requestTime) {
         List<FeedNews> result = new ArrayList<FeedNews>();
-        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX,
-                userId);
-        List<CacheNewFeed> newFeeds = memcached.get(key);
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
+        List<CacheNewFeed> newFeeds = jedisClient.lrange(key, 0, -1, CacheNewFeed.class);
 
         // 从缓存中取新鲜事
         if (newFeeds != null && newFeeds.size() > 0) {
@@ -151,27 +154,27 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             if (needFromDB.size() > 0) {
                 List<FeedNews> list = findByIds(needFromDB);
                 result.addAll(list);
-
-                // 设置缓存
-                for (FeedNews f : list) {
-                    memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
-                }
             }
         }
-        memcached.delete(key);
+        jedisClient.jedis.del(key);
         return result;
     }
 
     @Override
     public int findUnreadCount(Long userId, Timestamp requestTime) {
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
-        List<CacheNewFeed> newFeeds = memcached.get(key);
-        return newFeeds != null && newFeeds.size() > 0 ? newFeeds.size() : 0;
+        return jedisClient.jedis.llen(key).intValue();
     }
 
     @Override
     public List<FeedNews> findByIds(List<Long> ids) {
-        return feedNewsDAO.getByIds(ids);
+        List<FeedNews> news = feedNewsDAO.getByIds(ids);
+        
+        // 设置缓存
+        for (FeedNews f : news) {
+            memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
+        }
+        return news;
     }
 
     /* (non-Javadoc)

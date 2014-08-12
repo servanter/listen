@@ -133,4 +133,8 @@ public class JedisClient {
         return count;
     }
 
+    public Long lrem(String key, long count, Object o) {
+        String str = JSONObject.fromObject(o).toString();
+        return jedis.lrem(key, count, str);
+    }
 }

@@ -118,7 +118,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                             }
                         }
                         // push feed news
-                        onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), f.getId());
+                        onlineService.pushUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), f);
                     }
                 }
                 return true;
@@ -295,7 +295,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                         }
                     }
                     // remove feed news
-                    onlineService.removeUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), feedNews.getId());
+                    onlineService.removeUsers(onlineMyUserIds, new Timestamp(System.currentTimeMillis()), news);
                 }
             }
             return true;

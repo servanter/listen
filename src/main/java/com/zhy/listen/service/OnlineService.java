@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.zhy.listen.bean.UserStatusPointPath;
+import com.zhy.listen.entities.FeedNews;
 
 /**
  * 在线业务
@@ -42,7 +43,7 @@ public interface OnlineService {
      * @param newId
      * @return
      */
-    public int pushUsers(List<Long> ids, Timestamp currentTime, Long newId);
+    public int pushUsers(List<Long> ids, Timestamp currentTime, FeedNews feedNews);
 
     /**
      * 删除在线好友缓存中新鲜事ID
@@ -52,7 +53,7 @@ public interface OnlineService {
      * @param newId
      * @return
      */
-    public int removeUsers(List<Long> ids, Timestamp currentTime, Long newId);
+    public int removeUsers(List<Long> ids, Timestamp currentTime, FeedNews feedNews);
     
     /**
      * 更新在线列表

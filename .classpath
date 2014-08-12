@@ -39,7 +39,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/dwr-2.0.10.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ehcache-core-2.6.3.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ehcache-web-2.0.4.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ezmorph-1.0.6.jar" sourcepath="D:/maven/repo/net/sf/ezmorph/ezmorph/1.0.6/ezmorph-1.0.6-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/geronimo-javamail_1.4_spec-1.7.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/google-http-client-1.10.3-beta.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/guava-11.0.1.jar"/>

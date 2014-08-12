@@ -16,6 +16,7 @@ import com.zhy.listen.bean.cache.CacheNewFeed;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.cache.CacheConstants;
+import com.zhy.listen.cache.JedisClient;
 import com.zhy.listen.cache.KeyGenerator;
 import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.service.OnlineService;
@@ -29,10 +30,13 @@ public class OnlineServiceImpl implements OnlineService {
 
     @Autowired
     private SolrService solrService;
+    
+    @Autowired
+    private JedisClient jedisClient;
 
     @Override
     public int findCurrentTimeInService() {
-        return memcached.get(CacheConstants.CACHE_ONLINE_COUNT_PREFIX);
+        return jedisClient.jedis.llen(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX).intValue();
     }
 
     @Override
@@ -49,7 +53,7 @@ public class OnlineServiceImpl implements OnlineService {
 
     @Override
     public List<Long> findAllOnlineUserIds() {
-        return memcached.get(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX);
+        return jedisClient.lrange(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX, 0, -1);
     }
 
     @Override
@@ -132,27 +136,25 @@ public class OnlineServiceImpl implements OnlineService {
     @Override
     public boolean login(List<Long> ids) {
         try {
-            List<Long> onlineUserIds = memcached.get(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX);
+            List<Long> onlineUserIds = jedisClient.lrange(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX, 0, -1, Long.class);
             if (onlineUserIds != null) {
                 for (Long id : ids) {
                     if (onlineUserIds.contains(id)) {
                         
                         // 删掉之后重新放入
                         onlineUserIds.remove(id);
-                        onlineUserIds.add(id);
-                    } else {
-                        onlineUserIds.add(id);
                     }
                 }
+                jedisClient.lpush(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX, ids);
             } else {
-                onlineUserIds = new ArrayList<Long>();
-                onlineUserIds.addAll(ids);
+                
+                // 进来的id应该是数据库DESC过来,所以用rpush
+                jedisClient.rpush(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX, ids);
             }
-            memcached.set(CacheConstants.CACHE_ONLINE_USER_IDS_PREFIX, onlineUserIds, CacheConstants.TIME_MINUTE * 10);
             String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
             // 更新时间
-            memcached.set(CacheConstants.CACHE_ONLINE_LAST_TIME, time, CacheConstants.TIME_MINUTE * 10);
+            jedisClient.jedis.set(CacheConstants.CACHE_ONLINE_LAST_TIME, time);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

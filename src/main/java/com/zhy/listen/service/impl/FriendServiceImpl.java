@@ -158,7 +158,7 @@ public class FriendServiceImpl implements FriendService {
     public List<Long> findFriendIds(Long userId) {
         List<Long> ids = new ArrayList<Long>();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIEND_IDS, userId);
-        List<Long> cacheIds = jedisClient.lrange(key, 0, -1, Long.class);
+        List<Long> cacheIds = jedisClient.lrange(key, 0, -1);
         if (cacheIds == null || cacheIds.isEmpty()) {
             ids = friendDAO.getFriendIds(userId);
             jedisClient.rpush(key, ids);

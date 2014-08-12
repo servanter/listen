@@ -6,10 +6,14 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
+import net.sf.ezmorph.Morpher;
 import net.sf.ezmorph.object.DateMorpher;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import net.sf.json.processors.DefaultValueProcessor;
+import net.sf.json.processors.JsonBeanProcessor;
+import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.util.JSONUtils;
 
 import org.springframework.stereotype.Component;
@@ -41,21 +45,38 @@ public class JedisClient {
         jedis = pool.getResource();
     }
 
+    public <T extends Object> List<T> lrange(String key, long start, long end) {
+        List<String> values = jedis.lrange(key, start, end);
+        JsonConfig config = new JsonConfig();
+        String[] dateFmts = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
+        JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts));
+        if (values != null && values.size() > 0) {
+            JSONArray array = JSONArray.fromObject(values);
+            return array.toList(array, Long.class);
+        }
+        return null;
+    }
+    
     public <T extends Object> List<T> lrange(String key, long start, long end, Class<T> t) {
         List<String> values = jedis.lrange(key, start, end);
         JsonConfig config = new JsonConfig();
         String[] dateFmts = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
-        JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts)); 
+        JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts));
         if (values != null && values.size() > 0) {
             JSONArray array = JSONArray.fromObject(values);
-            try {
-                return array.toList(array, t.newInstance(), config);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            if(t.getSimpleName().equals("Long")) {
+                return array.toList(array, Long.class);
+            } else if(t.getSimpleName().equals("Integer")) {
+                return array.toList(array, Integer.class);
+            } else {
+                try {
+                    return array.toList(array, t.newInstance(), config);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
-            
         }
         return null;
     }

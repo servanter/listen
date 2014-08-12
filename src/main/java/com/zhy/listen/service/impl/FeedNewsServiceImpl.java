@@ -154,8 +154,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
                 // 设置缓存
                 for (FeedNews f : list) {
-                    memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f,
-                            CacheConstants.TIME_HOUR * 2);
+                    memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
                 }
             }
         }
@@ -165,17 +164,8 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
     @Override
     public int findUnreadCount(Long userId, Timestamp requestTime) {
-        int result = 0;
-        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX,
-                userId);
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = memcached.get(key);
-        // if (newFeeds != null) {
-        // for (CacheNewFeed newFeed : newFeeds) {
-        // if (newFeed.getCreateTime().after(requestTime)) {
-        // result++;
-        // }
-        // }
-        // }
         return newFeeds != null && newFeeds.size() > 0 ? newFeeds.size() : 0;
     }
 

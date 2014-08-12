@@ -29,11 +29,6 @@ public class CacheConstants {
     public static long TIME_DAY = 86400;
     
     /**
-     * 在线列表(数量)
-     */
-    public static final String CACHE_ONLINE_COUNT_PREFIX = "OC";
-    
-    /**
      * 在线列表(id)
      */
     public static final String CACHE_ONLINE_USER_IDS_PREFIX = "OUI";

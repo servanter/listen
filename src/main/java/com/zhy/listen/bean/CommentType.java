@@ -8,14 +8,9 @@ package com.zhy.listen.bean;
 public enum CommentType {
 
     /**
-     * 投票type
-     */
-    INFO(1),
-    
-    /**
      * 状态评论
      */
-    STATUS(2);
+    STATUS(1);
 
     private int type;
 

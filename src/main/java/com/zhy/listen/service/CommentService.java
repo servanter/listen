@@ -1,7 +1,5 @@
 package com.zhy.listen.service;
 
-import java.util.List;
-
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.entities.Comment;
 
@@ -15,12 +13,20 @@ import com.zhy.listen.entities.Comment;
 public interface CommentService {
 
     /**
-     * 根据投票信息获取评论
+     * 根据type获取评论
      * 
      * @param comment
      * @return
      */
     public Paging<Comment> getCommentsByTypeAndDependId(Comment comment);
+    
+    /**
+     * 评论数量
+     * 
+     * @param comment
+     * @return
+     */
+    public int getCommentsByTypeAndDependIdCount(Comment comment);
 
     /**
      * 评论(save)

@@ -28,7 +28,8 @@ public class CommentServiceImpl implements CommentService {
         return new Paging<Comment>(total, comment.getPage(), comment.getPageSize(), comments);
     }
     
-    private int getCommentsByTypeAndDependIdCount(Comment comment) {
+    @Override
+    public int getCommentsByTypeAndDependIdCount(Comment comment) {
         return commentDAO.getCommentsByTypeAndDependIdCount(comment);
     }
 

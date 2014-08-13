@@ -76,7 +76,7 @@ public interface FeedNewsService {
      * @param userId
      * @return
      */
-    public List<FeedNews> findBaseFeedsByUserId(Long userId);
+    public List<FeedNews> findBaseFeedsByUserId(FeedNews feedNews);
     
     /**
      * 删除新鲜事

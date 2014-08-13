@@ -67,15 +67,19 @@ public class FeedNewsServiceImplTest extends SuperTest{
 
     @Test
     public void testFindBaseFeedsByUserId() {
-        System.out.println(feedNewsService.findBaseFeedsByUserId(1L));;
+        FeedNews feedNews = new FeedNews();
+        feedNews.setUserId(1L);
+        feedNews.setPageSize(5);
+        feedNews.setPage(1);
+        System.out.println(feedNewsService.findBaseFeedsByUserId(feedNews));;
     }
     
     @Test
     public void testFindByNews() {
         FeedNews feedNews = new FeedNews();
         feedNews.setUserId(1L);
-        feedNews.setPageSize(20);
-        feedNews.setPage(2);
+        feedNews.setPageSize(8);
+        feedNews.setPage(1);
         Paging<FeedNews> findByNews = feedNewsService.findByNews(feedNews);
         System.out.println(findByNews.getResult().size() + "+++++++++++++++++++++++++++++++++++++++");
         System.out.println();

@@ -56,7 +56,16 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     }
     
     private int findByNewsFromDBCount(FeedNews feedNews) {
-        return feedNewsDAO.getByNewsCount(feedNews);
+        String totalKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS_COUNT, feedNews.getUserId());
+        String total = jedisClient.jedis.get(totalKey);
+        int totalRecord = 0;
+        if(total == null || total.length() == 0) {
+            totalRecord =  feedNewsDAO.getByNewsCount(feedNews);
+            jedisClient.jedis.set(totalKey, String.valueOf(totalRecord));
+        } else {
+            totalRecord = Integer.parseInt(total);
+        }
+        return totalRecord;
     }
 
     @Override
@@ -84,25 +93,8 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                 memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
 
                 // 放入个人新鲜事池
-                String profileNewsKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS,
-                        feedNews.getUserId());
-                Paging<FeedNews> profileNews = memcached.get(profileNewsKey);
-                if (profileNews != null && profileNews.getResult() != null && !profileNews.getResult().isEmpty()) {
-                    List<FeedNews> news = new ArrayList<FeedNews>();
-                    news.add(f);
-                    for (FeedNews n : profileNews.getResult()) {
-                        news.add(n);
-                    }
-                    profileNews.setResult(news);
-                    profileNews.setTotalRecord(profileNews.getTotalRecord() + 1);
-                } else {
-                    profileNews = new Paging<FeedNews>();
-                    profileNews.setTotalRecord(1L);
-                    List<FeedNews> news = new ArrayList<FeedNews>();
-                    news.add(f);
-                    profileNews.setResult(news);
-                }
-                memcached.set(profileNewsKey, profileNews, CacheConstants.TIME_HOUR * 2);
+                String profileNewsKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
+                jedisClient.lpush(profileNewsKey, f);
 
                 // 这里应该用消息队列做
                 List<Long> ids = friendService.findFriendIds(f.getUserId());
@@ -181,24 +173,20 @@ public class FeedNewsServiceImpl implements FeedNewsService {
      * @see com.zhy.listen.service.FeedNewsService#findBaseFeedsByUserId(java.lang.Long)
      */
     @Override
-    public List<FeedNews> findBaseFeedsByUserId(Long userId) {
-        String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, userId);
-        Paging<FeedNews> feedNews = memcached.get(key);
-        if (feedNews != null && feedNews.getResult() != null && !feedNews.getResult().isEmpty()
-                && feedNews.getResult().size() >= 5) {
-            return feedNews.getResult().subList(0, 5);
-        } else {
-            FeedNews news = new FeedNews();
-            news.setUserId(userId);
-            news.setPageSize(20);
-            List<FeedNews> list = findByNewsFromDB(news);
-            if (list != null && !list.isEmpty()) {
-                int totalRecord = findByNewsFromDBCount(news);
-                memcached.set(key, new Paging<FeedNews>(totalRecord, 1, 20, list), CacheConstants.TIME_HOUR * 2);
+    public List<FeedNews> findBaseFeedsByUserId(FeedNews feedNews) {
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
+        List<FeedNews> result = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
+        
+        // TODO 是否size不足,需要重新查询?如果确实小于size?
+//        if(result == null || result.isEmpty() || result.size() < feedNews.getPageSize()) {
+        if(result == null || result.isEmpty()) {
+            List<FeedNews> list = findByNewsFromDB(feedNews);
+            if(list != null && !list.isEmpty()){
+                findByNewsFromDBCount(feedNews);
                 return list.size() >= 5 ? list.subList(0, 5) : list.subList(0, list.size());
             }
         }
-        return new ArrayList<FeedNews>();
+        return result;
     }
 
     /* (non-Javadoc)
@@ -212,19 +200,18 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         int startIndex = feedNews.getSinceCount();
         int endIndex = startIndex + feedNews.getPageSize();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-        Paging<FeedNews> list = memcached.get(key);
-        if (list != null && list.getResult() != null && !list.getResult().isEmpty()
-                && list.getResult().size() >= endIndex) {
-            List<FeedNews> s = list.getResult().subList(startIndex, endIndex);
-            result.setResult(s);
+        List<FeedNews> list = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
+        if (list != null && !list.isEmpty() && list.size() == feedNews.getPageSize()) {
+            int totalRecord = findByNewsFromDBCount(feedNews);
+            result = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), list);
         } else {
 
             // 不够条数或者缓存直接为null
-            int fetchSize = 20;
+            int fetchSize = feedNews.getPageSize();
             int sinceCount = 0;
-            if (list != null && list.getResult() != null) {
-                fetchSize = endIndex - list.getResult().size();
-                sinceCount = list.getResult().size();
+            if (list != null) {
+                fetchSize = endIndex - list.size();
+                sinceCount = list.size();
             } else {
                 fetchSize = endIndex;
             }
@@ -235,33 +222,27 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             List<FeedNews> currentResult = findByNewsFromDB(feedNews2);
             if (currentResult != null && !currentResult.isEmpty()) {
                 int totalRecord = findByNewsFromDBCount(feedNews2);
-
+                
                 // 追加
-                if (list != null && list.getResult() != null) {
-                    for(FeedNews f : currentResult) {
-                        if(!list.getResult().contains(f)) {
-                            list.getResult().add(f);
-                        }
-                    }
+                jedisClient.lrem(key, 0, currentResult);
+                jedisClient.rpush(key, currentResult);
+                if(list != null && list.size() > 0) {
+                    list.addAll(currentResult);
                 } else {
-                    if(currentResult.size() > startIndex) {
-                        List<FeedNews> subList = currentResult.subList(startIndex, currentResult.size());
-                        result = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), subList);
-                    }
-                    list = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), currentResult);
-                    
+                    list = currentResult;
                 }
+                result = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), list);
             } else {
                 
                 // 没有查询到，那么缓存中有该页的所有数据
-                if(list != null && list.getResult() != null && !list.getResult().isEmpty()) {
-                    if(list.getResult().size() > startIndex) {
-                        List<FeedNews> subList = list.getResult().subList(startIndex, list.getResult().size());
-                        result = new Paging<FeedNews>(list.getTotalRecord(), feedNews.getPage(), feedNews.getPageSize(), subList);
+                if(list != null) {
+                    if(list.size() > startIndex) {
+                        List<FeedNews> subList = list.subList(startIndex, list.size());
+                        int total = findByNewsFromDBCount(feedNews);
+                        result = new Paging<FeedNews>(total, feedNews.getPage(), feedNews.getPageSize(), subList);
                     }
                 }
             }
-            memcached.set(key, list, CacheConstants.TIME_HOUR * 2);
         }
         return result;
     }

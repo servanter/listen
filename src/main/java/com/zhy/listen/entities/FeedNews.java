@@ -1,6 +1,6 @@
 package com.zhy.listen.entities;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.SubType;
@@ -28,7 +28,7 @@ public class FeedNews extends Page {
 
     private String link;
 
-    private Timestamp createTime;
+    private Date createTime;
 
     private SubType subType;
 
@@ -74,11 +74,11 @@ public class FeedNews extends Page {
         this.link = link;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

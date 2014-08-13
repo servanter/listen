@@ -1,6 +1,7 @@
 package com.zhy.listen.cache;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,9 +15,12 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.DefaultValueProcessor;
 import net.sf.json.processors.JsonBeanProcessor;
 import net.sf.json.processors.JsonValueProcessor;
+import net.sf.json.util.EnumMorpher;
 import net.sf.json.util.JSONUtils;
 
 import org.springframework.stereotype.Component;
+
+import com.zhy.listen.bean.SubType;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -62,6 +66,7 @@ public class JedisClient {
         JsonConfig config = new JsonConfig();
         String[] dateFmts = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
         JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts));
+        JSONUtils.getMorpherRegistry().registerMorpher(new EnumMorpher(SubType.class));
         if (values != null && values.size() > 0) {
             JSONArray array = JSONArray.fromObject(values);
             if(t.getSimpleName().equals("Long")) {
@@ -134,7 +139,12 @@ public class JedisClient {
     }
 
     public Long lrem(String key, long count, Object o) {
-        String str = JSONObject.fromObject(o).toString();
+        String str = "";
+        if(o instanceof List) {
+            str = JSONArray.fromObject(o).toString();
+        } else {
+            str = JSONObject.fromObject(o).toString();
+        }
         return jedis.lrem(key, count, str);
     }
 }

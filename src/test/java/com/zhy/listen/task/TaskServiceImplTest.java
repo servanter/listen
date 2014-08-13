@@ -7,14 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
 
-public class IndexCreateTaskTest extends SuperTest{
+public class TaskServiceImplTest extends SuperTest{
 
+    /**
+     * 
+     */
     @Autowired
-    private IndexCreateTask indexCreateTask;
+    private TaskService taskService;
     
     @Test
-    public void testCreate() {
-        indexCreateTask.create();
+    public void testStart() {
+        taskService.start();
     }
 
 }

@@ -1,39 +1,46 @@
-package com.zhy.listen.task;
+package com.zhy.listen.task.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.IndexEnum;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.indexer.Indexer;
 import com.zhy.listen.bean.indexer.IndexerClass;
-import com.zhy.listen.create.CreateService;
 import com.zhy.listen.entities.Music;
 import com.zhy.listen.service.MusicService;
+import com.zhy.listen.service.UserService;
+import com.zhy.listen.solr.SolrService;
+import com.zhy.listen.task.TaskScheduling;
 
 /**
- * 创建索引
+ * 索引任务
+ * 
  * @author zhanghongyan@outlook.com
  *
  */
-@Component
-public class IndexCreateTask {
+@Service("indexTask")
+public class IndexTask implements TaskScheduling {
 
     @Autowired
     private MusicService musicService;
     
     @Autowired
-    private CreateService createService;
+    private SolrService solrService;
     
-    public void create(){
+    @Autowired
+    private UserService userService;
+    
+    public void invoke(){
         List<Music> musics = musicService.findMusicsByIndex(IndexEnum.INDEXED);
         Indexer indexer = new Indexer();
         indexer.setIndexerClass(IndexerClass.MUSIC);
         indexer.setNeedIndexList(musics);
-        boolean isSuccess = createService.found(indexer);
-        System.out.println(isSuccess);
-        
+        List<UserStatusPointPath> users = userService.findUsersByIndex(IndexEnum.NOT_INDEXED); 
+        indexer.setIndexerClass(IndexerClass.USER);
+        indexer.setNeedIndexList(users);
+        solrService.create(indexer);
     }
 }

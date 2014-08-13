@@ -13,7 +13,7 @@
 		<result property="isValid" column="is_valid" />
 	</resultMap>
 	
-	<resultMap type="feedNewsCount" id="feedNewsCountResult">
+	<resultMap type="feedNewsCount" id="feedNewsCountResult" extends="feedNewsResult">
 		<result property="commentCount" column="comment_count"/>
 	</resultMap>
 

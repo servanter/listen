@@ -25,6 +25,15 @@
 	<select id="getCommentsByTypeAndDependIdCount" parameterType="comment" resultType="java.lang.Integer">
 		SELECT COUNT(*) FROM comment WHERE depend_id = #{dependId} AND type= #{commentType.type}
 	</select>
+	
+	<select id="getCommentsCountsByIds" resultType="java.util.HashMap">
+		SELECT depend_id, COUNT(*) AS count FROM comment WHERE depend_id IN 
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+		AND type= #{commentType.type} GROUP BY depend_id
+	</select>
+	
 	<insert id="save" parameterType="comment">
 		INSERT INTO `comment`
 		(depend_id, user_id, content, user_name, comment_time, type) 

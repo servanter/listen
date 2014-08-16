@@ -1,9 +1,12 @@
 package com.zhy.listen.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.entities.Comment;
 
 @Repository
@@ -40,4 +43,12 @@ public interface CommentDAO {
      * @return
      */
     public int getCommentsByTypeAndDependIdCount(Comment comment);
+
+    /**
+     * 根据id获取count
+     * @param type
+     * @param ids
+     * @return
+     */
+    public List<Map<Integer, Integer>> getCommentsCountsByIds(@Param("commentType") CommentType type, @Param("ids") List<Integer> ids);
 }

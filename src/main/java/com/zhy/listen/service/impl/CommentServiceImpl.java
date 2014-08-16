@@ -1,10 +1,12 @@
 package com.zhy.listen.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.dao.CommentDAO;
 import com.zhy.listen.entities.Comment;
@@ -36,5 +38,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean remove(Long commentId) {
         return commentDAO.delete(commentId) != 0 ? true : false;
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> findCommentsCountsByIds(CommentType type, List<Integer> ids) {
+        return commentDAO.getCommentsCountsByIds(type, ids);
     }
 }

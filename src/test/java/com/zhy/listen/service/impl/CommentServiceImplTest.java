@@ -1,6 +1,8 @@
 package com.zhy.listen.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -71,4 +73,12 @@ public class CommentServiceImplTest extends SuperTest {
         logger.debug("[CommentTest]: Remove comment is " + (isSuccess ? "success" : "fail"));
     }
 
+    @Test
+    public void testGetIds() {
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(1);
+        ids.add(2);
+        List<Map<Integer, Integer>> param = commentService.findCommentsCountsByIds(CommentType.STATUS, ids);
+        System.out.println(param);
+    }
 }

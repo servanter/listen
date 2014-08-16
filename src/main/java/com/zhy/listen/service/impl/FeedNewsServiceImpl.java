@@ -20,7 +20,6 @@ import com.zhy.listen.cache.KeyGenerator;
 import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.dao.FeedNewsDAO;
 import com.zhy.listen.entities.FeedNews;
-import com.zhy.listen.entities.Status;
 import com.zhy.listen.service.FeedNewsFactory;
 import com.zhy.listen.service.FeedNewsService;
 import com.zhy.listen.service.FriendService;

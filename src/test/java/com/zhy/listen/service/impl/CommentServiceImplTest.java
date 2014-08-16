@@ -35,7 +35,7 @@ public class CommentServiceImplTest extends SuperTest {
     @Test
     public void testCommentHasUsername() {
         String username = "test";
-        Comment comment = new Comment(1L, CommentType.INFO, "不错,顶一下", username);
+        Comment comment = new Comment(1L, CommentType.STATUS, "不错,顶一下", username);
         commentService.comment(comment);
         Assert.assertTrue("[CommentTest]: Add comment occur error .", comment.getId() != null);
         logger.debug("[CommentTest]: Comment is " + (comment.getId() != null ? "success" : "fail"));
@@ -44,7 +44,7 @@ public class CommentServiceImplTest extends SuperTest {
     @Test
     public void testCommentHasUserId() {
         String username = "test";
-        Comment comment = new Comment(1212121212L, CommentType.INFO, "不错,顶一下", username, 1L);
+        Comment comment = new Comment(1212121212L, CommentType.STATUS, "不错,顶一下", username, 1L);
         commentService.comment(comment);
         Assert.assertTrue("[CommentTest]: Add comment occur error .", comment.getId() != null);
         logger.debug("[CommentTest]: Comment is " + (comment.getId() != null ? "success" : "fail"));
@@ -52,7 +52,7 @@ public class CommentServiceImplTest extends SuperTest {
 
     @Test
     public void testGetCommentsByInfoId() {
-        Comment comment = new Comment(1212121212L, CommentType.INFO, "testcomment", "匿名");
+        Comment comment = new Comment(1212121212L, CommentType.STATUS, "testcomment", "匿名");
         commentService.comment(comment);
         Paging<Comment> comments = commentService.getCommentsByTypeAndDependId(comment);
         Assert.assertTrue("[CommentTest]: GetComments occur a  error ,Maybe can't find this result", comments != null
@@ -64,7 +64,7 @@ public class CommentServiceImplTest extends SuperTest {
     @Test
     public void testRemove() {
         String username = "test";
-        Comment comment = new Comment(1212121212L, CommentType.INFO, "不错,顶一下", username, 1L);
+        Comment comment = new Comment(1212121212L, CommentType.STATUS, "不错,顶一下", username, 1L);
         commentService.comment(comment);
         boolean isSuccess = commentService.remove(comment.getId());
         Assert.assertTrue("[CommentTest]: Remove comment occur a error .", isSuccess);

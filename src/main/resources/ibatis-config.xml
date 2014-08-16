@@ -20,6 +20,5 @@
 		<typeAlias alias="paging" type="com.zhy.listen.bean.Paging" />
 		<typeAlias alias="indexEnum" type="com.zhy.listen.bean.IndexEnum" />
 		<typeAlias alias="userStatusPointPath" type="com.zhy.listen.bean.UserStatusPointPath" />
-		<typeAlias alias="feedNewsCount" type="com.zhy.listen.bean.FeedNewsCount" />
 	</typeAliases>
 </configuration>

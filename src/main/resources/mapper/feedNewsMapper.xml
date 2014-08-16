@@ -12,23 +12,15 @@
 		<result property="subType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.SubTypeHandler" />
 		<result property="isValid" column="is_valid" />
 	</resultMap>
-	
-	<resultMap type="feedNewsCount" id="feedNewsCountResult" extends="feedNewsResult">
-		<result property="commentCount" column="comment_count"/>
-	</resultMap>
 
-	<select id="getByNews" parameterType="feedNews" resultMap="feedNewsCountResult">
-		SELECT n.*, (CASE WHEN tt.total IS NULL THEN 0 WHEN tt.total IS NOT NULL THEN tt.total END) AS comment_count 
-		FROM news n left JOIN 
-		(SELECT c.depend_id, COUNT(*) AS total FROM comment c INNER JOIN news s ON c.depend_id = s.id WHERE c.type = 1 GROUP BY depend_id)
-		tt on n.id = tt.depend_id
+	<select id="getByNews" parameterType="feedNews" resultMap="feedNewsResult">
+		SELECT * FROM news 
 		<where>
 			<if test="userId != null">
-				n.user_id = #{userId}
+				user_id = #{userId}
 			</if>
 		</where>
 		ORDER BY create_time DESC LIMIT #{sinceCount}, #{pageSize}
-		
 	</select>
 	
 	<select id="getByNewsCount" parameterType="feedNews" resultType="java.lang.Integer">
@@ -57,21 +49,15 @@
 		)
 	</insert>
 	
-	<select id="getByIds" resultMap="feedNewsCountResult">
-		SELECT n.*, (CASE WHEN tt.total IS NULL THEN 0 WHEN tt.total IS NOT NULL THEN tt.total END) AS comment_count 
-		FROM news n left JOIN 
-		(SELECT c.depend_id, COUNT(*) AS total FROM comment c INNER JOIN news s ON c.depend_id = s.id WHERE c.type = 1 AND c.depend_id = 1 GROUP BY depend_id)
-		tt on n.id = tt.depend_id WHERE n.id IN 
+	<select id="getByIds" resultMap="feedNewsResult">
+		SELECT * FROM news WHERE id IN 
 		<foreach collection="list" item="l" open="(" close=")" separator=",">
 			#{l}
 		</foreach>
 	</select>
 	
-	<select id="getById" parameterType="java.lang.Long" resultMap="feedNewsCountResult">
-		SELECT n.*, (CASE WHEN tt.total IS NULL THEN 0 WHEN tt.total IS NOT NULL THEN tt.total END) AS comment_count 
-		FROM news n left JOIN 
-		(SELECT c.depend_id, COUNT(*) AS total FROM comment c INNER JOIN news s ON c.depend_id = s.id WHERE c.type = 1 AND c.depend_id = 1 GROUP BY depend_id)
-		tt on n.id = tt.depend_id WHERE n.id = #{id}
+	<select id="getById" parameterType="java.lang.Long" resultMap="feedNewsResult">
+		SELECT * FROM news WHERE id = #{id}
 	</select>
 	
 	<update id="delete" parameterType="feedNews">

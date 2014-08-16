@@ -3,7 +3,6 @@ package com.zhy.listen.service;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.Response;
@@ -24,7 +23,7 @@ public interface FeedNewsService {
      * @param feedNews
      * @return
      */
-    public Paging<FeedNewsCount> findByNews(FeedNews feedNews);
+    public Paging<FeedNews> findByNews(FeedNews feedNews);
 
     /**
      * 获取新鲜事详情
@@ -52,7 +51,7 @@ public interface FeedNewsService {
      * @param requestTime
      * @return
      */
-    public List<FeedNewsCount> findUnreadList(Long userId, Timestamp requestTime);
+    public List<FeedNews> findUnreadList(Long userId, Timestamp requestTime);
 
     /**
      * 获取未读条数
@@ -69,7 +68,7 @@ public interface FeedNewsService {
      * @param ids
      * @return
      */
-    public List<FeedNewsCount> findByIds(List<Long> ids);
+    public List<FeedNews> findByIds(List<Long> ids);
     
     /**
      * 获取某用户新鲜事(前5条)
@@ -77,7 +76,7 @@ public interface FeedNewsService {
      * @param userId
      * @return
      */
-    public List<FeedNewsCount> findBaseFeedsByUserId(FeedNews feedNews);
+    public List<FeedNews> findBaseFeedsByUserId(FeedNews feedNews);
     
     /**
      * 删除新鲜事

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.zhy.listen.api.ApiFeedNewsService;
 import com.zhy.listen.bean.ErrorCode;
+import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.FeedNews;
@@ -44,7 +45,7 @@ public class ApiFeedNewsServiceImpl implements ApiFeedNewsService {
 
     @Override
     public QueryResult findUnreadList(Long userId, Timestamp requestTime) {
-        List<FeedNews> news  = feedNewsService.findUnreadList(userId, requestTime);
+        List<FeedNewsCount> news  = feedNewsService.findUnreadList(userId, requestTime);
         QueryResult queryResult = new QueryResult();
         queryResult.setErrorCode(ErrorCode.SUCCESS);
         queryResult.setHitCount(news == null ? 0 : news.size());

@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.entities.FeedNews;
 
 @Repository
 public interface FeedNewsDAO {
 
-    List<FeedNews> getByNews(FeedNews feedNews);
+    List<FeedNewsCount> getByNews(FeedNews feedNews);
 
     int save(FeedNews feedNews);
 
-    List<FeedNews> getByIds(List<Long> ids);
+    List<FeedNewsCount> getByIds(List<Long> ids);
 
-    FeedNews getById(Long id);
+    FeedNewsCount getById(Long id);
 
     int getByNewsCount(FeedNews feedNews);
     

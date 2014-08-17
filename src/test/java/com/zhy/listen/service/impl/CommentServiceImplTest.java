@@ -75,10 +75,10 @@ public class CommentServiceImplTest extends SuperTest {
 
     @Test
     public void testGetIds() {
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add(1);
-        ids.add(2);
-        List<Map<Integer, Integer>> param = commentService.findCommentsCountsByIds(CommentType.STATUS, ids);
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(1L);
+        ids.add(2L);
+        Map<Long, Integer> param = commentService.findCommentsCountsByIds(CommentType.STATUS, ids);
         System.out.println(param);
     }
 }

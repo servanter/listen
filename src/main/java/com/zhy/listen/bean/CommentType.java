@@ -10,7 +10,12 @@ public enum CommentType {
     /**
      * 状态评论
      */
-    STATUS(1);
+    STATUS(1),
+   
+    /**
+     * 新鲜事评论
+     */
+    FEEDNEWS(2);
 
     private int type;
 

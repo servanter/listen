@@ -147,4 +147,11 @@ public class JedisClient {
         }
         return jedis.lrem(key, count, str);
     }
+    
+    public String set(String key, Object value) {
+        if(value == null) {
+            return null;
+        }
+        return jedis.set(key, value.toString());
+    }
 }

@@ -72,4 +72,9 @@ public class CacheConstants {
      * 个人好友ID列表
      */
     public static final String CACHE_USER_FRIEND_IDS = "UFI";
+    
+    /**
+     * 评论count
+     */
+    public static final String CACHE_COMMENT_COUNT = "CC";
 }

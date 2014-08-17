@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
@@ -20,6 +21,7 @@ import com.zhy.listen.cache.KeyGenerator;
 import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.dao.FeedNewsDAO;
 import com.zhy.listen.entities.FeedNews;
+import com.zhy.listen.service.CommentService;
 import com.zhy.listen.service.FeedNewsFactory;
 import com.zhy.listen.service.FeedNewsService;
 import com.zhy.listen.service.FriendService;
@@ -43,6 +45,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private Memcached memcached;
@@ -179,10 +184,10 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         // TODO 是否size不足,需要重新查询?如果确实小于size?
 //        if(result == null || result.isEmpty() || result.size() < feedNews.getPageSize()) {
         if(result == null || result.isEmpty()) {
-            List<FeedNews> list = findByNewsFromDB(feedNews);
-            if(list != null && !list.isEmpty()){
+            Paging<FeedNews> list = findByNews(feedNews);
+            if(list != null && !list.getResult().isEmpty()){
                 findByNewsFromDBCount(feedNews);
-                return list.size() >= 5 ? list.subList(0, 5) : list.subList(0, list.size());
+                return list.getResult().size() >= 5 ? list.getResult().subList(0, 5) : list.getResult().subList(0, list.getResult().size());
             }
         }
         return result;
@@ -242,6 +247,14 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                     }
                 }
             }
+        }
+        if(result != null && !result.getResult().isEmpty()) {
+            List<Long> ids = new ArrayList<Long>();
+            for(FeedNews news : result.getResult()) {
+                ids.add(news.getId());
+            }
+            Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(CommentType.FEEDNEWS, ids);
+            
         }
         return result;
     }

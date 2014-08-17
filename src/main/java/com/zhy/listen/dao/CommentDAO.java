@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.zhy.listen.bean.CommentCount;
 import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.entities.Comment;
 
@@ -50,5 +51,5 @@ public interface CommentDAO {
      * @param ids
      * @return
      */
-    public List<Map<Integer, Integer>> getCommentsCountsByIds(@Param("commentType") CommentType type, @Param("ids") List<Integer> ids);
+    public List<CommentCount> getCommentsCountsByIds(@Param("commentType") CommentType type, @Param("ids") List<Long> ids);
 }

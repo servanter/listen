@@ -16,7 +16,12 @@
 		<result property="commentType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.CommentTypeHandler" />
 		<result property="isValid" column="is_valid" />
 	</resultMap>
-
+	
+	<resultMap id="commentCountResult" type="commentCount">
+		<result property="dependId" column="depend_id"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
 	<select id="getCommentsByTypeAndDependId" parameterType="comment"
 		resultMap="commentResult">
 		SELECT * FROM `comment` WHERE depend_id = #{dependId} AND type= #{commentType.type}
@@ -26,7 +31,7 @@
 		SELECT COUNT(*) FROM comment WHERE depend_id = #{dependId} AND type= #{commentType.type}
 	</select>
 	
-	<select id="getCommentsCountsByIds" resultType="java.util.HashMap">
+	<select id="getCommentsCountsByIds" resultMap="commentCountResult">
 		SELECT depend_id, COUNT(*) AS count FROM comment WHERE depend_id IN 
 		<foreach collection="ids" open="(" close=")" separator="," item="id">
 			#{id}

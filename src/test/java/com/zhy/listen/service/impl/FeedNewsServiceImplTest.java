@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhy.listen.SuperTest;
+import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.SubType;
 import com.zhy.listen.entities.FeedNews;
@@ -47,19 +48,19 @@ public class FeedNewsServiceImplTest extends SuperTest{
         int count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
         System.out.println(count);
         
-//        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
-//        System.out.println(list);
+        List<FeedNewsCount> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
+        System.out.println(list);
+        
+        count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
+        System.out.println(count);
+        
+//        FeedNews feedNews = new FeedNews();
+//        feedNews.setId(80L);
+//        feedNews.setSubType(SubType.STATUS);
+//        feedNewsService.destory(feedNews);
 //        
 //        count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
 //        System.out.println(count);
-        
-        FeedNews feedNews = new FeedNews();
-        feedNews.setId(80L);
-        feedNews.setSubType(SubType.STATUS);
-        feedNewsService.destory(feedNews);
-//        
-        count = feedNewsService.findUnreadCount(2L, new Timestamp(System.currentTimeMillis()));
-        System.out.println(count);
 //        
 //        List<FeedNews> list = feedNewsService.findUnreadList(2L, new Timestamp(System.currentTimeMillis()));
 //        System.out.println(list);
@@ -80,7 +81,7 @@ public class FeedNewsServiceImplTest extends SuperTest{
         feedNews.setUserId(1L);
         feedNews.setPageSize(8);
         feedNews.setPage(1);
-        Paging<FeedNews> findByNews = feedNewsService.findByNews(feedNews);
+        Paging<FeedNewsCount> findByNews = feedNewsService.findByNews(feedNews);
         System.out.println(findByNews.getResult().size() + "+++++++++++++++++++++++++++++++++++++++");
         System.out.println();
     }

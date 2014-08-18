@@ -72,6 +72,12 @@ public class CommentServiceImpl implements CommentService {
                     jedisClient.set(key, commentCount.getCount());
                     result.put(commentCount.getDependId(), commentCount.getCount());
                 }
+            } else {
+                for (Long id : ids) {
+                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + type.name(), id);
+                    jedisClient.set(key, 0);
+                    result.put(id, 0);
+                }
             }
         }
         return result;

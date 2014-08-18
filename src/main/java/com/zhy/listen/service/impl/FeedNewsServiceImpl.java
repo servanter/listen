@@ -28,6 +28,7 @@ import com.zhy.listen.service.FeedNewsService;
 import com.zhy.listen.service.FriendService;
 import com.zhy.listen.service.OnlineService;
 import com.zhy.listen.service.UserService;
+import com.zhy.listen.util.BeanUtils;
 
 @Service
 public class FeedNewsServiceImpl implements FeedNewsService {
@@ -126,9 +127,12 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.zhy.listen.service.FeedNewsService#findUnreadList(java.lang.Long, java.sql.Timestamp)
+     */
     @Override
-    public List<FeedNews> findUnreadList(Long userId, Timestamp requestTime) {
-        List<FeedNews> result = new ArrayList<FeedNews>();
+    public List<FeedNewsCount> findUnreadList(Long userId, Timestamp requestTime) {
+        List<FeedNews> feedList = new ArrayList<FeedNews>();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, userId);
         List<CacheNewFeed> newFeeds = jedisClient.lrange(key, 0, -1, CacheNewFeed.class);
 
@@ -140,7 +144,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             }
             List<Long> needFromDB = new ArrayList<Long>();
             Map<String, FeedNews> feedNews = memcached.getMulti(keys);
-            result.addAll(feedNews.values());
+            feedList.addAll(feedNews.values());
             for (String k : keys) {
                 if (!feedNews.containsKey(k)) {
                     needFromDB.add(Long.parseLong(KeyGenerator.getRowObject(k, CacheConstants.CACHE_FEED_NEWS)));
@@ -150,11 +154,11 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             // 从数据库中查询
             if (needFromDB.size() > 0) {
                 List<FeedNews> list = findByIds(needFromDB);
-                result.addAll(list);
+                feedList.addAll(list);
             }
         }
         jedisClient.jedis.del(key);
-        return result;
+        return initFeedNewsComment(feedList);
     }
 
     @Override
@@ -178,18 +182,21 @@ public class FeedNewsServiceImpl implements FeedNewsService {
      * @see com.zhy.listen.service.FeedNewsService#findBaseFeedsByUserId(java.lang.Long)
      */
     @Override
-    public List<FeedNews> findBaseFeedsByUserId(FeedNews feedNews) {
+    public List<FeedNewsCount> findBaseFeedsByUserId(FeedNews feedNews) {
+        List<FeedNewsCount> result = new ArrayList<FeedNewsCount>();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-        List<FeedNews> result = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
+        List<FeedNews> feedList = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
         
         // TODO 是否size不足,需要重新查询?如果确实小于size?
 //        if(result == null || result.isEmpty() || result.size() < feedNews.getPageSize()) {
-        if(result == null || result.isEmpty()) {
-            Paging<FeedNews> list = findByNews(feedNews);
+        if(feedList == null || feedList.isEmpty()) {
+            Paging<FeedNewsCount> list = findByNews(feedNews);
             if(list != null && !list.getResult().isEmpty()){
                 findByNewsFromDBCount(feedNews);
                 return list.getResult().size() >= 5 ? list.getResult().subList(0, 5) : list.getResult().subList(0, list.getResult().size());
             }
+        } else {
+            result = initFeedNewsComment(feedList);
         }
         return result;
     }
@@ -198,9 +205,8 @@ public class FeedNewsServiceImpl implements FeedNewsService {
      * @see com.zhy.listen.service.FeedNewsService#findByNews(com.zhy.listen.entities.FeedNews)
      */
     @Override
-    public Paging<FeedNews> findByNews(FeedNews feedNews) {
+    public Paging<FeedNewsCount> findByNews(FeedNews feedNews) {
         List<FeedNews> feedList = new ArrayList<FeedNews>();
-        List<FeedNewsCount> listCount = new ArrayList<FeedNewsCount>();
         int totalRecord = 0;
         
         // 构造方法中有计算sinceCount
@@ -251,25 +257,10 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                 }
             }
         }
-        if(feedList != null && !feedList.isEmpty()) {
-            List<Long> ids = new ArrayList<Long>();
-            for(FeedNews news : feedList) {
-                ids.add(news.getId());
-            }
-            Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(CommentType.FEEDNEWS, ids);
-            if(feedList != null && !feedList.isEmpty()) {
-                for(FeedNews f : feedList) {
-                    FeedNewsCount feedNewsCount = (FeedNewsCount) f;
-                    if(commentCounts.containsKey(feedNewsCount.getId())) {
-                        feedNewsCount.setCommentCount(commentCounts.get(feedNewsCount.getId()));
-                    } else {
-                        feedNewsCount.setCommentCount(0);
-                    }
-                    listCount.add(feedNewsCount);
-                }
-            }
-        }
-        return null;
+        
+        // 初始化评论数
+        List<FeedNewsCount> listCount = initFeedNewsComment(feedList);
+        return new Paging<FeedNewsCount>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), listCount);
     }
 
     @Override
@@ -307,6 +298,33 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * 封装评论数
+     * 
+     * @param feedNews
+     * @return
+     */
+    private List<FeedNewsCount> initFeedNewsComment(List<FeedNews> feedNews) {
+        List<FeedNewsCount> result = new ArrayList<FeedNewsCount>();
+        if(feedNews != null && !feedNews.isEmpty()) {
+            List<Long> ids = new ArrayList<Long>();
+            for(FeedNews news : feedNews) {
+                ids.add(news.getId());
+            }
+            Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(CommentType.FEEDNEWS, ids);
+            for(FeedNews f : feedNews) {
+                FeedNewsCount feedNewsCount = BeanUtils.feedNews2FeedNewsCount(f);
+                if(commentCounts.containsKey(feedNewsCount.getId())) {
+                    feedNewsCount.setCommentCount(commentCounts.get(feedNewsCount.getId()));
+                } else {
+                    feedNewsCount.setCommentCount(0);
+                }
+                result.add(feedNewsCount);
+            }
+        }
+        return result;
     }
 
 }

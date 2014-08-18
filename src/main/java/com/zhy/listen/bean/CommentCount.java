@@ -36,7 +36,6 @@ public class CommentCount {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((count == null) ? 0 : count.hashCode());
         result = prime * result + ((dependId == null) ? 0 : dependId.hashCode());
         return result;
     }
@@ -50,11 +49,6 @@ public class CommentCount {
         if (getClass() != obj.getClass())
             return false;
         CommentCount other = (CommentCount) obj;
-        if (count == null) {
-            if (other.count != null)
-                return false;
-        } else if (!count.equals(other.count))
-            return false;
         if (dependId == null) {
             if (other.dependId != null)
                 return false;

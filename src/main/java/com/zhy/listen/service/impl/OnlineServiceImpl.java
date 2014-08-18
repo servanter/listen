@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.UserStatusPointPath;
+import com.zhy.listen.bean.cache.CacheNewFeed;
 import com.zhy.listen.bean.indexer.IndexerClass;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.cache.CacheConstants;
@@ -53,11 +54,14 @@ public class OnlineServiceImpl implements OnlineService {
     @Override
     public int pushUsers(List<Long> ids, Timestamp currentTime, FeedNews feedNews) {
         int count = 0;
+        CacheNewFeed cacheNewFeed = new CacheNewFeed();
+        cacheNewFeed.setNewId(feedNews.getId());
+        cacheNewFeed.setCreateTime(currentTime);
         for(int i = 0; i < ids.size(); i++) {
             String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, ids.get(i));
             
             // 推送
-            count += jedisClient.lpush(key, feedNews);
+            count += jedisClient.lpush(key, cacheNewFeed);
         }
         
         // 推送
@@ -108,9 +112,12 @@ public class OnlineServiceImpl implements OnlineService {
     @Override
     public int removeUsers(List<Long> ids, Timestamp currentTime, FeedNews feedNews) {
         int count = 0;
+        CacheNewFeed cacheNewFeed = new CacheNewFeed();
+        cacheNewFeed.setNewId(feedNews.getId());
+        cacheNewFeed.setCreateTime(currentTime);
         for(int i = 0; i < ids.size(); i++) {
             String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, ids.get(i));
-            count += jedisClient.lrem(key, 0, feedNews);
+            count += jedisClient.lrem(key, 0, cacheNewFeed);
         }
 //        CacheNewFeed current = new CacheNewFeed();
 //        current.setNewId(newId);

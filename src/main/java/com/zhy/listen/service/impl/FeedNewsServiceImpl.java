@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Page;
@@ -310,10 +309,14 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         List<FeedNewsCount> result = new ArrayList<FeedNewsCount>();
         if(feedNews != null && !feedNews.isEmpty()) {
             List<Long> ids = new ArrayList<Long>();
+            List<SubType> types = new ArrayList<SubType>();
             for(FeedNews news : feedNews) {
-                ids.add(news.getId());
+                
+                // 每一个子类的id
+                ids.add(news.getSubNewsId());
+                types.add(news.getSubType());
             }
-            Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(CommentType.FEEDNEWS, ids);
+            Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(types, ids);
             for(FeedNews f : feedNews) {
                 FeedNewsCount feedNewsCount = BeanUtils.feedNews2FeedNewsCount(f);
                 if(commentCounts.containsKey(feedNewsCount.getId())) {

@@ -13,13 +13,14 @@
 		<result property="reUserName" column="re_user_name" />
 		<result property="commentTime" column="comment_time" />
 		<result property="modifyTime" column="modify_time" />
-		<result property="commentType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.CommentTypeHandler" />
+		<result property="commentType" column="type" typeHandler="com.zhy.listen.bean.typeHandler.SubTypeHandler" />
 		<result property="isValid" column="is_valid" />
 	</resultMap>
 	
 	<resultMap id="commentCountResult" type="commentCount">
 		<result property="dependId" column="depend_id"/>
 		<result property="count" column="count"/>
+		<result property="type" column="type" typeHandler="com.zhy.listen.bean.typeHandler.SubTypeHandler"/>
 	</resultMap>
 	
 	<select id="getCommentsByTypeAndDependId" parameterType="comment"
@@ -32,11 +33,13 @@
 	</select>
 	
 	<select id="getCommentsCountsByIds" resultMap="commentCountResult">
-		SELECT depend_id, COUNT(*) AS count FROM comment WHERE depend_id IN 
-		<foreach collection="ids" open="(" close=")" separator="," item="id">
-			#{id}
-		</foreach>
-		AND type= #{commentType.type} GROUP BY depend_id
+		SELECT depend_id, COUNT(*) AS count, type FROM comment
+		<where>
+			<foreach collection="commentTypes" item="type" index="index" separator=" OR " open="(" close=")">
+				type = #{type.type} AND depend_id = #{ids[${index}]}
+			</foreach>
+		</where>
+		GROUP BY depend_id
 	</select>
 	
 	<insert id="save" parameterType="comment">

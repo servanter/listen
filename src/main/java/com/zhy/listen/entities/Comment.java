@@ -2,8 +2,8 @@ package com.zhy.listen.entities;
 
 import java.sql.Timestamp;
 
-import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.Page;
+import com.zhy.listen.bean.SubType;
 
 /**
  * 评论
@@ -68,7 +68,7 @@ public class Comment extends Page implements java.io.Serializable {
     /**
      * 类别
      */
-    private CommentType commentType;
+    private SubType commentType;
 
     /**
      * 是否可用
@@ -79,7 +79,7 @@ public class Comment extends Page implements java.io.Serializable {
         commentTime = new Timestamp(System.currentTimeMillis());
     }
     
-    public Comment(Long dependId, CommentType commentType, String content, String userName) {
+    public Comment(Long dependId, SubType commentType, String content, String userName) {
         super();
         this.dependId = dependId;
         this.content = content;
@@ -87,7 +87,7 @@ public class Comment extends Page implements java.io.Serializable {
         this.commentType = commentType;
     }
     
-    public Comment(Long dependId, CommentType commentType, String content, String userName, Long id) {
+    public Comment(Long dependId, SubType commentType, String content, String userName, Long id) {
         super();
         this.dependId = dependId;
         this.content = content;
@@ -178,11 +178,11 @@ public class Comment extends Page implements java.io.Serializable {
         this.modifyTime = modifyTime;
     }
 
-    public CommentType getCommentType() {
+    public SubType getCommentType() {
         return commentType;
     }
 
-    public void setCommentType(CommentType commentType) {
+    public void setCommentType(SubType commentType) {
         this.commentType = commentType;
     }
 

@@ -3,9 +3,8 @@ package com.zhy.listen.service;
 import java.util.List;
 import java.util.Map;
 
-import com.zhy.listen.bean.CommentCount;
-import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.SubType;
 import com.zhy.listen.entities.Comment;
 
 
@@ -36,11 +35,11 @@ public interface CommentService {
     /**
      * 根据ids跟type获取count
      * 
-     * @param type
+     * @param types
      * @param ids
      * @return
      */
-    public Map<Long, Integer> findCommentsCountsByIds(CommentType type, List<Long> ids);
+    public Map<Long, Integer> findCommentsCountsByIds(List<SubType> types, List<Long> ids);
 
     /**
      * 评论(save)

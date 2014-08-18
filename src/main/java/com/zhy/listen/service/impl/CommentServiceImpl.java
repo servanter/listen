@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.CommentCount;
-import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.SubType;
 import com.zhy.listen.cache.CacheConstants;
 import com.zhy.listen.cache.JedisClient;
 import com.zhy.listen.cache.KeyGenerator;
@@ -29,7 +29,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public boolean comment(Comment comment) {
-        return commentDAO.save(comment) > 0;
+        boolean isSuccess = commentDAO.save(comment) > 0;
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
+        jedisClient.jedis.incr(key);
+        return isSuccess;
     }
 
     @Override
@@ -50,12 +53,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<Long, Integer> findCommentsCountsByIds(CommentType type, List<Long> ids) {
+    public Map<Long, Integer> findCommentsCountsByIds(List<SubType> types, List<Long> ids) {
         Map<Long, Integer> result = new HashMap<Long, Integer>();
         List<Long> needFromDBIds = new ArrayList<Long>();
-        String keyPrefix = CacheConstants.CACHE_COMMENT_COUNT + type.name();
         String[] keys = new String[ids.size()];
         for (int i = 0; i < keys.length; i++) {
+            String keyPrefix = CacheConstants.CACHE_COMMENT_COUNT + types.get(i);
             String key = KeyGenerator.generateKey(keyPrefix, ids.get(i));
             String value = jedisClient.jedis.get(key);
             if (value == null) {
@@ -65,18 +68,18 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         if (result.size() != ids.size()) {
-            List<CommentCount> commentCounts = commentDAO.getCommentsCountsByIds(type, ids);
+            List<CommentCount> commentCounts = commentDAO.getCommentsCountsByIds(types, ids);
             if (commentCounts != null && commentCounts.size() > 0) {
                 for (CommentCount commentCount : commentCounts) {
-                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + type.name(), commentCount.getDependId());
+                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + commentCount.getType().name(), commentCount.getDependId());
                     jedisClient.set(key, commentCount.getCount());
                     result.put(commentCount.getDependId(), commentCount.getCount());
                 }
             } else {
-                for (Long id : ids) {
-                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + type.name(), id);
+                for (int i = 0; i < ids.size(); i++) {
+                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + types.get(i), ids.get(i));
                     jedisClient.set(key, 0);
-                    result.put(id, 0);
+                    result.put(ids.get(i), 0);
                 }
             }
         }

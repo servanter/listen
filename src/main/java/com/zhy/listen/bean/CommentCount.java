@@ -10,6 +10,16 @@ public class CommentCount {
     private Long dependId;
     
     private Integer count;
+    
+    private SubType type;
+
+    public SubType getType() {
+        return type;
+    }
+
+    public void setType(SubType type) {
+        this.type = type;
+    }
 
     public Long getDependId() {
         return dependId;
@@ -29,7 +39,7 @@ public class CommentCount {
 
     @Override
     public String toString() {
-        return "CommentCount [dependId=" + dependId + ", count=" + count + "]";
+        return "CommentCount [dependId=" + dependId + ", count=" + count + ", type=" + type + "]";
     }
 
     @Override

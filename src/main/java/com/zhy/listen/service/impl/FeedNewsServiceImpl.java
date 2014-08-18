@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.CommentType;
 import com.zhy.listen.bean.ErrorCode;
+import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.Response;
@@ -198,16 +199,18 @@ public class FeedNewsServiceImpl implements FeedNewsService {
      */
     @Override
     public Paging<FeedNews> findByNews(FeedNews feedNews) {
-
-        Paging<FeedNews> result = new Paging<FeedNews>();
+        List<FeedNews> feedList = new ArrayList<FeedNews>();
+        List<FeedNewsCount> listCount = new ArrayList<FeedNewsCount>();
+        int totalRecord = 0;
+        
         // 构造方法中有计算sinceCount
         int startIndex = feedNews.getSinceCount();
         int endIndex = startIndex + feedNews.getPageSize();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
         List<FeedNews> list = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
         if (list != null && !list.isEmpty() && list.size() == feedNews.getPageSize()) {
-            int totalRecord = findByNewsFromDBCount(feedNews);
-            result = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), list);
+            totalRecord = findByNewsFromDBCount(feedNews);
+            feedList = list;
         } else {
 
             // 不够条数或者缓存直接为null
@@ -225,7 +228,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             feedNews2.setSinceCount(sinceCount);
             List<FeedNews> currentResult = findByNewsFromDB(feedNews2);
             if (currentResult != null && !currentResult.isEmpty()) {
-                int totalRecord = findByNewsFromDBCount(feedNews2);
+                totalRecord = findByNewsFromDBCount(feedNews2);
                 
                 // 追加
                 jedisClient.lrem(key, 0, currentResult);
@@ -235,28 +238,38 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                 } else {
                     list = currentResult;
                 }
-                result = new Paging<FeedNews>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), list);
+                feedList = list;
             } else {
                 
                 // 没有查询到，那么缓存中有该页的所有数据
                 if(list != null) {
                     if(list.size() > startIndex) {
                         List<FeedNews> subList = list.subList(startIndex, list.size());
-                        int total = findByNewsFromDBCount(feedNews);
-                        result = new Paging<FeedNews>(total, feedNews.getPage(), feedNews.getPageSize(), subList);
+                        totalRecord = findByNewsFromDBCount(feedNews);
+                        feedList = subList;
                     }
                 }
             }
         }
-        if(result != null && !result.getResult().isEmpty()) {
+        if(feedList != null && !feedList.isEmpty()) {
             List<Long> ids = new ArrayList<Long>();
-            for(FeedNews news : result.getResult()) {
+            for(FeedNews news : feedList) {
                 ids.add(news.getId());
             }
             Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(CommentType.FEEDNEWS, ids);
-            
+            if(feedList != null && !feedList.isEmpty()) {
+                for(FeedNews f : feedList) {
+                    FeedNewsCount feedNewsCount = (FeedNewsCount) f;
+                    if(commentCounts.containsKey(feedNewsCount.getId())) {
+                        feedNewsCount.setCommentCount(commentCounts.get(feedNewsCount.getId()));
+                    } else {
+                        feedNewsCount.setCommentCount(0);
+                    }
+                    listCount.add(feedNewsCount);
+                }
+            }
         }
-        return result;
+        return null;
     }
 
     @Override

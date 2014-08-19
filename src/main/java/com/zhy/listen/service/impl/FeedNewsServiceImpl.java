@@ -208,9 +208,6 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         List<FeedNews> feedList = new ArrayList<FeedNews>();
         int totalRecord = 0;
         
-        // 构造方法中有计算sinceCount
-        int startIndex = feedNews.getSinceCount();
-        int endIndex = startIndex + feedNews.getPageSize();
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
         List<FeedNews> list = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
         if (list != null && !list.isEmpty() && list.size() == feedNews.getPageSize()) {
@@ -218,6 +215,10 @@ public class FeedNewsServiceImpl implements FeedNewsService {
             feedList = list;
         } else {
 
+            // 构造方法中有计算sinceCount
+            int startIndex = feedNews.getSinceCount();
+            int endIndex = startIndex + feedNews.getPageSize();
+            
             // 不够条数或者缓存直接为null
             int fetchSize = feedNews.getPageSize();
             int sinceCount = 0;

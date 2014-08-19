@@ -23,9 +23,8 @@
 		<result property="type" column="type" typeHandler="com.zhy.listen.bean.typeHandler.SubTypeHandler"/>
 	</resultMap>
 	
-	<select id="getCommentsByTypeAndDependId" parameterType="comment"
-		resultMap="commentResult">
-		SELECT * FROM `comment` WHERE depend_id = #{dependId} AND type= #{commentType.type}
+	<select id="getCommentsByTypeAndDependId" parameterType="comment" resultMap="commentResult">
+		SELECT * FROM `comment` WHERE depend_id = #{dependId} AND type= #{commentType.type} ORDER BY comment_time DESC LIMIT #{sinceCount}, #{pageSize}
 	</select>
 	
 	<select id="getCommentsByTypeAndDependIdCount" parameterType="comment" resultType="java.lang.Integer">
@@ -57,4 +56,15 @@
 		UPDATE `comment` SET is_valid=false WHERE id = #{id}
 	</update>
 
+	<select id="getById" parameterType="java.lang.Long" resultMap="commentResult">
+		SELECT * FROM comment WHERE id = #{id} AND is_valid = true
+	</select>
+	
+	<select id="getByIds" resultMap="commentResult">
+		SELECT * FROM comment WHERE id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+		ORDER BY comment_time DESC
+	</select>
 </mapper>

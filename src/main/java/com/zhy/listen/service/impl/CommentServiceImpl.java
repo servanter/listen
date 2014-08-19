@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.solr.common.util.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import t4j.sohu.data.NewCounts;
 
 import com.zhy.listen.bean.CommentCount;
 import com.zhy.listen.bean.Paging;
@@ -14,6 +17,7 @@ import com.zhy.listen.bean.SubType;
 import com.zhy.listen.cache.CacheConstants;
 import com.zhy.listen.cache.JedisClient;
 import com.zhy.listen.cache.KeyGenerator;
+import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.dao.CommentDAO;
 import com.zhy.listen.entities.Comment;
 import com.zhy.listen.service.CommentService;
@@ -26,30 +30,138 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private JedisClient jedisClient;
+    
+    @Autowired
+    private Memcached memcached;
 
     @Override
     public boolean comment(Comment comment) {
         boolean isSuccess = commentDAO.save(comment) > 0;
+        
+        // 根据dependId增加评论个数
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
         jedisClient.jedis.incr(key);
+        
+        // 放入单条
+        findById(comment.getId());
+        
+        // 放入关联到的新鲜事
+        String newsKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_ID_LIST + comment.getCommentType().name(), comment.getDependId());
+        jedisClient.lpush(newsKey, comment.getId());
         return isSuccess;
     }
 
     @Override
     public Paging<Comment> getCommentsByTypeAndDependId(Comment comment) {
-        List<Comment> comments = commentDAO.getCommentsByTypeAndDependId(comment);
-        int total = getCommentsByTypeAndDependIdCount(comment);
-        return new Paging<Comment>(total, comment.getPage(), comment.getPageSize(), comments);
+        List<Comment> result = new ArrayList<Comment>();
+        int totalRecord = 0;
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_ID_LIST + comment.getCommentType().name(), comment.getDependId());
+        List<Long> ids = jedisClient.lrange(key, comment.getSinceCount(), comment.getEndPoint());
+        if(ids == null) {
+            List<Comment> comments = commentDAO.getCommentsByTypeAndDependId(comment);
+            
+            // 存放单条数据
+            if(comments != null && comments.size() > 0) {
+                List<Long> idList = new ArrayList<Long>();
+                for(Comment c : comments) {
+                    String everyKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, c.getId());
+                    memcached.set(everyKey, c, CacheConstants.TIME_HOUR * 4);
+                    idList.add(c.getId());
+                }
+                
+                // id list key
+                String idListKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_ID_LIST + comment.getCommentType().name(), comment.getDependId());
+                jedisClient.rpush(idListKey, idList);
+            }
+            int total = getCommentsByTypeAndDependIdCount(comment);
+            return new Paging<Comment>(total, comment.getPage(), comment.getPageSize(), comments);
+        } else {
+            
+            // 从memcached获取单条
+            String keys[] = new String[ids.size()];
+            for (int i = 0; i < ids.size(); i++) {
+                keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, ids.get(i));
+            }
+            Map<String, Comment> comments = memcached.getMulti(keys);
+            if(comments == null) {
+                comments = new HashMap<String, Comment>();
+            }
+            if(comments.size() != keys.length) {
+                
+                // 重新查询该分页数据
+                Comment newComment = new Comment();
+                newComment.setCommentType(comment.getCommentType());
+                newComment.setDependId(comment.getDependId());
+                newComment.setPageSize(comment.getPageSize());
+                newComment.setSinceCount(comment.getSinceCount());
+                List<Comment> currentComments = findCommentsFromDB(newComment);
+                List<Long> needPushIds = new ArrayList<Long>();
+                if(currentComments != null && currentComments.size() > 0) {
+                    for(Comment c : currentComments) {
+                        comments.put(KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, c.getId()), c);
+                        String everyKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, c.getId());
+                        memcached.set(everyKey, c, CacheConstants.TIME_HOUR * 4);
+                        if(!ids.contains(c.getId())) {
+                            needPushIds.add(c.getId());
+                        }
+                    }
+                }
+                
+                // 如果redis中没有,那么为新的数据,需要重新push把id到redis中
+                if(needPushIds.size() > 0) {
+                    jedisClient.rpush(key, needPushIds);
+                }
+                
+                // 重新排序
+                for(String eKey : keys) {
+                    result.add(comments.get(eKey));
+                }
+                
+            } else {
+                
+                // 重新排序
+                for(String eKey : keys) {
+                    result.add(comments.get(eKey));
+                }
+            }
+        }
+        
+        // 获取总条数
+        totalRecord = getCommentsByTypeAndDependIdCount(comment);
+        return new Paging<Comment>(totalRecord, comment.getPage(), comment.getPageSize(), result);
     }
 
     @Override
     public int getCommentsByTypeAndDependIdCount(Comment comment) {
-        return commentDAO.getCommentsByTypeAndDependIdCount(comment);
+        int totalRecord = 0;
+        String countKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
+        String value = jedisClient.get(countKey);
+        if(value == null || value.length() == 0) {
+            totalRecord = commentDAO.getCommentsByTypeAndDependIdCount(comment);
+            jedisClient.set(countKey, totalRecord);
+        } else {
+            totalRecord = Integer.parseInt(value);
+        }
+        return totalRecord;
     }
 
     @Override
     public boolean remove(Long commentId) {
-        return commentDAO.delete(commentId) != 0 ? true : false;
+        Comment comment = commentDAO.getById(commentId);
+        if(comment != null) {
+            String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
+            Long value = jedisClient.jedis.decr(key);
+            if(value > 0) {
+                jedisClient.set(key, 0);
+            }
+            boolean isSuccess =  commentDAO.delete(commentId) != 0 ? true : false;
+            
+            // 删除单条
+            String detailKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, commentId);
+            memcached.delete(detailKey);
+            return isSuccess;
+        }
+        return false;
     }
 
     @Override
@@ -84,5 +196,43 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         return result;
+    }
+    
+    /**
+     * 根据id获取评论
+     * 
+     * @param commentId
+     * @return
+     */
+    private Comment findById(Long commentId) {
+        String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, commentId);
+        Comment comment = memcached.get(key);
+        if(comment == null) {
+            comment = commentDAO.getById(commentId);
+            if(comment != null) {
+                memcached.set(key, comment, CacheConstants.TIME_HOUR * 4);
+            }
+        }
+        return comment;
+    }
+    
+    /**
+     * 根据id列表获取评论
+     * 
+     * @param ids
+     * @return
+     */
+    private List<Comment> findByIdsFromDB(List<Long> ids) {
+        return commentDAO.getByIds(ids);
+    }
+    
+    /**
+     * 从数据库中查询
+     * 
+     * @param comment
+     * @return
+     */
+    private List<Comment> findCommentsFromDB(Comment comment) {
+        return commentDAO.getCommentsByTypeAndDependId(comment);
     }
 }

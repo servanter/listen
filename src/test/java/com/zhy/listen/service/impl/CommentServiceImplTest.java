@@ -54,8 +54,10 @@ public class CommentServiceImplTest extends SuperTest {
 
     @Test
     public void testGetCommentsByInfoId() {
-        Comment comment = new Comment(1212121212L, SubType.STATUS, "testcomment", "匿名");
-        commentService.comment(comment);
+        Comment comment = new Comment(80L, SubType.STATUS, "testcomment", "匿名");
+        comment.setPageSize(3);
+        comment.setPage(1);
+//        commentService.comment(comment);
         Paging<Comment> comments = commentService.getCommentsByTypeAndDependId(comment);
         Assert.assertTrue("[CommentTest]: GetComments occur a  error ,Maybe can't find this result", comments != null
                 && comments.getResult().size() > 0);

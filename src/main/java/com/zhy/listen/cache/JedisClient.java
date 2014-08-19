@@ -154,4 +154,11 @@ public class JedisClient {
         }
         return jedis.set(key, value.toString());
     }
+    
+    public String get(String key) {
+        if(key == null || key.length() == 0) {
+            return null;
+        }
+        return jedis.get(key);
+    }
 }

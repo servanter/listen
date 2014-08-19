@@ -77,4 +77,14 @@ public class CacheConstants {
      * 评论count
      */
     public static final String CACHE_COMMENT_COUNT = "CC";
+    
+    /**
+     * 评论详情
+     */
+    public static final String CACHE_COMMENT_DETAIL = "CD";
+    
+    /**
+     * 评论 id list
+     */
+    public static final String CACHE_COMMENT_ID_LIST = "CIL"; 
 }

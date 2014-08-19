@@ -51,4 +51,20 @@ public interface CommentDAO {
      * @return
      */
     public List<CommentCount> getCommentsCountsByIds(@Param("commentTypes") List<SubType> types, @Param("ids") List<Long> ids);
+    
+    /**
+     * 根据id获取
+     * 
+     * @param id
+     * @return
+     */
+    public Comment getById(Long id);
+
+    /**
+     * 根据ids获取
+     * 
+     * @param ids
+     * @return
+     */
+    public List<Comment> getByIds(List<Long> ids);
 }

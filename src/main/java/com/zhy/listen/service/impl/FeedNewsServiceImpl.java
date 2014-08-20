@@ -242,17 +242,11 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                     }
                 }
 
-                // 重新排序
-                for (String eKey : keys) {
-                    result.add(cacheFeedNews.get(eKey));
-                }
+            } 
 
-            } else {
-
-                // 重新排序
-                for (String eKey : keys) {
-                    result.add(cacheFeedNews.get(eKey));
-                }
+            // 重新排序
+            for (String eKey : keys) {
+                result.add(cacheFeedNews.get(eKey));
             }
         }
 

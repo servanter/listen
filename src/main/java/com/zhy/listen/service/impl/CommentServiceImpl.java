@@ -101,20 +101,13 @@ public class CommentServiceImpl implements CommentService {
                         comments.put(KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, c.getId()), c);
                         String everyKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, c.getId());
                         memcached.set(everyKey, c, CacheConstants.TIME_HOUR * 4);
-                        result.add(c);
                     }
                 }
+            }
 
-                // 重新排序
-                for (String eKey : keys) {
-                    result.add(comments.get(eKey));
-                }
-            } else {
-
-                // 重新排序
-                for (String eKey : keys) {
-                    result.add(comments.get(eKey));
-                }
+            // 重新排序
+            for (String eKey : keys) {
+                result.add(comments.get(eKey));
             }
         }
 

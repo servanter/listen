@@ -67,4 +67,12 @@ public interface CommentDAO {
      * @return
      */
     public List<Comment> getByIds(List<Long> ids);
+    
+    /**
+     * 获取所有id列表
+     * 
+     * @param comment
+     * @return
+     */
+    public List<Long> getCommentIdsByTypeAndDependIdCount(Comment comment);
 }

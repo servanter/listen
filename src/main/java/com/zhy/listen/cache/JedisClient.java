@@ -88,7 +88,12 @@ public class JedisClient {
 
     public Long lpush(String key, Object value) {
         JsonConfig config = new JsonConfig();
-        String val = JSONObject.fromObject(value, config).toString();
+        String val = "";
+        if (value instanceof Integer || value instanceof Long) {
+            val = String.valueOf(value);
+        } else {
+            val = JSONObject.fromObject(value, config).toString();
+        }
         Long count = jedis.lpush(key, val);
         return count;
     }

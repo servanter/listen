@@ -137,16 +137,25 @@ public class CommentServiceImpl implements CommentService {
     public boolean remove(Long commentId) {
         Comment comment = commentDAO.getById(commentId);
         if (comment != null) {
-            String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
-            Long value = jedisClient.jedis.decr(key);
-            if (value > 0) {
-                jedisClient.set(key, 0);
-            }
             boolean isSuccess = commentDAO.delete(commentId) != 0 ? true : false;
-
-            // 删除单条
-            String detailKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, commentId);
-            memcached.delete(detailKey);
+            if(isSuccess) {
+                
+                // 评论条数-1
+                String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + comment.getCommentType().name(), comment.getDependId());
+                Long value = jedisClient.jedis.decr(key);
+                if (value < 0) {
+                    jedisClient.set(key, 0);
+                }
+                
+                //  评论id list 删除 该id
+                String idListKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_ID_LIST + comment.getCommentType().name(), comment.getDependId());
+                jedisClient.lrem(idListKey, 1, commentId);
+                
+                
+                // 删除单条
+                String detailKey = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_DETAIL, commentId);
+                memcached.delete(detailKey);
+            }
             return isSuccess;
         }
         return false;
@@ -156,6 +165,7 @@ public class CommentServiceImpl implements CommentService {
     public Map<Long, Integer> findCommentsCountsByIds(List<SubType> types, List<Long> ids) {
         Map<Long, Integer> result = new HashMap<Long, Integer>();
         List<Long> needFromDBIds = new ArrayList<Long>();
+        List<SubType> needFromDBTypes = new ArrayList<SubType>();
         String[] keys = new String[ids.size()];
         for (int i = 0; i < keys.length; i++) {
             String keyPrefix = CacheConstants.CACHE_COMMENT_COUNT + types.get(i);
@@ -163,12 +173,13 @@ public class CommentServiceImpl implements CommentService {
             String value = jedisClient.jedis.get(key);
             if (value == null) {
                 needFromDBIds.add(ids.get(i));
+                needFromDBTypes.add(types.get(i));
             } else {
                 result.put(ids.get(i), Integer.parseInt(value));
             }
         }
         if (result.size() != ids.size()) {
-            List<CommentCount> commentCounts = commentDAO.getCommentsCountsByIds(types, ids);
+            List<CommentCount> commentCounts = commentDAO.getCommentsCountsByIds(needFromDBTypes, needFromDBIds);
             if (commentCounts != null && commentCounts.size() > 0) {
                 for (CommentCount commentCount : commentCounts) {
                     String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + commentCount.getType().name(), commentCount.getDependId());
@@ -176,8 +187,8 @@ public class CommentServiceImpl implements CommentService {
                     result.put(commentCount.getDependId(), commentCount.getCount());
                 }
             } else {
-                for (int i = 0; i < ids.size(); i++) {
-                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + types.get(i), ids.get(i));
+                for (int i = 0; i < needFromDBIds.size(); i++) {
+                    String key = KeyGenerator.generateKey(CacheConstants.CACHE_COMMENT_COUNT + needFromDBTypes.get(i), needFromDBIds.get(i));
                     jedisClient.set(key, 0);
                     result.put(ids.get(i), 0);
                 }

@@ -53,25 +53,25 @@ public class JedisClient {
         List<String> values = jedis.lrange(key, start, end);
         JsonConfig config = new JsonConfig();
         String[] dateFmts = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
-        JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts));
+        JSONUtils.getMorpherRegistry().registerMorpher(new DateMorpher(dateFmts));
         if (values != null && values.size() > 0) {
             JSONArray array = JSONArray.fromObject(values);
             return array.toList(array, Long.class);
         }
         return null;
     }
-    
+
     public <T extends Object> List<T> lrange(String key, long start, long end, Class<T> t) {
         List<String> values = jedis.lrange(key, start, end);
         JsonConfig config = new JsonConfig();
         String[] dateFmts = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
-        JSONUtils.getMorpherRegistry().registerMorpher( new DateMorpher(dateFmts));
+        JSONUtils.getMorpherRegistry().registerMorpher(new DateMorpher(dateFmts));
         JSONUtils.getMorpherRegistry().registerMorpher(new EnumMorpher(SubType.class));
         if (values != null && values.size() > 0) {
             JSONArray array = JSONArray.fromObject(values);
-            if(t.getSimpleName().equals("Long")) {
+            if (t.getSimpleName().equals("Long")) {
                 return array.toList(array, Long.class);
-            } else if(t.getSimpleName().equals("Integer")) {
+            } else if (t.getSimpleName().equals("Integer")) {
                 return array.toList(array, Integer.class);
             } else {
                 try {
@@ -97,7 +97,7 @@ public class JedisClient {
         Long count = jedis.lpush(key, val);
         return count;
     }
-    
+
     public Long lpush(String key, List<? extends Object> values) {
         Long count = 0L;
         String str[] = null;
@@ -116,14 +116,14 @@ public class JedisClient {
         }
         return count;
     }
-    
+
     public Long rpush(String key, Object value) {
         JsonConfig config = new JsonConfig();
         String val = JSONObject.fromObject(value, config).toString();
         Long count = jedis.rpush(key, val);
         return count;
     }
-    
+
     public Long rpush(String key, List<? extends Object> values) {
         Long count = 0L;
         String str[] = null;
@@ -145,23 +145,25 @@ public class JedisClient {
 
     public Long lrem(String key, long count, Object o) {
         String str = "";
-        if(o instanceof List) {
+        if (o instanceof List) {
             str = JSONArray.fromObject(o).toString();
+        } else if (o instanceof Integer || o instanceof Long) {
+            str = String.valueOf(o);
         } else {
             str = JSONObject.fromObject(o).toString();
         }
         return jedis.lrem(key, count, str);
     }
-    
+
     public String set(String key, Object value) {
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         return jedis.set(key, value.toString());
     }
-    
+
     public String get(String key) {
-        if(key == null || key.length() == 0) {
+        if (key == null || key.length() == 0) {
             return null;
         }
         return jedis.get(key);

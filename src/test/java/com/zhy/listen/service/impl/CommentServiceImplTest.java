@@ -68,8 +68,10 @@ public class CommentServiceImplTest extends SuperTest {
     @Test
     public void testRemove() {
         String username = "test";
-        Comment comment = new Comment(1212121212L, SubType.STATUS, "不错,顶一下", username, 1L);
-        commentService.comment(comment);
+//        Comment comment = new Comment(1212121212L, SubType.STATUS, "不错,顶一下", username, 1L);
+//        commentService.comment(comment);
+        Comment comment = new Comment();
+        comment.setId(16L);
         boolean isSuccess = commentService.remove(comment.getId());
         Assert.assertTrue("[CommentTest]: Remove comment occur a error .", isSuccess);
         logger.debug("[CommentTest]: Remove comment is " + (isSuccess ? "success" : "fail"));
@@ -79,7 +81,9 @@ public class CommentServiceImplTest extends SuperTest {
     public void testGetIds() {
         List<Long> ids = new ArrayList<Long>();
         ids.add(80L);
+        ids.add(3L);
         List<SubType> types = new ArrayList<SubType>();
+        types.add(SubType.STATUS);
         types.add(SubType.STATUS);
         Map<Long, Integer> param = commentService.findCommentsCountsByIds(types, ids);
         System.out.println(param);

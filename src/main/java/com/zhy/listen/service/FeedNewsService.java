@@ -63,22 +63,6 @@ public interface FeedNewsService {
     public int findUnreadCount(Long userId, Timestamp requestTime);
 
     /**
-     * 根据id查询
-     * 
-     * @param ids
-     * @return
-     */
-    public List<FeedNews> findByIds(List<Long> ids);
-    
-    /**
-     * 获取某用户新鲜事(前5条)
-     * 
-     * @param userId
-     * @return
-     */
-    public List<FeedNewsCount> findBaseFeedsByUserId(FeedNews feedNews);
-    
-    /**
      * 删除新鲜事
      * 
      * @param feedNews

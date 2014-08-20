@@ -63,49 +63,6 @@ public class OnlineServiceImpl implements OnlineService {
             // 推送
             count += jedisClient.lpush(key, cacheNewFeed);
         }
-        
-        // 推送
-//        CacheNewFeed cacheNewFeed = new CacheNewFeed();
-//        cacheNewFeed.setCreateTime(currentTime);
-//        cacheNewFeed.setNewId(newId);
-//        int count = 0;
-//        List<Long> hasUserCacheIds = new ArrayList<Long>();
-//        Map<String, List<CacheNewFeed>> currentUserCacheNews = memcached.getMulti(keys);
-//        if(currentUserCacheNews != null && currentUserCacheNews.size() > 0) {
-//            Iterator<String> it = currentUserCacheNews.keySet().iterator();
-//            while(it.hasNext()) {
-//                String key = it.next();
-//                List<CacheNewFeed> cache = new ArrayList<CacheNewFeed>();
-//                List<CacheNewFeed> userCacheNewFeeds = currentUserCacheNews.get(key);
-//                if (userCacheNewFeeds == null || userCacheNewFeeds.isEmpty()) {
-//                    userCacheNewFeeds = new ArrayList<CacheNewFeed>();
-//                }
-//                cache.add(cacheNewFeed);
-//                cache.addAll(userCacheNewFeeds);
-//                memcached.set(key, cache, CacheConstants.TIME_HOUR * 4);
-//                hasUserCacheIds.add(Long.parseLong(KeyGenerator.getRowObject(key, CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX)));
-//                count++;
-//            }
-//            
-//            // 验证是否所有id都对应有缓存
-//            if(ids.size() != currentUserCacheNews.size()) {
-//                for(Long id : ids) {
-//                    if(!hasUserCacheIds.contains(id)) {
-//                        List<CacheNewFeed> list = new ArrayList<CacheNewFeed>();
-//                        list.add(cacheNewFeed);
-//                        memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, id), list, CacheConstants.TIME_HOUR * 4);
-//                        count++;
-//                    }
-//                }
-//            }
-//        } else {
-//            for(Long id : ids) {
-//                List<CacheNewFeed> list = new ArrayList<CacheNewFeed>();
-//                list.add(cacheNewFeed);
-//                memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, id), list, CacheConstants.TIME_HOUR * 4);
-//                count++;
-//            }
-//        }
         return count;
     }
     
@@ -119,21 +76,6 @@ public class OnlineServiceImpl implements OnlineService {
             String key = KeyGenerator.generateKey(CacheConstants.CACHE_ONLINE_USER_OTHERS_PUSH_IMMEDIATELY_NEWS_PREFIX, ids.get(i));
             count += jedisClient.lrem(key, 0, cacheNewFeed);
         }
-//        CacheNewFeed current = new CacheNewFeed();
-//        current.setNewId(newId);
-//        Map<String, List<CacheNewFeed>> currentUserCacheNews = memcached.getMulti(keys);
-//        if(currentUserCacheNews != null && currentUserCacheNews.size() > 0) {
-//            Iterator<String> it = currentUserCacheNews.keySet().iterator();
-//            while(it.hasNext()) {
-//                String key = it.next();
-//                List<CacheNewFeed> userCacheNewFeeds = currentUserCacheNews.get(key);
-//                if(userCacheNewFeeds.contains(current)) {
-//                    userCacheNewFeeds.remove(current);
-//                }
-//                memcached.set(key, userCacheNewFeeds, CacheConstants.TIME_HOUR * 4);
-//                count++;
-//            }
-//        }
         return count;
     }
 

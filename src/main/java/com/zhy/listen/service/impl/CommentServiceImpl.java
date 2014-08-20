@@ -105,6 +105,10 @@ public class CommentServiceImpl implements CommentService {
                     }
                 }
 
+                // 重新排序
+                for (String eKey : keys) {
+                    result.add(comments.get(eKey));
+                }
             } else {
 
                 // 重新排序

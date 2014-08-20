@@ -2,6 +2,7 @@ package com.zhy.listen.service.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,29 +44,29 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
     @Autowired
     private FriendService friendService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private CommentService commentService;
 
     @Autowired
     private Memcached memcached;
-    
+
     @Autowired
     private JedisClient jedisClient;
 
     private List<FeedNews> findByNewsFromDB(FeedNews feedNews) {
         return feedNewsDAO.getByNews(feedNews);
     }
-    
+
     private int findByNewsFromDBCount(FeedNews feedNews) {
         String totalKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS_COUNT, feedNews.getUserId());
         String total = jedisClient.jedis.get(totalKey);
         int totalRecord = 0;
-        if(total == null || total.length() == 0) {
-            totalRecord =  feedNewsDAO.getByNewsCount(feedNews);
+        if (total == null || total.length() == 0) {
+            totalRecord = feedNewsDAO.getByNewsCount(feedNews);
             jedisClient.jedis.set(totalKey, String.valueOf(totalRecord));
         } else {
             totalRecord = Integer.parseInt(total);
@@ -90,7 +91,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
                 userService.modifyIsIndex(feedNews.getUserId(), false);
             }
             if (affect > 0) {
-                
+
                 // 重新查询
                 FeedNews f = feedNewsDAO.getById(feedNews.getId());
 
@@ -99,7 +100,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
 
                 // 放入个人新鲜事池
                 String profileNewsKey = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-                jedisClient.lpush(profileNewsKey, f);
+                jedisClient.lpush(profileNewsKey, f.getId());
 
                 // 这里应该用消息队列做
                 List<Long> ids = friendService.findFriendIds(f.getUserId());
@@ -126,7 +127,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return false;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.zhy.listen.service.FeedNewsService#findUnreadList(java.lang.Long, java.sql.Timestamp)
      */
     @Override
@@ -166,10 +169,9 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return jedisClient.jedis.llen(key).intValue();
     }
 
-    @Override
-    public List<FeedNews> findByIds(List<Long> ids) {
+    private List<FeedNews> findByIds(List<Long> ids) {
         List<FeedNews> news = feedNewsDAO.getByIds(ids);
-        
+
         // 设置缓存
         for (FeedNews f : news) {
             memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f, CacheConstants.TIME_HOUR * 2);
@@ -177,89 +179,88 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         return news;
     }
 
-    /* (non-Javadoc)
-     * @see com.zhy.listen.service.FeedNewsService#findBaseFeedsByUserId(java.lang.Long)
-     */
-    @Override
-    public List<FeedNewsCount> findBaseFeedsByUserId(FeedNews feedNews) {
-        List<FeedNewsCount> result = new ArrayList<FeedNewsCount>();
-        String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-        List<FeedNews> feedList = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
-        
-        // TODO 是否size不足,需要重新查询?如果确实小于size?
-//        if(result == null || result.isEmpty() || result.size() < feedNews.getPageSize()) {
-        if(feedList == null || feedList.isEmpty()) {
-            Paging<FeedNewsCount> list = findByNews(feedNews);
-            if(list != null && !list.getResult().isEmpty()){
-                findByNewsFromDBCount(feedNews);
-                return list.getResult().size() >= 5 ? list.getResult().subList(0, 5) : list.getResult().subList(0, list.getResult().size());
-            }
-        } else {
-            result = initFeedNewsComment(feedList);
-        }
-        return result;
-    }
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.zhy.listen.service.FeedNewsService#findByNews(com.zhy.listen.entities.FeedNews)
      */
     @Override
     public Paging<FeedNewsCount> findByNews(FeedNews feedNews) {
-        List<FeedNews> feedList = new ArrayList<FeedNews>();
+        List<FeedNews> result = new ArrayList<FeedNews>();
+
+        // 初始化评论数
+        List<FeedNewsCount> listCount = new ArrayList<FeedNewsCount>();
         int totalRecord = 0;
-        
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FEED_NEWS, feedNews.getUserId());
-        List<FeedNews> list = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint(), FeedNews.class);
-        if (list != null && !list.isEmpty() && list.size() == feedNews.getPageSize()) {
-            totalRecord = findByNewsFromDBCount(feedNews);
-            feedList = list;
+        List<Long> ids = jedisClient.lrange(key, feedNews.getSinceCount(), feedNews.getEndPoint());
+        if (ids == null) {
+            result = findByNewsFromDB(feedNews);
+
+            // 存放单条数据
+            if (result != null) {
+                for (FeedNews f : result) {
+                    String everyKey = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId());
+                    memcached.set(everyKey, f, CacheConstants.TIME_HOUR * 4);
+                }
+
+                // 存放id list
+                List<Long> idList = feedNewsDAO.getIdsByNews(feedNews);
+                jedisClient.rpush(key, idList);
+            }
         } else {
 
-            // 构造方法中有计算sinceCount
-            int startIndex = feedNews.getSinceCount();
-            int endIndex = startIndex + feedNews.getPageSize();
-            
-            // 不够条数或者缓存直接为null
-            int fetchSize = feedNews.getPageSize();
-            int sinceCount = 0;
-            if (list != null) {
-                fetchSize = endIndex - list.size();
-                sinceCount = list.size();
-            } else {
-                fetchSize = endIndex;
+            // 从memcached获取单条
+            String keys[] = new String[ids.size()];
+            for (int i = 0; i < ids.size(); i++) {
+                keys[i] = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, ids.get(i));
             }
-            FeedNews feedNews2 = new FeedNews();
-            feedNews2.setPageSize(fetchSize);
-            feedNews2.setUserId(feedNews.getUserId());
-            feedNews2.setSinceCount(sinceCount);
-            List<FeedNews> currentResult = findByNewsFromDB(feedNews2);
-            if (currentResult != null && !currentResult.isEmpty()) {
-                totalRecord = findByNewsFromDBCount(feedNews2);
-                
-                // 追加
-                jedisClient.lrem(key, 0, currentResult);
-                jedisClient.rpush(key, currentResult);
-                if(list != null && list.size() > 0) {
-                    list.addAll(currentResult);
-                } else {
-                    list = currentResult;
-                }
-                feedList = list;
-            } else {
-                
-                // 没有查询到，那么缓存中有该页的所有数据
-                if(list != null) {
-                    if(list.size() > startIndex) {
-                        List<FeedNews> subList = list.subList(startIndex, list.size());
-                        totalRecord = findByNewsFromDBCount(feedNews);
-                        feedList = subList;
+            Map<String, FeedNews> cacheFeedNews = memcached.getMulti(keys);
+            if (cacheFeedNews == null) {
+                cacheFeedNews = new HashMap<String, FeedNews>();
+            }
+
+            // memcache中没有该数据
+            if (cacheFeedNews.size() != keys.length) {
+                List<Long> needFromDBIds = new ArrayList<Long>();
+
+                // 按照当前分页的id列表查询
+                if (cacheFeedNews.size() > 0) {
+                    for (int i = 0; i < keys.length; i++) {
+                        if (!cacheFeedNews.containsKey(keys[i])) {
+                            needFromDBIds.add(ids.get(i));
+                        }
                     }
+                } else {
+                    needFromDBIds = ids;
+                }
+                List<FeedNews> currentFeedNews = feedNewsDAO.getByIds(needFromDBIds);
+                if (currentFeedNews != null && currentFeedNews.size() > 0) {
+                    for (FeedNews f : currentFeedNews) {
+                        cacheFeedNews.put(KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId()), f);
+                        String everyKey = KeyGenerator.generateKey(CacheConstants.CACHE_FEED_NEWS, f.getId());
+                        memcached.set(everyKey, f, CacheConstants.TIME_HOUR * 4);
+                    }
+                }
+
+                // 重新排序
+                for (String eKey : keys) {
+                    result.add(cacheFeedNews.get(eKey));
+                }
+
+            } else {
+
+                // 重新排序
+                for (String eKey : keys) {
+                    result.add(cacheFeedNews.get(eKey));
                 }
             }
         }
-        
+
+        // 获取总条数
+        totalRecord = findByNewsFromDBCount(feedNews);
+
         // 初始化评论数
-        List<FeedNewsCount> listCount = initFeedNewsComment(feedList);
+        listCount = initFeedNewsComment(result);
         return new Paging<FeedNewsCount>(totalRecord, feedNews.getPage(), feedNews.getPageSize(), listCount);
     }
 
@@ -267,16 +268,16 @@ public class FeedNewsServiceImpl implements FeedNewsService {
     public boolean destory(FeedNews feedNews) {
         FeedNews news = feedNewsDAO.getById(feedNews.getId());
         int affect = feedNewsDAO.delete(feedNews);
-        if(affect > 0) {
+        if (affect > 0) {
             Page p = feedNewsFactory.generateSub(news);
             affect = feedNewsFactory.generateService(feedNews.getSubType()).remove(p);
             Response response = new Response();
             response.setErrorCode(affect > 0 ? ErrorCode.SUCCESS : ErrorCode.ERROR);
-            if(affect > 0 && feedNews.getSubType() == SubType.STATUS) {
-                
+            if (affect > 0 && feedNews.getSubType() == SubType.STATUS) {
+
                 // 更新用户索引，定时重新建立
                 userService.modifyIsIndex(news.getUserId(), false);
-                
+
             }
             // 这里应该用消息队列做
             List<Long> ids = friendService.findFriendIds(news.getUserId());
@@ -299,7 +300,7 @@ public class FeedNewsServiceImpl implements FeedNewsService {
         }
         return false;
     }
-    
+
     /**
      * 封装评论数
      * 
@@ -308,19 +309,19 @@ public class FeedNewsServiceImpl implements FeedNewsService {
      */
     private List<FeedNewsCount> initFeedNewsComment(List<FeedNews> feedNews) {
         List<FeedNewsCount> result = new ArrayList<FeedNewsCount>();
-        if(feedNews != null && !feedNews.isEmpty()) {
+        if (feedNews != null && !feedNews.isEmpty()) {
             List<Long> ids = new ArrayList<Long>();
             List<SubType> types = new ArrayList<SubType>();
-            for(FeedNews news : feedNews) {
-                
+            for (FeedNews news : feedNews) {
+
                 // 每一个子类的id
                 ids.add(news.getSubNewsId());
                 types.add(news.getSubType());
             }
             Map<Long, Integer> commentCounts = commentService.findCommentsCountsByIds(types, ids);
-            for(FeedNews f : feedNews) {
+            for (FeedNews f : feedNews) {
                 FeedNewsCount feedNewsCount = BeanUtils.feedNews2FeedNewsCount(f);
-                if(commentCounts.containsKey(feedNewsCount.getId())) {
+                if (commentCounts.containsKey(feedNewsCount.getId())) {
                     feedNewsCount.setCommentCount(commentCounts.get(feedNewsCount.getId()));
                 } else {
                     feedNewsCount.setCommentCount(0);

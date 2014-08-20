@@ -63,4 +63,15 @@
 	<update id="delete" parameterType="feedNews">
 		UPDATE news SET is_valid = false WHERE id = #{id}
 	</update>
+	
+	<select id="getIdsByNews" resultType="java.lang.Long">
+		SELECT id FROM news 
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+		</where>
+		ORDER BY create_time DESC
+	</select>
+	
 </mapper>

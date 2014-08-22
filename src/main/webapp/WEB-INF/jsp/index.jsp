@@ -44,6 +44,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}});
 			});
 			
+			$("#makeFriendBtn").click(function(){
+				$.ajax({url:"${ctx}/friend/makeFriend", type:"POST", data:{"user_id":$("#f_user_id").val(), "friend_id":$("#f_friend_id").val()}, success:function (data) {
+					$("#result").text(data);
+				}});
+			});
+			
+			$("#removeFriendBtn").click(function(){
+				$.ajax({url:"${ctx}/friend/destory", type:"POST", data:{"user_id":$("#f_user_id").val(), "friend_id":$("#f_friend_id").val()}, success:function (data) {
+					$("#result").text(data);
+				}});
+			});
+			
+			$("#myFreindBtn").click(function(){
+				$.ajax({url:"${ctx}/friend/myFriends", type:"POST", data:{"user_id":$("#f_my_user_id").val(), "page": "1", "page_size":"10"}, success:function (data) {
+					$("#result").text(data);
+				}});
+			});
+			
 		});
 	</script>
   </head>
@@ -66,6 +84,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	类别<input type="text" id="sub_type">
   	<input id="removeNewsBtn" type="button" value="删除一条新鲜事">
   	
+  	<br><br>好友<br>
+  	用户ID<input type="text" id="f_user_id"> 好友ID<input type="text" id="f_friend_id"> <input id="makeFriendBtn" type="button" value="添加好友"><input id="removeFriendBtn" type="button" value="删除好友">
+  	用户ID<input type="text" id="f_my_user_id"><input id="myFreindBtn" type="button" value="我的好友">
   	<div id="result"></div>
   </body>
 </html>

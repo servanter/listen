@@ -15,7 +15,7 @@ public interface ApiCommentService {
     public Response comment(Comment comment);
 
     /**
-     * 根据投票信息获取评论
+     * 获取评论
      * 
      * @param comment
      * @return

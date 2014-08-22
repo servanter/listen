@@ -39,24 +39,6 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Paging<User> findFriendsByUserId(Friend friend) {
-//        List<User> myUsers = jedisClient.lrange(KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIENDS, friend.getUserId()), friend.getSinceCount(), friend.getEndPoint(), User.class);
-//        if (myUsers == null) {
-//            List<User> fs = friendDAO.getFriendsByUserId(friend);
-//            int total = getFriendsByUserIdCount(friend);
-//            Paging<User> result = new Paging<User>(total, friend.getPage(), friend.getPageSize(), fs);
-//            jedisClient.rpush(KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIENDS, friend.getUserId()), fs);
-//            jedisClient.jedis.set(KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIENDS_COUNT, friend.getUserId()), String.valueOf(total));
-//            return result;
-//        } else {
-//            int total = 0;
-//            String string = jedisClient.jedis.get(KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIENDS_COUNT, friend.getUserId()));
-//            if (!StringUtils.isNullOrEmpty(string)) {
-//                total = Integer.parseInt(string);
-//            } else {
-//                total = getFriendsByUserIdCount(friend);
-//            }
-//            return new Paging<User>(total, friend.getPage(), friend.getPageSize(), myUsers);
-//        }
         List<User> result = new ArrayList<User>();
         int totalRecord = 0;
         String key = KeyGenerator.generateKey(CacheConstants.CACHE_USER_FRIENDS, friend.getUserId());
@@ -91,7 +73,7 @@ public class FriendServiceImpl implements FriendService {
             }
 
             // memcache中没有该数据
-            if (users.size() != keys.length) {
+             if (users.size() != keys.length) {
                 List<Long> needFromDBIds = new ArrayList<Long>();
 
                 // 按照当前分页的id列表查询

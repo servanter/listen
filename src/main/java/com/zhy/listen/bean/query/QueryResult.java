@@ -15,6 +15,11 @@ import com.zhy.listen.bean.indexer.IndexerClass;
  */
 public class QueryResult extends Page {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 264499318574907993L;
+
     private Long id;
 
     /**

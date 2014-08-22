@@ -10,6 +10,7 @@ import com.zhy.listen.api.ApiFeedNewsService;
 import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.FeedNewsCount;
 import com.zhy.listen.bean.Response;
+import com.zhy.listen.bean.SubType;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.FeedNews;
 import com.zhy.listen.service.FeedNewsService;
@@ -28,6 +29,7 @@ public class ApiFeedNewsServiceImpl implements ApiFeedNewsService {
             int count = feedNewsService.findUnreadCount(userId, requestTime);
             response.setErrorCode(ErrorCode.SUCCESS);
             response.setResult(count);
+            response.setResponseTime(new Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,6 +41,7 @@ public class ApiFeedNewsServiceImpl implements ApiFeedNewsService {
         Response response = new Response();
         boolean isSuccess = feedNewsService.destory(feedNews);
         response.setErrorCode(isSuccess ? ErrorCode.SUCCESS : ErrorCode.ERROR);
+        response.setResponseTime(new Timestamp(System.currentTimeMillis()));
         return response;
     }
 
@@ -50,6 +53,16 @@ public class ApiFeedNewsServiceImpl implements ApiFeedNewsService {
         queryResult.setHitCount(news == null ? 0 : news.size());
         queryResult.setResult(news);
         return queryResult;
+    }
+
+    @Override
+    public Response findDetail(Long id, SubType subType) {
+        Response response = new Response();
+        Object o = feedNewsService.findDetailByIdAndType(id, subType);
+        response.setErrorCode(ErrorCode.SUCCESS);
+        response.setResult(o);
+        response.setResponseTime(new Timestamp(System.currentTimeMillis()));
+        return response;
     }
 
 }

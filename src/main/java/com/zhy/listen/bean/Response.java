@@ -42,6 +42,12 @@ public class Response {
     public Response() {
         responseTime = new Timestamp(System.currentTimeMillis());
     }
+    
+    public Response(ErrorCode errorCode, Object object) {
+        this.errorCode = errorCode;
+        this.responseTime = new Timestamp(System.currentTimeMillis());
+        this.result = object;
+    }
 
     @Override
     public int hashCode() {

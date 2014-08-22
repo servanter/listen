@@ -1,9 +1,9 @@
 package com.zhy.listen.api;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import com.zhy.listen.bean.Response;
+import com.zhy.listen.bean.SubType;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.FeedNews;
 
@@ -34,4 +34,13 @@ public interface ApiFeedNewsService {
      * @return
      */
     public QueryResult findUnreadList(Long userId, Timestamp requestTime);
+    
+    /**
+     * 获取详情
+     * 
+     * @param id
+     * @param subType
+     * @return
+     */
+    public Response findDetail(Long id, SubType subType);
 }

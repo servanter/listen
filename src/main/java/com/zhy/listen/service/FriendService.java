@@ -9,7 +9,7 @@ import com.zhy.listen.entities.User;
 public interface FriendService {
 
     /**
-     * 根据用户ID获取好友列表(不要分页了)
+     * 根据用户ID获取好友列表
      * 
      * @param friend
      * @return

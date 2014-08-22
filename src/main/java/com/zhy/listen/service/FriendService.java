@@ -25,14 +25,6 @@ public interface FriendService {
     public List<Long> findFriendIds(Long userId);
 
     /**
-     * 获取用户拥有的好友数
-     * 
-     * @param userId
-     * @return
-     */
-    public int findUserHaveFriendCount(Long userId);
-
-    /**
      * 同意加为好友(数据库中两条记录,userid与friendid互换)
      * 
      * @param friend

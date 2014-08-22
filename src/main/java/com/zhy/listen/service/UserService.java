@@ -33,6 +33,13 @@ public interface UserService {
      * @return
      */
     public List<User> findUsersByIds(Long[] ids);
+    
+    /**
+     * 获取一批用户
+     * @param ids
+     * @return
+     */
+    public List<User> findUsersByIds(List<Long> ids);
 
     /**
      * 用户登录

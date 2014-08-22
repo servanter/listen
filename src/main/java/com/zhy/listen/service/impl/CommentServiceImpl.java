@@ -94,6 +94,8 @@ public class CommentServiceImpl implements CommentService {
                             needFromDBIds.add(ids.get(i));
                         }
                     }
+                } else {
+                    needFromDBIds = ids;
                 }
                 List<Comment> currentComments = findByIds(needFromDBIds);
                 if (currentComments != null && currentComments.size() > 0) {

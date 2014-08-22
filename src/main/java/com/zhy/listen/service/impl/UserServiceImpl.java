@@ -146,4 +146,14 @@ public class UserServiceImpl implements UserService {
     public boolean modifyIsIndex(Long userId, boolean isIndex) {
         return userDAO.updateIsIndex(userId, isIndex) > 0;
     }
+
+    @Override
+    public List<User> findUsersByIds(List<Long> ids) {
+        if(ids != null && ids.size() > 0) {
+            Long[] arr = new Long[ids.size()];
+            ids.toArray(arr);
+            return findUsersByIds(arr);
+        }
+        return new ArrayList<User>();
+    }
 }

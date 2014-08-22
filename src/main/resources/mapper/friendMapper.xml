@@ -13,11 +13,25 @@
 
 	<resultMap id="userResult" type="user">
 		<result property="id" column="id" />
+		<result property="userName" column="user_name" />
+		<result property="passWord" column="pass_word" />
+		<result property="birthday" column="birthday" />
+		<result property="sex" column="sex" />
 		<result property="userNick" column="user_nick" />
+		<result property="userImg" column="user_img" />
+		<result property="province" column="province" />
+		<result property="city" column="city" />
+		<result property="introduction" column="introduction" />
+		<result property="mobile" column="mobile" />
+		<result property="email" column="email" />
+		<result property="regTime" column="reg_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="isValid" column="is_valid" />
+		<result property="isIndex" column="is_index" />
 	</resultMap>
 	
 	<select id="getFriendsByUserId" parameterType="friend" resultMap="userResult">
-		SELECT u.user_nick, u.id FROM USER u INNER JOIN friend f ON u.id = f.friend_id WHERE f.user_id = #{userId} AND f.is_valid = true 
+		SELECT u.* FROM USER u INNER JOIN friend f ON u.id = f.friend_id WHERE f.user_id = #{userId} AND f.is_valid = true 
 		ORDER BY f.create_time DESC LIMIT #{sinceCount}, #{pageSize}
 	</select>
 	

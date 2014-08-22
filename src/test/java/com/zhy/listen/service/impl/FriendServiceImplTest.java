@@ -31,8 +31,8 @@ public class FriendServiceImplTest extends SuperTest{
     @Test
     public void testModifyFriendRelation() {
         Friend friend = new Friend();
-        friend.setUserId(2L);
-        friend.setFriendId(3L);
+        friend.setUserId(1L);
+        friend.setFriendId(16L);
         friend.setIsValid(false);
         Assert.assertTrue("Can't remove the friendship.", friendService.removeFriendRelation(friend));
     }
@@ -40,16 +40,10 @@ public class FriendServiceImplTest extends SuperTest{
     @Test
     public void testMakeFriends() {
         Friend friend = new Friend();
-        friend.setUserId(6L);
-        friend.setFriendId(7L);
+        friend.setUserId(1L);
+        friend.setFriendId(16L);
         boolean isSuccess = friendService.makeFriends(friend);
         Assert.assertTrue("Can't make friends?", isSuccess);
-    }
-
-    @Test
-    public void testFindUserHaveFriendCount() {
-        int total = friendService.findUserHaveFriendCount(1L);
-        Assert.assertTrue("Can't find the friend?", total > 0);
     }
 
     @Test

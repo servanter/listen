@@ -8,7 +8,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
 /**
- * json注册类型转换
+ * json工具类
  * 
  * @author zhanghongyan
  * 

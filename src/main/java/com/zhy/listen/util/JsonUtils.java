@@ -1,6 +1,5 @@
 package com.zhy.listen.util;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,17 +12,15 @@ import net.sf.json.processors.JsonValueProcessor;
  * @author zhanghongyan
  * 
  */
-public abstract class JsonUtils implements JsonValueProcessor {
+public class JsonUtils {
 
-    public static JsonValueProcessor create(Class<?> o) {
-        if (o == Date.class || o == Timestamp.class) {
-            JsonUtils.DateProcesser dateProcesser = new DateProcesser("yyyy-MM-dd HH:mm:ss");
-            return dateProcesser;
-        }
-        return null;
-    }
-
-    static class DateProcesser implements JsonValueProcessor {
+    /**
+     * date转json格式
+     * 
+     * @author zhanghongyan
+     *
+     */
+    public static class DateProcesser implements JsonValueProcessor {
 
         static String format;
 

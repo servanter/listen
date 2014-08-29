@@ -39,7 +39,7 @@ public class UserServiceImplTest extends SuperTest {
 
     @Test
     public void testGetUserByIdExists() {
-        User a = new User("hongyan123", "123", "红颜", "1.png", new Timestamp(System.currentTimeMillis()), 1);
+        User a = new User("hongya11234n123", "123", "红颜", "1.png", new Timestamp(System.currentTimeMillis()), 1);
         a.setMobile("15901000000");
         a.setEmail("aasdasd@125.com");
         Long userId = userService.register(a);
@@ -57,25 +57,23 @@ public class UserServiceImplTest extends SuperTest {
 
     @Test
     public void testGetUsersByRandomExists() {
-        Long[] ids = new Long[10];
-        for (int i = 0; i < 10; i++) {
-            ids[i] = userService.register(new User("zhy" + i + "@126.com", "111111"));
+        Long[] ids = new Long[5];
+        for (int i = 0; i < 5; i++) {
+            ids[i] = userService.register(new User("zhy234324" + i + "@126.com", "111111"));
         }
         User user = new User(ids[1]);
         user.setPageSize(20);
         List<User> users = userService.findUsersByRandom(user);
-        Assert
-                .assertTrue("[UserTest]: GetUsersByRandom occur error.Maybe the database has no users.",
-                        users.size() > 0);
+        Assert.assertTrue("[UserTest]: GetUsersByRandom occur error.Maybe the database has no users.", users.size() > 0);
         logger.debug("[UserTest]: GetUsersByRandom is " + (users.size() > 0 ? "success" : "fail"));
     }
 
     @Test
     public void testLogin() {
-        Long id = userService.register(new User("zhy1231", "12345"));
-//        User user = userService.login(new User("zhy1231", "12345"));
-//        Assert.assertNotNull("[UserTest]: Login occur error.", user);
-//        logger.debug("[UserTest]: Login is " + (user != null ? "success" : "fail"));
+//        Long id = userService.register(new User("zhy1231", "12345"));
+        // User user = userService.login(new User("zhy1231", "12345"));
+        // Assert.assertNotNull("[UserTest]: Login occur error.", user);
+        // logger.debug("[UserTest]: Login is " + (user != null ? "success" : "fail"));
     }
 
     @Test
@@ -95,7 +93,7 @@ public class UserServiceImplTest extends SuperTest {
 
     @Test
     public void testRemove() {
-        Long id = userService.register(new User("asawqw1231", "12345"));
+        Long id = userService.register(new User("asawqw34341231", "12345"));
         boolean isSuccess = userService.logout(id);
         Assert.assertTrue("[UserTest]: Delete user occur error.", isSuccess);
         logger.debug("[UserTest]: Remove is " + (isSuccess ? "success" : "fail"));
@@ -104,7 +102,7 @@ public class UserServiceImplTest extends SuperTest {
     @Test
     public void testCompleteInfo() {
         User user = new User();
-        Long userId = userService.register(new User("adasdadadavvvz", "12341"));
+        Long userId = userService.register(new User("adasdad33424ad2avvvz", "12341"));
         user.setId(userId);
         String birth = "1989-02-21";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,9 +118,7 @@ public class UserServiceImplTest extends SuperTest {
             user.setProvince("广东");
             user.setCity("广州");
             boolean isSuccess = userService.completeInfo(user);
-            Assert
-                    .assertTrue("[UserTest]: CompleteInfo occur error.Maybe the database has not this user id",
-                            isSuccess);
+            Assert.assertTrue("[UserTest]: CompleteInfo occur error.Maybe the database has not this user id", isSuccess);
             logger.debug("[UserTest]: CompleteInfo is " + (isSuccess ? "success" : "fail"));
 
         } catch (ParseException e) {
@@ -137,7 +133,7 @@ public class UserServiceImplTest extends SuperTest {
         Assert.assertTrue("[UserTest]: Can't find user by user_nick?", users.size() > 0);
         logger.debug("[UserTest]: Get user by nick name is " + (users.size() > 0 ? "success" : "fail"));
     }
-    
+
     @Test
     public void testFindUsersByIndex() {
         List<UserStatusPointPath> userStatus = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);

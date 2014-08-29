@@ -27,10 +27,10 @@ CREATE TABLE `user` (
   `introduction` varchar(200) DEFAULT NULL COMMENT '个人简介',
   `mobile` varchar(20) DEFAULT NULL COMMENT '电话',
   `email` varchar(200) DEFAULT NULL COMMENT '邮箱',
-  `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最近一次修改时间',
+  `reg_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '注册时间',
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近一次修改时间',
   `is_valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用,0为注销;1为可用',
-  `is_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已经被索引,0为未索引;1为已经索引',
+  `is_index` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

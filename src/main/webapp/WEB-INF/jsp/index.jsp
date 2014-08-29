@@ -62,6 +62,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}});
 			});
 			
+			$("#upload_btn").click(function(){
+				var url = $("#form2").attr("action");
+				url += "?user_id=" + $("#upload_user_id").val();
+				$("#form2").attr("action", url);
+				 $("#form2").submit();
+//				$.ajax({url: url, type:"POST", data:$("#form2").serialize(), success:function (data) {
+//					$("#result").text(data);
+//				}});
+			});
+			
+			$("#c_modify_btn").click(function(){
+				$.ajax({url:"${ctx}/user/modifyInfo/", type:"POST", data:{"user_id":$("#c_user_id").val(), "user_nick" : $("#c_user_nick").val(), "sex": $("#c_user_sex").val(), "email":$("#c_email").val(), "phone" : $("#c_phone").val()}, success:function (data) {
+					$("#result").text(data);
+				}});
+			});
+			
 		});
 	</script>
   </head>
@@ -87,6 +103,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<br><br>好友<br>
   	用户ID<input type="text" id="f_user_id"> 好友ID<input type="text" id="f_friend_id"> <input id="makeFriendBtn" type="button" value="添加好友"><input id="removeFriendBtn" type="button" value="删除好友">
   	用户ID<input type="text" id="f_my_user_id"><input id="myFreindBtn" type="button" value="我的好友">
+  	
+  	<br><br>用户<br>
+  	<form name="form2" id="form2"  enctype="multipart/form-data" action="${ctx }/user/modifyHead/" method="post">
+  	用户ID<input type="text" id="upload_user_id">上传头像<input type="file" name="upload_file"><input id="upload_btn" type="button" value="上传">
+  	</form>
+  	用户ID<input type="text" id="c_user_id">用户昵称<input id="c_user_nick" type="text">性别<input id="c_user_sex" type="text">email<input id="c_email" type="text">电话<input id="c_phone" type="text"><input id="c_modify_btn" type="button" value="修改">
   	<div id="result"></div>
   </body>
 </html>

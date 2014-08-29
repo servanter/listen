@@ -78,6 +78,7 @@
 		<if test="city != null">,city</if>
 		<if test="mobile != null">,mobile</if>
 		<if test="email != null">,email</if>
+		<if test="modifyTime != null">,modify_time</if>
 		<if test="isValid != null">,is_valid</if>
 		<![CDATA[ 
         ) VALUES ( 
@@ -92,6 +93,7 @@
 		<if test="city != null">,#{city}</if>
 		<if test="mobile != null">,#{mobile}</if>
 		<if test="email != null">,#{email}</if>
+		<if test="modifyTime != null">,#{modifyTime}</if>
 		<if test="isValid != null">,#{isValid}</if>
 		<![CDATA[ 
         ) 

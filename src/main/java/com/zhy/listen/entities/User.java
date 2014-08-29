@@ -76,11 +76,6 @@ public class User extends Page implements java.io.Serializable {
     private String email;
 
     /**
-     * 用户第三方信息
-     */
-    private List<Third> thirds;
-
-    /**
      * 注册时间
      */
     private Date regTime;
@@ -262,14 +257,6 @@ public class User extends Page implements java.io.Serializable {
         this.city = city;
     }
 
-    public List<Third> getThirds() {
-        return thirds;
-    }
-
-    public void setThirds(List<Third> thirds) {
-        this.thirds = thirds;
-    }
-
     public String getMobile() {
         return mobile;
     }
@@ -295,6 +282,12 @@ public class User extends Page implements java.io.Serializable {
     }
 
     @Override
+    public String toString() {
+        return "User [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", birthday=" + birthday + ", sex=" + sex + ", userNick=" + userNick + ", userImg=" + userImg + ", introduction=" + introduction + ", province=" + province
+                + ", city=" + city + ", mobile=" + mobile + ", email=" + email + ", regTime=" + regTime + ", modifyTime=" + modifyTime + ", isValid=" + isValid + ", isIndex=" + isIndex + "]";
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -311,7 +304,6 @@ public class User extends Page implements java.io.Serializable {
         result = prime * result + ((province == null) ? 0 : province.hashCode());
         result = prime * result + ((regTime == null) ? 0 : regTime.hashCode());
         result = prime * result + ((sex == null) ? 0 : sex.hashCode());
-        result = prime * result + ((thirds == null) ? 0 : thirds.hashCode());
         result = prime * result + ((userImg == null) ? 0 : userImg.hashCode());
         result = prime * result + ((userName == null) ? 0 : userName.hashCode());
         result = prime * result + ((userNick == null) ? 0 : userNick.hashCode());
@@ -389,11 +381,6 @@ public class User extends Page implements java.io.Serializable {
                 return false;
         } else if (!sex.equals(other.sex))
             return false;
-        if (thirds == null) {
-            if (other.thirds != null)
-                return false;
-        } else if (!thirds.equals(other.thirds))
-            return false;
         if (userImg == null) {
             if (other.userImg != null)
                 return false;
@@ -412,13 +399,6 @@ public class User extends Page implements java.io.Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", birthday=" + birthday
-                + ", sex=" + sex + ", userNick=" + userNick + ", userImg=" + userImg + ", introduction=" + introduction
-                + ", province=" + province + ", city=" + city + ", mobile=" + mobile + ", email=" + email + ", thirds="
-                + thirds + ", regTime=" + regTime + ", modifyTime=" + modifyTime + ", isValid=" + isValid
-                + ", isIndex=" + isIndex + "]";
-    }
+
 
 }

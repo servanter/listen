@@ -31,7 +31,7 @@ public interface UserService {
      * @param ids
      * @return
      */
-    public List<User> findUsersByIds(Long[] ids);
+    public List<UserStatusPointPath> findUsersByIds(Long[] ids);
     
     /**
      * 用户登录
@@ -96,7 +96,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    public List<User> findInterestedUser(User user, SameType sameType);
+    public List<UserStatusPointPath> findInterestedUser(User user, SameType sameType);
     
     /**
      * 根据索引状态查询

@@ -9,6 +9,7 @@ import com.zhy.listen.api.ApiFriendService;
 import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.Paging;
 import com.zhy.listen.bean.Response;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.bean.query.QueryResult;
 import com.zhy.listen.entities.Friend;
 import com.zhy.listen.entities.User;
@@ -33,7 +34,7 @@ public class ApiFriendServiceImpl implements ApiFriendService {
      */
     @Override
     public QueryResult findFriendsByUserId(Friend friend) {
-        Paging<User> list = friendService.findFriendsByUserId(friend);
+        Paging<UserStatusPointPath> list = friendService.findFriendsByUserId(friend);
         QueryResult queryResult = new QueryResult();
         queryResult.setResult(list.getResult());
         queryResult.setHitCount(list.getResult().size());

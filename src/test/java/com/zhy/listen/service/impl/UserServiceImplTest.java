@@ -127,14 +127,6 @@ public class UserServiceImplTest extends SuperTest {
     }
 
     @Test
-    public void testGetUserByNick() {
-        Long id = userService.register(new User("ajsdada", "11234", "英雄"));
-        List<User> users = userService.seacherByUserName("英雄");
-        Assert.assertTrue("[UserTest]: Can't find user by user_nick?", users.size() > 0);
-        logger.debug("[UserTest]: Get user by nick name is " + (users.size() > 0 ? "success" : "fail"));
-    }
-
-    @Test
     public void testFindUsersByIndex() {
         List<UserStatusPointPath> userStatus = userService.findUsersByIndex(IndexEnum.NOT_INDEXED);
         Assert.assertTrue("Can't find the user status.", userStatus != null && userStatus.size() > 0);

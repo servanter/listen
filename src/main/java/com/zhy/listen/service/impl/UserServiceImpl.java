@@ -11,10 +11,16 @@ import com.zhy.listen.bean.IndexEnum;
 import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.UserStatusPointPath;
+import com.zhy.listen.bean.indexer.IndexerClass;
+import com.zhy.listen.bean.query.QueryResult;
+import com.zhy.listen.cache.CacheConstants;
+import com.zhy.listen.cache.KeyGenerator;
+import com.zhy.listen.cache.Memcached;
 import com.zhy.listen.dao.UserDAO;
 import com.zhy.listen.entities.User;
 import com.zhy.listen.service.ThirdService;
 import com.zhy.listen.service.UserService;
+import com.zhy.listen.solr.SolrService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ThirdService thirdService;
+
+    @Autowired
+    private SolrService solrService;
+
+    @Autowired
+    private Memcached memcached;
 
     @Override
     public User findUserById(Long id) {
@@ -37,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response login(User user) {
-        User u =  userDAO.getUserByNameAndPass(user);
+        User u = userDAO.getUserByNameAndPass(user);
         Response response = new Response();
         response.setErrorCode(u != null ? ErrorCode.SUCCESS : ErrorCode.USER_NOT_FOUNT);
         return response;
@@ -78,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findInterestedUser(User user, SameType sameType) {
+    public List<UserStatusPointPath> findInterestedUser(User user, SameType sameType) {
         if (sameType == SameType.ALL) {
             int typeSize = SameType.values().length;
             int everySize = user.getPageSize() / typeSize;
@@ -91,13 +103,11 @@ public class UserServiceImpl implements UserService {
             break;
         case PATH:
             break;
-//        case TAG:
-//            ids = tagService.getSameTagUsers(user);
-//            break;
-//        case VOTING:
-//            ids = voteService.getSameVotes(user);
-//            break;
         case INDIRECTFRIEND:
+            break;
+        case ALL:
+            
+            // TODO for all categories of results
             break;
         default:
 
@@ -108,11 +118,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUsersByIds(Long[] ids) {
+    public List<UserStatusPointPath> findUsersByIds(Long[] ids) {
         if (ids == null || ids.length == 0) {
-            return null;
+            return new ArrayList<UserStatusPointPath>();
         }
-        return userDAO.getUsersByIds(ids);
+        QueryResult queryResult = new QueryResult();
+        
+        // together the raw query string
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Long id : ids) {
+            stringBuilder.append("id:(" + id + ") OR ");
+        }
+        String rawQuery = "";
+        if (stringBuilder.length() > 3) {
+            rawQuery = stringBuilder.substring(0, stringBuilder.length() - 3);
+        }
+        queryResult.setRawQuery(rawQuery);
+        queryResult.setIndexerClass(IndexerClass.USER);
+        solrService.query(queryResult);
+        
+        // check the result size
+        if (queryResult.getHitCount() > 0) {
+
+            // in cache
+            for (UserStatusPointPath userStatusPointPath : (List<UserStatusPointPath>) queryResult.getResult()) {
+                memcached.set(KeyGenerator.generateKey(CacheConstants.CACHE_USER, userStatusPointPath.getId()), userStatusPointPath, CacheConstants.TIME_HOUR * 4);
+            }
+            return (List<UserStatusPointPath>) queryResult.getResult();
+        }
+        return new ArrayList<UserStatusPointPath>();
     }
 
     @Override

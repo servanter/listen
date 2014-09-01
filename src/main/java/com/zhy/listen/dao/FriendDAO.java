@@ -31,7 +31,7 @@ public interface FriendDAO {
      * @param userId
      * @return
      */
-    public List<User> getFriendsByUserId(Page page);
+    public List<Long> getFriendsByUserId(Page page);
 
     /**
      * 根据用户ID,好友ID,逻辑更新好友关系,并修改时间

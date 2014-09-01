@@ -3,8 +3,8 @@ package com.zhy.listen.service;
 import java.util.List;
 
 import com.zhy.listen.bean.Paging;
+import com.zhy.listen.bean.UserStatusPointPath;
 import com.zhy.listen.entities.Friend;
-import com.zhy.listen.entities.User;
 
 public interface FriendService {
 
@@ -14,7 +14,7 @@ public interface FriendService {
      * @param friend
      * @return
      */
-    public Paging<User> findFriendsByUserId(Friend friend);
+    public Paging<UserStatusPointPath> findFriendsByUserId(Friend friend);
 
     /**
      * 获取用户好友id列表

@@ -1,7 +1,6 @@
 package com.zhy.listen.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.zhy.listen.bean.ErrorCode;
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.UserStatusPointPath;
@@ -75,21 +73,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> seacherByUserName(String userNick) {
-        return userDAO.getUserByNick(userNick);
-    }
-
-    @Override
-    public List<User> findUsersByPaging(Page page) {
-        return userDAO.getUsers(new HashMap<String, Object>());
-    }
-
-    @Override
-    public List<User> findUserNames() {
-        return userDAO.getUserNameAndId();
-    }
-
-    @Override
     public boolean upgradePointAndLevel(Long userId, Long point, Integer level) {
         return userDAO.updatePointAndLevel(userId, point, level) > 0;
     }
@@ -133,11 +116,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUsersByModifyTime(String time) {
-        return userDAO.getUsersByModifyTime(time);
-    }
-
-    @Override
     public List<UserStatusPointPath> findUsersByIndex(IndexEnum indexEnum) {
         return userDAO.getUsersByIndex(indexEnum.getType());
     }
@@ -147,13 +125,4 @@ public class UserServiceImpl implements UserService {
         return userDAO.updateIsIndex(userId, isIndex) > 0;
     }
 
-    @Override
-    public List<User> findUsersByIds(List<Long> ids) {
-        if(ids != null && ids.size() > 0) {
-            Long[] arr = new Long[ids.size()];
-            ids.toArray(arr);
-            return findUsersByIds(arr);
-        }
-        return new ArrayList<User>();
-    }
 }

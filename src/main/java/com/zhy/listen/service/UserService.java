@@ -3,7 +3,6 @@ package com.zhy.listen.service;
 import java.util.List;
 
 import com.zhy.listen.bean.IndexEnum;
-import com.zhy.listen.bean.Page;
 import com.zhy.listen.bean.Response;
 import com.zhy.listen.bean.SameType;
 import com.zhy.listen.bean.UserStatusPointPath;
@@ -34,13 +33,6 @@ public interface UserService {
      */
     public List<User> findUsersByIds(Long[] ids);
     
-    /**
-     * 获取一批用户
-     * @param ids
-     * @return
-     */
-    public List<User> findUsersByIds(List<Long> ids);
-
     /**
      * 用户登录
      * 
@@ -89,29 +81,6 @@ public interface UserService {
     public boolean completeInfo(User user);
 
     /**
-     * 根据用户昵称搜寻用户
-     * 
-     * @param userNick
-     * @return
-     */
-    public List<User> seacherByUserName(String userNick);
-
-    /**
-     * 分页查找用户
-     * 
-     * @param paging
-     * @return
-     */
-    public List<User> findUsersByPaging(Page paging);
-
-    /**
-     * 获取所有用户昵称及ID
-     * 
-     * @return
-     */
-    public List<User> findUserNames();
-
-    /**
      * 提升积分和等级
      * 
      * @param userId
@@ -128,13 +97,6 @@ public interface UserService {
      * @return
      */
     public List<User> findInterestedUser(User user, SameType sameType);
-    
-    /**
-     * 根据最后修改时间查询用户
-     * @param time
-     * @return
-     */
-    public List<User> findUsersByModifyTime(String time);
     
     /**
      * 根据索引状态查询

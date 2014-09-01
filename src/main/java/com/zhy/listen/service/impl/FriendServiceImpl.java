@@ -86,7 +86,9 @@ public class FriendServiceImpl implements FriendService {
                 } else {
                     needFromDBIds = ids;
                 }
-                List<User> currentUsers = userService.findUsersByIds(needFromDBIds);
+                Long[] needFromDBIdArr = new Long[needFromDBIds.size()];
+                needFromDBIds.toArray(needFromDBIdArr);
+                List<User> currentUsers = userService.findUsersByIds(needFromDBIdArr);
                 if (currentUsers != null && currentUsers.size() > 0) {
                     for (User c : currentUsers) {
                         users.put(KeyGenerator.generateKey(CacheConstants.CACHE_USER, c.getId()), c);
